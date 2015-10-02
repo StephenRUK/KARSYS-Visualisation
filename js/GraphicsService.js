@@ -104,7 +104,6 @@ function GraphicsService(htmlContainerID) {
         } else {
             statusBar.innerHTML = '(Move over an object)';
         }
-        
     }
     
     function onWindowResize() {	
@@ -169,12 +168,12 @@ function GraphicsService(htmlContainerID) {
 		camera.position.z = z;
     };
     
-    this.enableMovement = function (enabled) {
-        controls.enabled = enabled;
+    this.enableMovement = function (isEnabled) {
+        controls.enabled = isEnabled;
     };
     
     this.enableCoordinatesDisplay = function (isEnabled) {
-        statusBar.style.visibility = isEnabled;
+        statusBar.style.visibility = isEnabled ? 'visible' : 'hidden';
         showStatusBar = isEnabled;
     };
     
@@ -188,10 +187,10 @@ function GraphicsService(htmlContainerID) {
 	// Model Loaders
 	//
 	
-	this.loadObjMtl = function(name, objPath, mtlPath, solo) { // TODO: Add asyncCallback to show progress
+	this.loadObjMtl = function(name, objPath, mtlPath, displaySolo) { // TODO: Add asyncCallback to show progress
 		new THREE.OBJMTLLoader().load(objPath, mtlPath,
             function(obj) { // Load complete
-                displayModel(name, obj, solo);
+                displayModel(name, obj, displaySolo);
             },
 
             function ( xhr ) {  // In progress
@@ -206,8 +205,22 @@ function GraphicsService(htmlContainerID) {
         );
 	};
 	
-	this.loadDae = function(daePath) {
-		
+	this.loadDae = function(name, daePath, displaySolo) { // TODO: Add asyncCallback to show progress
+		new THREE.ColladaLoader().load(daePath,
+            function(collada) { // Load complete
+                displayModel(name, collada.scene, displaySolo);
+            },
+
+            function ( xhr ) {  // In progress
+                document.getElementById('progress').innerHTML = (xhr.loaded / xhr.total * 100) + '% loaded';
+                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+            },
+
+            function ( xhr ) {  // On error
+                document.getElementById('progress').innerHTML = 'Model file ' + objFile + ' could not be loaded';
+                console.error( 'Model file ' + objFile + ' could not be loaded' );
+            }
+	    );
 	};
 	
 	
