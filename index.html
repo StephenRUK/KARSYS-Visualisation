@@ -20,10 +20,10 @@
         
     </head>
     
-    <body ng-app="modelLoader" class="container-fluid">
+    <body class="container-fluid" ng-app="karsys">
 		
         <div class="row-fluid">
-            <div id="left" class="col-md-2">
+            <div ng-controller="ModelController as ctrl" id="left" class="col-md-2">
                 <div class="row">
                     <div id="top" class="col-md-12">
                         <h2>Visual KARSYS</h2>
@@ -33,21 +33,15 @@
                 </div>
                 
                 <div class="row">
+                    {{ctrl.test}}
                   <div id="controls">
                     <label>Model</label>
-          <!-- ********************************************************** -->
-          <!-- TODO: Binding with AngularJS -->
-          <!-- ********************************************************** -->
-                    <select id="modelList" ng-repeat="model in ctrl.models">
-                        <option value="" selected>Select a model...</option>
-                        <option value="Box">Box</option>
-                        <option value="CrossScene">CrossScene</option>
-                        <option value="male02">Male Three.js example</option>
-                        <option value="Spaceship">Spaceship</option>
-                        <option value="StephenHouse">House Architecture</option>
-						<option value="KARSYS_1">KARSYS Model #1</option>
+                    <select id="modelList" ng-model="ctrl.currentModel">
+                        <option value="">(Please select...)</option>
+                        <option ng-repeat="model in ctrl.getAll" value="{{$index}}">{{model.name}}</option>
+                        
                     </select>
-					<input type="button" text="Show" />
+					<input type="button" value="Show" ng-click="ctrl.loadModel(ctrl.currentModel)" />
                   </div>
 
                   <div id="details">
@@ -58,12 +52,11 @@
             </div>
 
             <div id="right" class="col-md-10">
-                <div id="visualisation"></div>
+                <div id="visualisation" ></div>
             </div>
         </div>
+        
     </body>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
 	
 	<script src="./threejs/three.min.js" type="text/javascript"></script>
 	<script src="./threejs/OrbitControls.js"  type="text/javascript"></script>
@@ -74,7 +67,12 @@
    
     <script src="./threejs/ThreeCSG.js"  type="text/javascript"></script>
     
-	<script src="./js/modelLoader.js"  type="text/javascript"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    
+    <script src="./js/GraphicsService.js"  type="text/javascript"></script>
+	<script src="./js/Model.js"  type="text/javascript"></script>
+    <script src="./js/ModelService.js"  type="text/javascript"></script>
+    <script src="./js/ModelCtrl.js"  type="text/javascript"></script>
+    <script src="./js/app.js"  type="text/javascript"></script>
 	
 </html>

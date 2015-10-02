@@ -1,6 +1,8 @@
-angular
- .module('VisualKarsys', [])
- .controller('GraphicsController', GraphicsController)
- .controller('ModelController', ['ModelRepo', 'GraphicsController', ModelController])
- .service('ModelRepo', ModelServiceStatic)
-;
+var app = angular.module('karsys', []);
+
+app.service('ModelRepo', ModelServiceStatic);
+
+app.value('htmlContainerID', 'visualisation');
+app.service('GraphicsSvc', ['htmlContainerID', GraphicsService]);
+
+app.controller('ModelController', ['ModelRepo', 'GraphicsSvc', ModelController]);
