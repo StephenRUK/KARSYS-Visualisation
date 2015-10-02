@@ -30,8 +30,8 @@ var ModelParams = function ModelParams (modelFormat) {
 
 var Model = function Model (name, filePath, fileFormat, params) {
 	this.name = name;
-	this.filename = filePath;
-	this.format = fileFormat;
+	this.filePath = filePath;
+	this.fileFormat = fileFormat;
 	
 	if (params != undefined) {
 		this.params = params;
@@ -40,8 +40,8 @@ var Model = function Model (name, filePath, fileFormat, params) {
 	if (params == undefined && fileFormat == ModelFormat.OBJMTL) {
 		// Assume MTL file is called the same as OBJ file
 		// Better would be to read it from the file, but meh...
-		this.params = { OBJMTL: {
+		this.params = {
 			mtlPath: filePath.replace(".obj", ".mtl")
-		}};
+		};
 	}
 };
