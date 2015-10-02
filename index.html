@@ -9,13 +9,8 @@
 		 
 		  #top { border-bottom: 2px solid black; }
 		  
-          #info { background-color: azure; background-blend-mode: screen; color: navy; font-family: Sans-serif; font-weight: 200; }
+          #statusBar { background-color: azure; background-blend-mode: screen; color: navy; font-family: Sans-serif; font-weight: 200; }
             
-		  #controls { height: 100px; }
-		  #details { width: 250px; border: 1px solid grey; background-color: #F0F0F0; }
-		  #details p { text-align: right; }
-		  
-		  label { display: block; width: 90px; margin-right: 10px; font-weight: bold; }
         </style>
         
     </head>
@@ -33,19 +28,28 @@
                 </div>
                 
                 <div class="row">
-                    {{ctrl.test}}
+                    <br />
                   <div id="controls">
-                    <label>Model</label>
-                    <select id="modelList" ng-model="ctrl.currentModel">
-                        <option value="">(Please select...)</option>
-                        <option ng-repeat="model in ctrl.getAll" value="{{$index}}">{{model.name}}</option>
-                        
-                    </select>
-					<input type="button" value="Show" ng-click="ctrl.loadModel(ctrl.currentModel)" />
+                      <label>Model</label>
+                      <select id="modelList" ng-model="ctrl.currentModel">
+                          <option value="">(Please select...)</option>
+                          <option ng-repeat="model in ctrl.getAll" value="{{$index}}">{{model.name}}</option>
+                      </select>
+                      <br />
+                      <input type="button" value="Show" ng-click="ctrl.loadModel(ctrl.currentModel)" />
+                      
+                      <br /><br />
+                      <div class="row-fluid">
+                          <input type="checkbox" name="controls_MovementEnabled" ng-model="ctrl.movementEnabled" ng-change="ctrl.toggleMovementControls()">
+                          <label for="controls_MovementEnabled">Movement</label>
+
+                          <input type="checkbox" name="controls_CoordinatesEnabled" ng-model="ctrl.coordinatesEnabled" ng-change="ctrl.toggleCoordinatesDisplay()">
+                          <label for="controls_MovementEnabled">Coordinates</label>
+                      </div>
                   </div>
 
                   <div id="details">
-                    <label>Name</label><span id="details_Name"></span><br />
+                    <!--<label>Name</label><span id="details_Name"></span><br />-->
                   </div>
                 </div>
 
