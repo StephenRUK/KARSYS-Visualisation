@@ -1,0 +1,263 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 14.09.2015 14:20:21
+
+newmtl Concrete_Wall
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__128_Composite.jpg
+	map_Kd maps\Map__128_Composite.jpg
+	map_bump -bm 0.300 maps\Map__10_Normal Bump.jpg
+
+newmtl Garage_Door
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__70_Map Output Selector.jpg
+	map_Kd maps\Map__70_Map Output Selector.jpg
+	map_bump -bm 0.300 maps\Map__72_Normal Bump.jpg
+
+newmtl Glass
+	Ns 10.000
+	Ni 1.500
+	d 0.300
+	Tr 0.700
+	Tf 0.300 0.300 0.300 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+
+newmtl wire_086086086
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.337 0.337 0.337
+	Kd 0.337 0.337 0.337
+	Ks 0.350 0.350 0.350
+
+newmtl Material__76
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__192_Wood.jpg
+	map_Kd maps\Map__192_Wood.jpg
+
+newmtl Door
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__34_Map Output Selector.jpg
+	map_Kd maps\Map__34_Map Output Selector.jpg
+	map_bump -bm 0.300 maps\Map__31_Normal Bump.jpg
+
+newmtl Wooden_Frame
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__92_Color Correction.jpg
+	map_Kd maps\Map__92_Color Correction.jpg
+	map_bump -bm 0.300 maps\Map__85_Normal Bump.jpg
+
+newmtl Roof_Ridges
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__61_Map Output Selector.jpg
+	map_Kd maps\Map__61_Map Output Selector.jpg
+	map_Ks maps\Map__64_Map Output Selector.jpg
+	map_bump -bm 0.300 maps\Map__62_Normal Bump.jpg
+
+newmtl Material__77
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__195_Map Output Selector.jpg
+	map_Kd maps\Map__195_Map Output Selector.jpg
+	map_bump -bm 0.300 maps\Map__196_Map Output Selector.jpg
+
+newmtl Material__28
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__40_Map Output Selector.jpg
+	map_Kd maps\Map__40_Map Output Selector.jpg
+	map_Ks maps\Map__41_Map Output Selector.jpg
+	map_bump -bm 0.300 maps\Map__42_Normal Bump.jpg
+
+newmtl Foundation_Patio
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__50_Map Output Selector.jpg
+	map_Kd maps\Map__50_Map Output Selector.jpg
+	map_Ks maps\Map__51_Map Output Selector.jpg
+	map_bump -bm 0.300 maps\Map__49_Normal Bump.jpg
+
+newmtl Garage_Driveway
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__78_Map Output Selector.jpg
+	map_Kd maps\Map__78_Map Output Selector.jpg
+	map_bump -bm 0.300 maps\Map__77_Normal Bump.jpg
+
+newmtl Lawn_Grass
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__2_Map Output Selector.jpg
+	map_Kd maps\Map__2_Map Output Selector.jpg
+	map_bump -bm 0.300 maps\Map__4_Normal Bump.jpg
+
+newmtl Concrete_Steps
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__18_Map Output Selector.jpg
+	map_Kd maps\Map__18_Map Output Selector.jpg
+	map_bump -bm 0.300 maps\Map__23_Normal Bump.jpg
+
+newmtl LIGHTS
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+
+newmtl Roof
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__25_Map Output Selector.jpg
+	map_Kd maps\Map__25_Map Output Selector.jpg
+	map_bump maps\Map__27_Normal Bump.jpg
+
+newmtl Plants___Grass
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__141_Map Output Selector.jpg
+	map_Kd maps\Map__141_Map Output Selector.jpg
+	map_bump -bm 0.300 maps\Map__144_Map Output Selector.jpg
+
+newmtl Material__53
+	Ns 10.000
+	Ni 1.500
+	d 1.000
+	Tr 0.000
+	Tf 1.000 1.000 1.000 
+	illum 2
+	Ka 0.588 0.588 0.588
+	Kd 0.588 0.588 0.588
+	Ks 0.000 0.000 0.000
+	Ke 0.000 0.000 0.000
+	map_Ka maps\Map__147_Map Output Selector.jpg
+	map_Kd maps\Map__147_Map Output Selector.jpg
+	map_bump -bm 0.300 maps\Map__149_Map Output Selector.jpg
