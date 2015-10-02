@@ -1,11 +1,19 @@
 function ModelController(ModelRepo, GraphicsController) {
 	var repo = ModelRepo;
 	var gfx = GraphicsController;
+    
+    var LOAD_MODELS_SOLO = true;
+    
+    this.test = "Hello from ModelController!";
+    
+    this.currentModel = null;
 	
-	this.loadModel = function (model) {
+	this.loadModel = function (modelID) {
+        var model = repo.getByID(modelID);
+        
 		switch (model.fileFormat) {
         case ModelFormat.OBJMTL:
-            gfx.loadObjMtl(model.filePath, model.params.OBJMTL.mtlPath);
+            gfx.loadObjMtl(model.name, model.filePath, model.params.mtlPath, LOAD_MODELS_SOLO);
             break;
 			
         case ModelFormat.DAE:
@@ -17,9 +25,6 @@ function ModelController(ModelRepo, GraphicsController) {
 		}
 	};
 	
-	this.getAll = function () {
-		repo.getAll();
-	};
-	
+	this.getAll = repo.getAll();	
 	
 }
