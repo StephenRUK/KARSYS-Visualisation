@@ -60,8 +60,11 @@
                                 <i>Name</i><br />
                                 <span ng-bind="ctrl.getModelName()"></span>
                             </div>
-                            <i>Coordinates</i><br />
-                            <span ng-repeat="(dim,val) in ctrl.mouseCoordinates" ng-bind="dim + ': ' + (val | number: 2) + ($index<2 ? ', ' : '')"></span>
+                            
+                            <div>  
+                                <i>Coordinates</i><br />
+                                <span ng-repeat="(dim,val) in ctrl.mouseCoordinates" ng-bind="dim + ': ' + (val | number: 2) + ($index<2 ? ', ' : '')"></span>
+                            </div>
                         </div>
                     </div>
                     
