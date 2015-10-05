@@ -22,14 +22,16 @@ function ModelController(ModelRepo, GraphicsController) {
     * Public
     ***********************************************/
     
-    // Variables
-    this.currentModel = null;
+    // Temporary variables
+    this.currentModelID = null;
+    this.camCoords = gfx.getCameraPosition();
 
-    this.mouseCoordinates = { x: 0, y: 0, z: 0 };
+    // Display variables
+    this.mouseCoordinates = {x: 0, y: 0, z: 0};
     
+    // Settings
     this.coordinatesEnabled = true;
     this.movementEnabled = true;
-    
     //this.interactionMode = InteractionMode.MOVE;
     
 	
@@ -53,8 +55,7 @@ function ModelController(ModelRepo, GraphicsController) {
             break;
 		}
         
-        this.mouse
-        
+        this.mouseCoordinates = {x: 0, y: 0, z: 0}; // Reset mouse coordinates        
 	};
 	
     //
@@ -62,6 +63,10 @@ function ModelController(ModelRepo, GraphicsController) {
     //
     
 	this.getAll = repo.getAll();
+    
+    this.getModelName = function () {
+        return repo.getByID(this.currentModelID).name;
+    };
 
     
     //
@@ -80,6 +85,8 @@ function ModelController(ModelRepo, GraphicsController) {
     // Event Handlers
     //
     this.canvasMouseMoved = function ($event) {
+        if (!this.coordinatesEnabled) return;
+        
         var coords = gfx.getMouseWorldCoordinates($event);
         if (coords != null) {
             this.mouseCoordinates = coords;

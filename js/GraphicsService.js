@@ -20,7 +20,7 @@ function GraphicsService(canvasID) {
 		
 		// Camera
 		camera = new THREE.PerspectiveCamera(75, renderer.domElement.width / renderer.domElement.height, 0.1, 1000);
-		camera.position.y = 40;
+		camera.position.y = 40.0;
 		camera.position.z = 100;
 		
 		// Orbit Controls
@@ -37,10 +37,6 @@ function GraphicsService(canvasID) {
 
 		// Listeners
 		window.addEventListener('resize', onWindowResize, true);
-        //renderer.domElement.addEventListener('mousemove', updateWorldCoordinates);
-        //renderer.domElement.setAttribute("ngMouseMove", "updateWorldCoordinates");
-        //renderer.domElement.addEventListener('click', onClick, false);
-        
 	}
     
     //
@@ -114,7 +110,7 @@ function GraphicsService(canvasID) {
     // Public utility functions
     //
     
-    this.moveCamera = function (x, y, z) {
+    this.moveCamera = function (x, y, z) {    
         camera.position.x = x;
         camera.position.y = y;
 		camera.position.z = z;
@@ -150,6 +146,10 @@ function GraphicsService(canvasID) {
             return null;
         }
     };
+    
+    this.getCameraPosition = function() {
+        return camera.position;
+    }
     
 	
 	//
