@@ -2,7 +2,6 @@ function GraphicsService(canvasID) {
     var svc = this;
     
 	var scene, camera, renderer, controls, objects = [];
-    var mouseWorldCoords = { x: 0, y: 0, z: 0 };
     
     // Main
     init(canvasID);
@@ -59,22 +58,11 @@ function GraphicsService(canvasID) {
     //
     // Event handlers
     //
-    
-    function updateWorldCoordinates(event) {
-        var intersections = getMouseIntersections(camera, event);
         
-        if (intersections.length > 0) {
-            // Coordinates must be updated individually (don't replace object, it breaks the binding)
-            mouseWorldCoords.x = intersections[0].point.x;
-            mouseWorldCoords.y = intersections[0].point.y;
-            mouseWorldCoords.z = intersections[0].point.z;
-        }
-    }
-    
-    function onWindowResize () {
-        var w = renderer.domElement.clientWidth;
-        var h =  renderer.domElement.clientHeight;
-        camera.aspect = w/h;
+    function onWindowResize() {
+        var w = renderer.domElement.clientWidth, h =  renderer.domElement.clientHeight;
+        
+        camera.aspect = w / h;
         camera.updateProjectionMatrix();
         renderer.setSize(w, h);
     }
@@ -122,9 +110,6 @@ function GraphicsService(canvasID) {
     * Public
     ******************************************************/
     
-    
-    
-    
     //
     // Public utility functions
     //
@@ -138,15 +123,7 @@ function GraphicsService(canvasID) {
     this.enableMovement = function (isEnabled) {
         controls.enabled = isEnabled;
     };
-    
-    this.enableCoordinatesDisplay = function (isEnabled) {
-        statusBar.style.visibility = isEnabled ? 'visible' : 'hidden';
-        showStatusBar = isEnabled;
-    };
-    
-    this.mouseMove = function (event) {
-        updateWorldCoordinates(event);
-    };
+
     
     //
     // Hooks, listeners
@@ -164,8 +141,14 @@ function GraphicsService(canvasID) {
     // Read-only data functions
     //
     
-    this.getMouseWorldCoordinates = function() {
-        return mouseWorldCoords;
+    this.getMouseWorldCoordinates = function(mouseEvent) {
+        var intersections = getMouseIntersections(camera, mouseEvent);
+        
+        if (intersections.length > 0) {
+            return intersections[0].point.clone();
+        } else {
+            return null;
+        }
     };
     
 	

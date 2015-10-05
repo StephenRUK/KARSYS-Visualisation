@@ -47,10 +47,10 @@
                         </div>
                     </div>
 
-                    <header>Details</header>
                     <div id="details">
+                        <b>Details</b>
                         <div id="details_coordinates" ng-show="ctrl.coordinatesEnabled && ctrl.currentModel != null">
-                            <label>Coordinates</label><br />
+                            <i>Coordinates</i><br />
                             <span ng-repeat="(dim,val) in ctrl.mouseCoordinates" ng-bind="dim + ': ' + (val | number: 2) + ($index<2 ? ', ' : '')"></span>
                         </div>
                     </div>

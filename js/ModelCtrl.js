@@ -25,6 +25,11 @@ function ModelController(ModelRepo, GraphicsController) {
     // Variables
     this.currentModel = null;
 
+    this.mouseCoordinates = { x: 0, y: 0, z: 0 };
+    
+    this.coordinatesEnabled = true;
+    this.movementEnabled = true;
+    
     //this.interactionMode = InteractionMode.MOVE;
     
 	
@@ -57,11 +62,6 @@ function ModelController(ModelRepo, GraphicsController) {
     //
     
 	this.getAll = repo.getAll();
-    
-    this.mouseCoordinates = gfx.getMouseWorldCoordinates();
-    
-    this.coordinatesEnabled = true;
-    this.movementEnabled = true;
 
     
     //
@@ -80,7 +80,10 @@ function ModelController(ModelRepo, GraphicsController) {
     // Event Handlers
     //
     this.canvasMouseMoved = function ($event) {
-        gfx.mouseMove($event);
+        var coords = gfx.getMouseWorldCoordinates($event);
+        if (coords != null) {
+            this.mouseCoordinates = coords;
+        }
     };
 	
 }
