@@ -3,9 +3,11 @@ function ModelController(ModelRepo, GraphicsController) {
     * Private
     ***********************************************/
 
+    var ctrl = this;    // Sometimes needed to 'escape' the current 'this' scope
+    
 	var repo = ModelRepo;
 	var gfx = GraphicsController;
-    
+        
     // Config
     var LOAD_MODELS_SOLO = true;
     
@@ -16,7 +18,6 @@ function ModelController(ModelRepo, GraphicsController) {
         CROSS_SECTION: 2
     };
     
-    
     /***********************************************
     * Public
     ***********************************************/
@@ -24,8 +25,6 @@ function ModelController(ModelRepo, GraphicsController) {
     // Variables
     this.currentModel = null;
 
-    this.coordinatesEnabled = true;
-    this.movementEnabled = true;        // Enables/disabled movement controls
     //this.interactionMode = InteractionMode.MOVE;
     
 	
@@ -48,16 +47,40 @@ function ModelController(ModelRepo, GraphicsController) {
         default:
             break;
 		}
+        
+        this.mouse
+        
 	};
 	
+    //
+    // Data access
+    //
+    
 	this.getAll = repo.getAll();
     
-    this.toggleMovementControls = function() {
-        gfx.enableMovement(this.movementEnabled);
+    this.mouseCoordinates = gfx.getMouseWorldCoordinates();
+    
+    this.coordinatesEnabled = true;
+    this.movementEnabled = true;
+
+    
+    //
+    // Config change
+    //
+    
+    this.toggleMovementControls = function () {
+        gfx.enableMovement(ctrl.movementEnabled);
     };
     
-    this.toggleCoordinatesDisplay = function() {
-        gfx.enableCoordinatesDisplay(this.coordinatesEnabled);
+    this.toggleCoordinatesDisplay = function () {
+        gfx.enableCoordinatesDisplay(ctrl.coordinatesEnabled);
+    };
+    
+    //
+    // Event Handlers
+    //
+    this.canvasMouseMoved = function ($event) {
+        gfx.mouseMove($event);
     };
 	
 }

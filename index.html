@@ -17,46 +17,50 @@
     
     <body class="container-fluid" ng-app="karsys">
 		
-        <div class="row-fluid">
-            <div ng-controller="ModelController as ctrl" id="left" class="col-md-2">
+        <div ng-controller="ModelController as ctrl" class="row-fluid">
+            <div id="left" class="col-md-2">
                 <div class="row">
                     <div id="top" class="col-md-12">
                         <h2>Visual KARSYS</h2>
                         <b><i>by ISSKA</i></b>
-                        <div id="progress"></div>
                     </div>
                 </div>
                 
                 <div class="row">
                     <br />
-                  <div id="controls">
-                      <label>Model</label>
-                      <select id="modelList" ng-model="ctrl.currentModel">
-                          <option value="">(Please select...)</option>
-                          <option ng-repeat="model in ctrl.getAll" value="{{$index}}">{{model.name}}</option>
-                      </select>
-                      <br />
-                      <input type="button" value="Show" ng-click="ctrl.loadModel(ctrl.currentModel)" />
-                      
-                      <br /><br />
-                      <div class="row-fluid">
-                          <input type="checkbox" name="controls_MovementEnabled" ng-model="ctrl.movementEnabled" ng-change="ctrl.toggleMovementControls()">
-                          <label for="controls_MovementEnabled">Movement</label>
+                    <div id="controls">
+                        <label>Model</label>
+                        <select id="modelList" ng-model="ctrl.currentModel">
+                            <option value="">(Please select...)</option>
+                            <option ng-repeat="model in ctrl.getAll" value="{{$index}}">{{model.name}}</option>
+                        </select>
+                        <br />
+                        <input type="button" value="Show" ng-click="ctrl.loadModel(ctrl.currentModel)" />
 
-                          <input type="checkbox" name="controls_CoordinatesEnabled" ng-model="ctrl.coordinatesEnabled" ng-change="ctrl.toggleCoordinatesDisplay()">
-                          <label for="controls_MovementEnabled">Coordinates</label>
-                      </div>
-                  </div>
+                        <br /><br />
+                        <div class="row-fluid">
+                            <input type="checkbox" name="controls_MovementEnabled" ng-model="ctrl.movementEnabled" ng-change="ctrl.toggleMovementControls()">
+                            <label for="controls_MovementEnabled">Movement</label>
 
-                  <div id="details">
-                    <!--<label>Name</label><span id="details_Name"></span><br />-->
-                  </div>
+                            <input type="checkbox" name="controls_CoordinatesEnabled" ng-model="ctrl.coordinatesEnabled"> <!-- ng-change="ctrl.toggleCoordinatesDisplay()">-->
+                            <label for="controls_MovementEnabled">Coordinates</label>
+                        </div>
+                    </div>
+
+                    <header>Details</header>
+                    <div id="details">
+                        <div id="details_coordinates" ng-show="ctrl.coordinatesEnabled && ctrl.currentModel != null">
+                            <label>Coordinates</label><br />
+                            <span ng-repeat="(dim,val) in ctrl.mouseCoordinates" ng-bind="dim + ': ' + (val | number: 2) + ($index<2 ? ', ' : '')"></span>
+                        </div>
+                    </div>
+                    
                 </div>
 
             </div>
 
             <div id="right" class="col-md-10">
-                <div id="visualisation" ></div>
+                <div id="visualisation"><canvas ng-mousemove="ctrl.canvasMouseMoved($event)" id="canvas"></canvas></div>
             </div>
         </div>
         

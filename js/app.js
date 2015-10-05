@@ -2,7 +2,7 @@ var app = angular.module('karsys', []);
 
 app.service('ModelRepo', ModelServiceStatic);
 
-app.value('htmlContainerID', 'visualisation');
-app.service('GraphicsSvc', ['htmlContainerID', GraphicsService]);
+app.value('canvasID', 'canvas');
+app.service('GraphicsSvc', ['canvasID', GraphicsService]);
 
 app.controller('ModelController', ['ModelRepo', 'GraphicsSvc', ModelController]);
