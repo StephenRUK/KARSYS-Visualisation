@@ -25,8 +25,10 @@ var Model = function Model(name, filePath, fileFormat, params) {
 	this.name = name;
 	this.filePath = filePath;
 	this.fileFormat = fileFormat;
-	
+	this.params = {};
+    
 	if (params) {
 		this.params = params;
 	}
+    
 };
