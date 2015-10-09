@@ -3,6 +3,8 @@ function GraphicsService(canvasID) {
     
 	var scene, camera, renderer, controls, objects = [];
     
+    var CAM_DEFAULT_POS = new THREE.Vector3(0, 40, 100); 
+    
     // Main
     init(canvasID);
     animate();
@@ -10,7 +12,7 @@ function GraphicsService(canvasID) {
     //
     // Setup functions
     //
-    
+        
     function init(canvasID) {
 		scene = new THREE.Scene();
         
@@ -20,8 +22,7 @@ function GraphicsService(canvasID) {
 		
 		// Camera
 		camera = new THREE.PerspectiveCamera(75, renderer.domElement.width / renderer.domElement.height, 0.1, 1000);
-		camera.position.y = 40.0;
-		camera.position.z = 100;
+        camera.position.set(CAM_DEFAULT_POS.x, CAM_DEFAULT_POS.y, CAM_DEFAULT_POS.z);
 		
 		// Orbit Controls
 		controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -110,6 +111,10 @@ function GraphicsService(canvasID) {
     // Public utility functions
     //
     
+    this.resetCamPosition = function() {
+        camera.position.set(CAM_DEFAULT_POS.x, CAM_DEFAULT_POS.y, CAM_DEFAULT_POS.z);
+    }
+        
     this.moveCamera = function (x, y, z) {    
         camera.position.x = x;
         camera.position.y = y;
@@ -120,15 +125,23 @@ function GraphicsService(canvasID) {
         controls.enabled = isEnabled;
     };
     
+    // TODO Bugfix: Scaling seems to be reset a moment later??
     this.scaleObject = function (name, scale) {
-        scene.getChildByName(name).scale.set(scale.x, scale.y, scale.z);
+        var obj = scene.getChildByName(name);
+        
+        if (obj) {
+            obj.scale.set(scale.x, scale.y, scale.z);
+        }
     };
     
     this.translateObject = function (name, offset) {
         var obj = scene.getChildByName(name);
-        obj.translateX(offset.x);
-        obj.translateY(offset.y);
-        obj.translateZ(offset.z);
+        
+        if (obj) {
+            obj.translateX(offset.x);
+            obj.translateY(offset.y);
+            obj.translateZ(offset.z);
+        }
     };
     
     //
