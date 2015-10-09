@@ -18,6 +18,21 @@ function ModelController(ModelRepo, GraphicsController) {
         CROSS_SECTION: 2
     };
     
+    // Event handlers
+    gfx.onModelLoaded = function (name) {
+        gfx.resetCamPosition();
+        
+        // Apply transformations
+        if (loadedModel.params.transform) {
+            if (loadedModel.params.transform.offset) {
+                gfx.translateObject(loadedModel.name, loadedModel.params.transform.offset);
+            }
+            if (loadedModel.params.transform.scale) {
+                gfx.scaleObject(loadedModel.name, loadedModel.params.transform.scale);
+            }
+        }
+    };
+    
     /*
     * transfromCoordinates
     * Accepts a 3D coordinates object and applies coordinatesTransform object (scale & offset).
@@ -65,8 +80,6 @@ function ModelController(ModelRepo, GraphicsController) {
 	this.loadModel = function (modelID) {
         loadedModel = repo.getByID(modelID);
         
-        gfx.resetCamPosition();
-        
 		switch (loadedModel.fileFormat) {
         case ModelFormat.OBJMTL:
             gfx.loadObjMtl(loadedModel.name, loadedModel.filePath, loadedModel.params.mtlPath, LOAD_MODELS_SOLO);
@@ -79,16 +92,6 @@ function ModelController(ModelRepo, GraphicsController) {
         default:
             break;
 		}
-        
-        // Apply transformations
-        if (loadedModel.params.transform) {
-            if (loadedModel.params.transform.offset) {
-                gfx.translateObject(loadedModel.name, loadedModel.params.transform.offset);
-            }
-            if (loadedModel.params.transform.scale) {
-                gfx.scaleObject(loadedModel.name, loadedModel.params.transform.scale);
-            }
-        }
                 
         // Set up coordinate display
         this.mouseCoordinates = {x: 0, y: 0, z: 0};
