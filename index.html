@@ -5,11 +5,10 @@
         
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <style>
-          canvas { width: 100%; height: 100% }
+          canvas { width: 100%; height: 100%; }
 		 
 		  #top { border-bottom: 2px solid black; }
-		  
-          #statusBar { background-color: azure; background-blend-mode: screen; color: navy; font-family: Sans-serif; font-weight: 200; }
+          /* #statusBar { background-color: azure; background-blend-mode: screen; color: navy; font-family: Sans-serif; font-weight: 200; } */
             
         </style>
         
@@ -63,7 +62,7 @@
                             
                             <div>  
                                 <i>Coordinates</i><br />
-                                <span ng-repeat="(dim,val) in ctrl.mouseCoordinates" ng-bind="dim + ': ' + (val | number: 2) + ($index<2 ? ', ' : '')"></span>
+                                <span ng-repeat="(dim,val) in ctrl.mouseCoordinates" ng-bind="dim + ': ' + (val | number: 2) + ctrl.coordinatesUnit + ($index<2 ? ', ' : '')"></span>
                             </div>
                         </div>
                     </div>
