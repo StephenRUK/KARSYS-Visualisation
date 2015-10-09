@@ -7,7 +7,7 @@
 * Arguments:
 *	- filePath		file path relative to root
 *	- fileFormat	Value of type ModelFormat (OBJ, OBJMTL, DAE)
-*	- params		Type-specific parameters of type ModelParams.
+*	- params		Valid parameters: coordinatesTransform, mtlPath
 */
 
 var ModelFormat = {
@@ -16,32 +16,17 @@ var ModelFormat = {
 	DAE: 2
 };
 
-var ModelParams = function ModelParams (modelFormat) {    
-    var params = {};
-    
-    this.format = modelFormat;
-    
-    this.setParam = function (paramName, paramValue) {
-        params.push(paramName, paramValue);
-    };
-    
+var CoordinatesTransform = function CoordinatesTransform(offsetX, offsetY, offsetZ, scaleX, scaleY, scaleZ) {
+    this.offset = {x: offsetX, y: offsetY, z: offsetZ };
+    this.scale = {x: scaleX, y: scaleY, z: scaleZ };
 };
 
-
-var Model = function Model (name, filePath, fileFormat, params) {
+var Model = function Model(name, filePath, fileFormat, params) {
 	this.name = name;
 	this.filePath = filePath;
 	this.fileFormat = fileFormat;
 	
-	if (params != undefined) {
+	if (params) {
 		this.params = params;
-	}
-	
-	if (params == undefined && fileFormat == ModelFormat.OBJMTL) {
-		// Assume MTL file is called the same as OBJ file
-		// Better would be to read it from the file, but meh...
-		this.params = {
-			mtlPath: filePath.replace(".obj", ".mtl")
-		};
 	}
 };
