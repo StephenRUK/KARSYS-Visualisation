@@ -119,7 +119,17 @@ function GraphicsService(canvasID) {
     this.enableMovement = function (isEnabled) {
         controls.enabled = isEnabled;
     };
-
+    
+    this.scaleObject = function (name, scale) {
+        scene.getChildByName(name).scale.set(scale.x, scale.y, scale.z);
+    };
+    
+    this.translateObject = function (name, offset) {
+        var obj = scene.getChildByName(name);
+        obj.translateX(offset.x);
+        obj.translateY(offset.y);
+        obj.translateZ(offset.z);
+    };
     
     //
     // Hooks, listeners
