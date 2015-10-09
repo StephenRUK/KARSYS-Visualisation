@@ -3,10 +3,10 @@ function ModelController(ModelRepo, GraphicsController) {
     * Private
     ***********************************************/
 
-    var ctrl = this;    // Sometimes needed to 'escape' the current 'this' scope
-    
-	var repo = ModelRepo;
-	var gfx = GraphicsController;
+    var ctrl = this,        // Sometimes needed to 'escape' the current 'this' scope
+        repo = ModelRepo,
+        gfx = GraphicsController,
+        loadedModel;        // Reference to currently loaded model object
         
     // Config
     var LOAD_MODELS_SOLO = true;
@@ -18,6 +18,28 @@ function ModelController(ModelRepo, GraphicsController) {
         CROSS_SECTION: 2
     };
     
+    /*
+    * transfromCoordinates
+    * Accepts a 3D coordinates object and applies coordinatesTransform object (scale & offset).
+    */
+    function transformCoordinates(coords, transform) {
+        if (!transform) {
+            return;
+        }
+        
+        // Scale
+        if (transform.scale) {
+            coords.x *= transform.scale.x;
+            coords.y *= transform.scale.y;
+            coords.z *= transform.scale.z;
+        }
+        
+        // Offset
+        coords.x += transform.offset.x;
+        coords.y += transform.offset.y;
+        coords.z += transform.offset.z;
+    }
+    
     /***********************************************
     * Public
     ***********************************************/
@@ -28,6 +50,7 @@ function ModelController(ModelRepo, GraphicsController) {
 
     // Display variables
     this.mouseCoordinates = {x: 0, y: 0, z: 0};
+    this.coordinatesUnit = "";
     
     // Settings
     this.coordinatesEnabled = true;
@@ -40,22 +63,36 @@ function ModelController(ModelRepo, GraphicsController) {
     //
     
 	this.loadModel = function (modelID) {
-        var model = repo.getByID(modelID);
+        loadedModel = repo.getByID(modelID);
         
-		switch (model.fileFormat) {
+        gfx.resetCamPosition();
+        
+		switch (loadedModel.fileFormat) {
         case ModelFormat.OBJMTL:
-            gfx.loadObjMtl(model.name, model.filePath, model.params.mtlPath, LOAD_MODELS_SOLO);
+            gfx.loadObjMtl(loadedModel.name, loadedModel.filePath, loadedModel.params.mtlPath, LOAD_MODELS_SOLO);
             break;
 			
         case ModelFormat.DAE:
-            gfx.loadDae(model.name, model.filePath, LOAD_MODELS_SOLO);
+            gfx.loadDae(loadedModel.name, loadedModel.filePath, LOAD_MODELS_SOLO);
             break;
 			
         default:
             break;
 		}
         
-        this.mouseCoordinates = {x: 0, y: 0, z: 0}; // Reset mouse coordinates        
+        // Apply transformations
+        if (loadedModel.params.transform) {
+            if (loadedModel.params.transform.offset) {
+                gfx.translateObject(loadedModel.name, loadedModel.params.transform.offset);
+            }
+            if (loadedModel.params.transform.scale) {
+                gfx.scaleObject(loadedModel.name, loadedModel.params.transform.scale);
+            }
+        }
+                
+        // Set up coordinate display
+        this.mouseCoordinates = {x: 0, y: 0, z: 0};
+        this.coordinatesUnit = loadedModel.params.unit;
 	};
 	
     //
@@ -65,7 +102,7 @@ function ModelController(ModelRepo, GraphicsController) {
 	this.getAll = repo.getAll();
     
     this.getModelName = function () {
-        return repo.getByID(this.currentModelID).name;
+        return loadedModel.name;
     };
 
     
@@ -85,12 +122,25 @@ function ModelController(ModelRepo, GraphicsController) {
     // Event Handlers
     //
     this.canvasMouseMoved = function ($event) {
-        if (!this.coordinatesEnabled) return;
+        
+        //
+        // Update coordinates display
+        //
+        if (!this.coordinatesEnabled) {
+            return;
+        }
         
         var coords = gfx.getMouseWorldCoordinates($event);
-        if (coords != null) {
+        if (coords) {
+            if (loadedModel.params.coordinatesTransform) {
+                transformCoordinates(coords, loadedModel.params.coordinatesTransform);
+            }
             this.mouseCoordinates = coords;
         }
+        
+        //
+        // TODO: Show tooltip with info? Or maybe on-click instead?
+        //
     };
 	
 }
