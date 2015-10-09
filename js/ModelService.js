@@ -14,7 +14,9 @@ function ModelServiceStatic() {
 		new Model("Male Three.js example", "models/male02/male02.obj", ModelFormat.OBJMTL),
 		new Model("Spaceship", "models/Spaceship/Spaceship.obj", ModelFormat.OBJMTL),
 		new Model("House", "models/StephenHouse/StephenHouse.obj", ModelFormat.OBJMTL),
-		new Model("KARSYS Model 1", "models/KARSYS_1/KARSYS_1.dae", ModelFormat.DAE)
+		new Model("KARSYS Model 1", "models/KARSYS_1/KARSYS_1.dae", ModelFormat.DAE),
+		new Model("ISSKA 3D (level 5)", "models/ISSKA_3D/Model_isska3d_5.dae", ModelFormat.DAE),
+		new Model("ISSKA 3D (level 6)", "models/ISSKA_3D/Model_isska3d_6.dae", ModelFormat.DAE)
 	];
 
 	this.getAll = function () {
