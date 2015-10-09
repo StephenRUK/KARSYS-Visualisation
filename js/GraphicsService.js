@@ -79,6 +79,8 @@ function GraphicsService(canvasID) {
         object3d.name = name;
         scene.add(object3d);
         objects.push(object3d);
+        
+        svc.onModelLoaded(name);    // Callback/Event
     }
     
     // Calculate world coordinates based on mouse position
@@ -113,6 +115,7 @@ function GraphicsService(canvasID) {
     
     this.resetCamPosition = function() {
         camera.position.set(CAM_DEFAULT_POS.x, CAM_DEFAULT_POS.y, CAM_DEFAULT_POS.z);
+        camera.lookAt(new THREE.Vector3(0,0,0));
     }
         
     this.moveCamera = function (x, y, z) {    
@@ -127,7 +130,7 @@ function GraphicsService(canvasID) {
     
     // TODO Bugfix: Scaling seems to be reset a moment later??
     this.scaleObject = function (name, scale) {
-        var obj = scene.getChildByName(name);
+        var obj = scene.getObjectByName(name);
         
         if (obj) {
             obj.scale.set(scale.x, scale.y, scale.z);
@@ -135,7 +138,7 @@ function GraphicsService(canvasID) {
     };
     
     this.translateObject = function (name, offset) {
-        var obj = scene.getChildByName(name);
+        var obj = scene.getObjectByName(name);
         
         if (obj) {
             obj.translateX(offset.x);
@@ -155,6 +158,8 @@ function GraphicsService(canvasID) {
     this.removeEventHandler = function (eventName, handler) {
         render.domElement.removeEventListener(eventName, handler);
     };
+    
+    this.onModelLoaded = function (name){};     // Assigned function is called when model loading is completed
     
     //
     // Read-only data functions
@@ -204,12 +209,12 @@ function GraphicsService(canvasID) {
             },
 
             function ( xhr ) {  // In progress
-                document.getElementById('progress').innerHTML = (xhr.loaded / xhr.total * 100) + '% loaded';
+                //document.getElementById('progress').innerHTML = (xhr.loaded / xhr.total * 100) + '% loaded';
                 console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
             },
 
             function ( xhr ) {  // On error
-                document.getElementById('progress').innerHTML = 'Model file ' + objFile + ' could not be loaded';
+                //document.getElementById('progress').innerHTML = 'Model file ' + objFile + ' could not be loaded';
                 console.error( 'Model file ' + objFile + ' could not be loaded' );
             }
 	    );
