@@ -24,12 +24,8 @@ function ModelController(ModelRepo, GraphicsController) {
         
         // Apply transformations
         if (loadedModel.params.transform) {
-            if (loadedModel.params.transform.offset) {
-                gfx.translateObject(loadedModel.name, loadedModel.params.transform.offset);
-            }
-            if (loadedModel.params.transform.scale) {
-                gfx.scaleObject(loadedModel.name, loadedModel.params.transform.scale);
-            }
+            gfx.translateObject(loadedModel.name, loadedModel.params.transform.offset);
+            gfx.scaleObject(loadedModel.name, loadedModel.params.transform.scale);
         }
     };
     
@@ -105,7 +101,9 @@ function ModelController(ModelRepo, GraphicsController) {
 	this.getAll = repo.getAll();
     
     this.getModelName = function () {
-        return loadedModel.name;
+        if (loadedModel) {
+            return loadedModel.name;
+        }
     };
 
     
