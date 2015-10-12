@@ -16,7 +16,7 @@ var ModelFormat = {
 	DAE: 2
 };
 
-var CoordinatesTransform = function CoordinatesTransform(offsetX, offsetY, offsetZ, scaleX, scaleY, scaleZ) {
+var Transform = function Transform(offsetX, offsetY, offsetZ, scaleX, scaleY, scaleZ) {
     this.offset = {x: offsetX, y: offsetY, z: offsetZ };
     this.scale = {x: scaleX, y: scaleY, z: scaleZ };
 };
