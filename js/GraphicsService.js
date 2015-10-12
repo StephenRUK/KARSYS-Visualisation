@@ -3,7 +3,9 @@ function GraphicsService(canvasID) {
     
 	var scene, camera, renderer, controls, objects = [];
     
-    var CAM_DEFAULT_POS = new THREE.Vector3(0, 40, 100); 
+    var CAM_DEFAULT_POS = new THREE.Vector3(0, 40, 100),
+        CAM_NEAR_PLANE = 100,
+        CAM_FAR_PLANE  = 2000;
     
     // Main
     init(canvasID);
@@ -21,7 +23,7 @@ function GraphicsService(canvasID) {
 		renderer.setSize(renderer.domElement.clientWidth, renderer.domElement.clientHeight);
 		
 		// Camera
-		camera = new THREE.PerspectiveCamera(75, renderer.domElement.width / renderer.domElement.height, 0.1, 1000);
+		camera = new THREE.PerspectiveCamera(75, renderer.domElement.width / renderer.domElement.height, CAM_NEAR_PLANE, CAM_FAR_PLANE);
         camera.position.set(CAM_DEFAULT_POS.x, CAM_DEFAULT_POS.y, CAM_DEFAULT_POS.z);
 		
 		// Orbit Controls
@@ -132,9 +134,13 @@ function GraphicsService(canvasID) {
     this.scaleObject = function (name, scale) {
         var obj = scene.getObjectByName(name);
         
+        console.info("GraphicsService.scaleObject: Old " + obj.scale);
+        
         if (obj) {
             obj.scale.set(scale.x, scale.y, scale.z);
         }
+        
+        console.info("GraphicsService.scaleObject: New " + obj.scale);
     };
     
     this.translateObject = function (name, offset) {
@@ -150,14 +156,6 @@ function GraphicsService(canvasID) {
     //
     // Hooks, listeners
     //
-    
-    this.addEventHandler = function (eventName, handler) {
-        render.domElement.addEventListener(eventName, handler);
-    };
-    
-    this.removeEventHandler = function (eventName, handler) {
-        render.domElement.removeEventListener(eventName, handler);
-    };
     
     this.onModelLoaded = function (name){};     // Assigned function is called when model loading is completed
     
