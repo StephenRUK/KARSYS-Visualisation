@@ -24,7 +24,7 @@ function ModelServiceStatic() {
 		new Model("ISSKA 3D (level 6)", "models/ISSKA_3D/Model_isska3d_6.dae", ModelFormat.DAE, {
             coordinatesTransform: new Transform(1000, 100, 0,  1, 1, 1),
             unit: "km",
-            //transform: new Transform(0, 0, 0, 0.2, 0.2, 0.2)
+            transform: new Transform(0, 0, 0, 0.1, 0.1, 0.1)
         })
 	];
 

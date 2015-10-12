@@ -4,8 +4,8 @@ function GraphicsService(canvasID) {
 	var scene, camera, renderer, controls, objects = [];
     
     var CAM_DEFAULT_POS = new THREE.Vector3(0, 40, 100),
-        CAM_NEAR_PLANE = 100,
-        CAM_FAR_PLANE  = 2000;
+        CAM_NEAR_PLANE = 10,
+        CAM_FAR_PLANE  = 500;
     
     // Main
     init(canvasID);
@@ -83,6 +83,13 @@ function GraphicsService(canvasID) {
         objects.push(object3d);
         
         svc.onModelLoaded(name);    // Callback/Event
+        
+        // DEBUG
+        object3d.traverse( function( node ) {
+            if( node.material ) {
+                node.material.side = THREE.DoubleSide;
+            }
+        });
     }
     
     // Calculate world coordinates based on mouse position
@@ -134,13 +141,13 @@ function GraphicsService(canvasID) {
     this.scaleObject = function (name, scale) {
         var obj = scene.getObjectByName(name);
         
-        console.info("GraphicsService.scaleObject: Old " + obj.scale);
+        //console.info("GraphicsService.scaleObject: Old " + obj.scale);
         
         if (obj) {
             obj.scale.set(scale.x, scale.y, scale.z);
         }
         
-        console.info("GraphicsService.scaleObject: New " + obj.scale);
+        //console.info("GraphicsService.scaleObject: New " + obj.scale);
     };
     
     this.translateObject = function (name, offset) {
@@ -176,6 +183,10 @@ function GraphicsService(canvasID) {
     this.getCameraPosition = function() {
         return camera.position;
     }
+    
+    this.getObjectHierarchy = function() {
+        return objects.slice(0);    // Clone
+    };
     
 	
 	//

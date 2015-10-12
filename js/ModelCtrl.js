@@ -1,4 +1,4 @@
-function ModelController(ModelRepo, GraphicsController) {
+function ModelController(ModelRepo, GraphicsController, $scope) {
     /***********************************************
     * Private
     ***********************************************/
@@ -27,6 +27,10 @@ function ModelController(ModelRepo, GraphicsController) {
             gfx.translateObject(loadedModel.name, loadedModel.params.transform.offset);
             gfx.scaleObject(loadedModel.name, loadedModel.params.transform.scale);
         }
+        
+        ctrl.objectTree = gfx.getObjectHierarchy();
+        
+        $scope.$apply();    // This function is outside of Angular's scope. Tell it to update view.
     };
     
     /*
@@ -56,15 +60,16 @@ function ModelController(ModelRepo, GraphicsController) {
     ***********************************************/
     
     // Temporary variables
-    this.currentModelID = null;
+    this.currentModelID;
     this.camCoords = gfx.getCameraPosition();
 
     // Display variables
     this.mouseCoordinates = {x: 0, y: 0, z: 0};
     this.coordinatesUnit = "";
+    this.objectHierarchy;
     
     // Settings
-    this.coordinatesEnabled = true;
+    this.coordinatesEnabled = false;
     this.movementEnabled = true;
     //this.interactionMode = InteractionMode.MOVE;
     
@@ -104,7 +109,7 @@ function ModelController(ModelRepo, GraphicsController) {
         if (loadedModel) {
             return loadedModel.name;
         }
-    };
+    };    
 
     
     //
@@ -123,11 +128,10 @@ function ModelController(ModelRepo, GraphicsController) {
     // Event Handlers
     //
     this.canvasMouseMoved = function ($event) {
+        var isMouseClicked = ($event.buttons !== 0);
         
-        //
-        // Update coordinates display
-        //
-        if (!this.coordinatesEnabled) {
+        // Don't proceed if coordinates are disabled or user is moving model (results in bad performance)
+        if (!this.coordinatesEnabled || isMouseClicked) {
             return;
         }
         
@@ -139,9 +143,6 @@ function ModelController(ModelRepo, GraphicsController) {
             this.mouseCoordinates = coords;
         }
         
-        //
-        // TODO: Show tooltip with info? Or maybe on-click instead?
-        //
     };
 	
 }
