@@ -27,20 +27,24 @@
                 <div class="row">
                     <br />
                     <div id="controls">
-                        <label>Model</label>
-                        <select id="modelList" ng-model="ctrl.currentModelID">
-                            <option value="">(Please select...)</option>
-                            <option ng-repeat="model in ctrl.getAll" value="{{$index}}">{{model.name}}</option>
-                        </select>
+                        
+                        <div class="row-fluid">
+                            <label>Model</label>
+                            <select id="modelList" ng-model="ctrl.currentModelID">
+                                <option value="">(Please select...)</option>
+                                <option ng-repeat="model in ctrl.getAll" value="{{$index}}">{{model.name}}</option>
+                            </select>
+                            <br />
+                            <input type="button" value="Show" ng-click="ctrl.loadModel(ctrl.currentModelID)" />
+                        </div>
                         <br />
-                        <input type="button" value="Show" ng-click="ctrl.loadModel(ctrl.currentModelID)" />
-                        
-                        <br /><br />
-                        
-                        <label>Camera</label>
-                        <input type="text" size="3" ng-model="ctrl.camCoords.x"><input type="text" size="3" ng-model="ctrl.camCoords.y"><input type="text" size="3" ng-model="ctrl.camCoords.z">
-                        <br /><br />
-                        
+                        <div class="row-fluid" ng-show="ctrl.cameraEnabled">
+                            <label>Camera</label>
+                            <input type="text" size="3" ng-model="ctrl.camCoords.x">
+                            <input type="text" size="3" ng-model="ctrl.camCoords.y">
+                            <input type="text" size="3" ng-model="ctrl.camCoords.z">
+                        </div>
+                        <br />
                         <div class="row-fluid">
                             <input type="checkbox" name="controls_MovementEnabled" ng-model="ctrl.movementEnabled" ng-change="ctrl.toggleMovementControls()">
                             <label for="controls_MovementEnabled">Movement</label>
@@ -53,19 +57,15 @@
                     <div id="details">
                         <b>Details</b>
                         <div id="details_coordinates" ng-show="ctrl.currentModelID != null">
-                            
-                            <div>
-                                <i>Name</i><br />
-                                <span ng-bind="ctrl.getModelName()"></span>
-                            </div>
-                            <br /><br />
+                            <br />
                             <div ng-show="ctrl.coordinatesEnabled">  
                                 <i>Coordinates</i><br />
                                 <span ng-repeat="(dim,val) in ctrl.mouseCoordinates" ng-bind="dim + ': ' + (val | number: 2) + ctrl.coordinatesUnit + ($index<2 ? ', ' : '')"></span>
                             </div>
-                            <br /><br />
-                            <div>
-                                <i>Hierarchy</i>                                
+                            <br />
+                            <h3>Hierarchy</h3>
+                                                        
+                            <div id="objectHierarchy" class="">                              
                                 <ul>
                                     <li ng-repeat="child in ctrl.objectTree" ng-include="'sceneTree'"></li>
                                 </ul>
@@ -100,7 +100,7 @@
     <script src="./threejs/OBJMTLLoader.js"  type="text/javascript"></script>
 	<script src="./threejs/ColladaLoader.js"  type="text/javascript"></script>
    
-    <script src="./threejs/ThreeCSG.js"  type="text/javascript"></script>
+    <!--<script src="./threejs/ThreeCSG.js"  type="text/javascript"></script>-->
     
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
     
