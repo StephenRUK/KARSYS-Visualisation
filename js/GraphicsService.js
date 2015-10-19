@@ -188,6 +188,10 @@ function GraphicsService(canvasID) {
         return objects.slice(0);    // Clone
     };
     
+    this.getObjectByName = function(name) {
+      return scene.getChildByName(name).clone();
+    };
+    
 	
 	//
 	// Model Loaders

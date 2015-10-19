@@ -27,6 +27,14 @@ function ModelServiceStatic() {
             transform: new Transform(0, 0, 0, 0.1, 0.1, 0.1)
         })
 	];
+    
+    var modelObjectInfo = [
+        {
+            model: "Spaceship",
+            object: "Booster_Blade_001",
+            info: "Helps propel the ship!"
+        }
+    ]
 
 	this.getAll = function () {
 		return models;
@@ -35,5 +43,13 @@ function ModelServiceStatic() {
     this.getByID = function (id) {
         return models[id];
     };
+    
+    this.getObjectInfo = function (modelName, objName) {
+        for (var i=0; i<modelObjectInfo.length; i++) {
+            if (modelObjectInfo[i].model == modelName && modelObjectInfo[i].object == objName) {
+                return modelObjectInfo[i].info;
+            }
+        }
+    }
 
 }
