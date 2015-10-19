@@ -189,7 +189,7 @@ function GraphicsService(canvasID) {
     };
     
     this.getObjectByName = function(name) {
-      return scene.getChildByName(name).clone();
+      return scene.getObjectByName(name).clone();
     };
     
 	
