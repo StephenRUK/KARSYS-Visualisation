@@ -39,20 +39,24 @@ function ModelController(ModelRepo, GraphicsController, $scope) {
     */
     function transformCoordinates(coords, transform) {
         if (!transform) {
-            return;
+            return coords;
         }
+        
+        var newCoords = {x:0, y:0, z:0};
         
         // Scale
         if (transform.scale) {
-            coords.x *= transform.scale.x;
-            coords.y *= transform.scale.y;
-            coords.z *= transform.scale.z;
+            newCoords.x = coords.x * transform.scale.x;
+            newCoords.y = coords.y * transform.scale.y;
+            newCoords.z = coords.z * transform.scale.z;
         }
         
         // Offset
-        coords.x += transform.offset.x;
-        coords.y += transform.offset.y;
-        coords.z += transform.offset.z;
+        newCoords.x = coords.x + transform.offset.x;
+        newCoords.y = coords.y + transform.offset.y;
+        newCoords.z = coords.z + transform.offset.z;
+        
+        return newCoords;
     }
     
     /***********************************************
@@ -137,10 +141,7 @@ function ModelController(ModelRepo, GraphicsController, $scope) {
         
         var coords = gfx.getMouseWorldCoordinates($event);
         if (coords) {
-            if (loadedModel.params.coordinatesTransform) {
-                transformCoordinates(coords, loadedModel.params.coordinatesTransform);
-            }
-            this.mouseCoordinates = coords;
+            this.mouseCoordinates = transformCoordinates(coords, loadedModel.params.coordinatesTransform);
         }
         
     };
