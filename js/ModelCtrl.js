@@ -28,9 +28,10 @@ function ModelController(ModelRepo, GraphicsController, $scope) {
             gfx.scaleObject(loadedModel.name, loadedModel.params.transform.scale);
         }
         
-        ctrl.objectTree = gfx.getObjectHierarchy();
-        
+        ctrl.objectTree = gfx.getObjectHierarchy();        
         $scope.$apply();    // This function is outside of Angular's scope. Tell it to update view.
+        
+        CollapsibleLists.applyTo(document.getElementById('objectHierarchy'));
     };
     
     /*
@@ -75,6 +76,7 @@ function ModelController(ModelRepo, GraphicsController, $scope) {
     // Settings
     this.coordinatesEnabled = false;
     this.movementEnabled = true;
+    this.cameraEnabled = false;
     //this.interactionMode = InteractionMode.MOVE;
     
 	
@@ -102,6 +104,12 @@ function ModelController(ModelRepo, GraphicsController, $scope) {
         this.mouseCoordinates = {x: 0, y: 0, z: 0};
         this.coordinatesUnit = loadedModel.params.unit;
 	};
+    
+    this.showObjectInfo = function(name) {
+        var obj = gfx.getObjectByName(name);
+        alert("You clicked on " + obj.name + "\r\nInfo: " + repo.getObjectInfo(loadedModel.name, obj.name));
+        // TO DO Show modal dialogue with name, info, position, ...?
+    };
 	
     //
     // Data access
@@ -113,7 +121,7 @@ function ModelController(ModelRepo, GraphicsController, $scope) {
         if (loadedModel) {
             return loadedModel.name;
         }
-    };    
+    };
 
     
     //
