@@ -126,7 +126,7 @@
     <script type="text/ng-template" id="sceneTree">
         <a ng-click="ctrl.showObjectInfo(child.name); $event.stopPropagation();">{{ child.name }}</a>
         <ul ng-if="child.children" class="collapsibleList">
-            <li ng-repeat="child in child.children | orderBy: 'name'" ng-include="'sceneTree'" ng-class="{lastChild: child.children.length==0 || !child.children}"> <!-- TODO: Which children to display?? -->
+            <li ng-repeat="child in (child.children | listObjectInTree) | orderBy: 'name'" ng-include="'sceneTree'" ng-class="{'lastChild list-unstyled': (child.children | listObjectInTree).length==0}">
             </li>
         </ul>
     </script>
