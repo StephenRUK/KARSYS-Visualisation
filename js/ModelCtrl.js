@@ -32,6 +32,9 @@ function ModelController(ModelRepo, GraphicsController, $scope) {
         $scope.$apply();    // This function is outside of Angular's scope. Tell it to update view.
         
         CollapsibleLists.applyTo(document.getElementById('objectHierarchy'));
+        document.getElementById('hierarchyRoot').click(); // Hackily expand first level
+        
+        ctrl.isModelLoaded = true;
     };
     
     /*
@@ -67,6 +70,8 @@ function ModelController(ModelRepo, GraphicsController, $scope) {
     // Temporary variables
     this.currentModelID;
     this.camCoords = gfx.getCameraPosition();
+    
+    this.isModelLoaded = false;
 
     // Display variables
     this.mouseCoordinates = {x: 0, y: 0, z: 0};
@@ -85,6 +90,7 @@ function ModelController(ModelRepo, GraphicsController, $scope) {
     //
     
 	this.loadModel = function (modelID) {
+        ctrl.isModelLoaded = false;
         loadedModel = repo.getByID(modelID);
         
 		switch (loadedModel.fileFormat) {
