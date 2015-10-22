@@ -1,4 +1,4 @@
-function ModelController(ModelRepo, GraphicsController, $scope) {
+function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
     /***********************************************
     * Private
     ***********************************************/
@@ -111,10 +111,28 @@ function ModelController(ModelRepo, GraphicsController, $scope) {
         this.coordinatesUnit = loadedModel.params.unit;
 	};
     
+    
+    this.hierarchyObjInfo;
     this.showObjectInfo = function(name) {
         var obj = gfx.getObjectByName(name);
-        alert("You clicked on " + obj.name + "\r\nInfo: " + repo.getObjectInfo(loadedModel.name, obj.name));
-        // TO DO Show modal dialogue with name, info, position, ...?
+        var hierarchyObjInfo = repo.getObjectInfo(loadedModel.name, name);
+        
+        //alert("You clicked on " + obj.name + "\r\nInfo: " + repo.getObjectInfo(loadedModel.name, obj.name));
+        
+        var modalInstance = $uibModal.open({
+            templateUrl: 'dialog.html',
+            controller: 'ModalInfoController as modalCtrl',
+            backdrop: false,
+            resolve: {
+                objectInfo: hierarchyObjInfo
+            }
+        });
+        
+        modalInstance.result.then(function () {
+			console.info("Modal opened successfully!");
+		}, function (error) {
+			console.warn("Modal couldn't be opened. error.");
+		});		
     };
 	
     //
@@ -160,4 +178,16 @@ function ModelController(ModelRepo, GraphicsController, $scope) {
         
     };
 	
+}
+
+
+
+
+function ModalInfoController ($modalInstance, objectInfo) {
+    //this.name = objectName;
+    this.info = objectInfo;
+    
+    this.ok = function() {
+        $modalInstance.dismiss();
+    }
 }

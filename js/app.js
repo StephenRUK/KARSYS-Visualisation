@@ -1,11 +1,12 @@
-var app = angular.module('karsys', []);
+var app = angular.module('karsys', ['ui.bootstrap']);
 
 app.service('ModelRepo', ModelServiceStatic);
 
 app.value('canvasID', 'canvas');
 app.service('GraphicsSvc', ['canvasID', GraphicsService]);
 
-app.controller('ModelController', ['ModelRepo', 'GraphicsSvc', '$scope', ModelController]);
+app.controller('ModelController', ['ModelRepo', 'GraphicsSvc', '$scope', '$uibModal', ModelController]);
+app.controller('ModalInfoController', ['$modalInstance', 'objectInfo', ModalInfoController]);
 
 app.filter('listObjectInTree', function () {
   return function (sceneObjects) {

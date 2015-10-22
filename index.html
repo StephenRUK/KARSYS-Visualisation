@@ -164,6 +164,17 @@
         
     </body>
     
+    <script type="text/ng-template" id="dialog.html">
+        <div class="modal-title">Object details</div>
+        <div class="modal-body">
+            <label>Object: </label><span ng-bind="modalCtrl.name"></span>
+            <label>Information: </label><span ng-bind="modalCtrl.info"></span>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="modalCtrl.ok()">OK</button>
+        </div>
+    </script>
+    
     <script type="text/ng-template" id="sceneTree">
         <a ng-click="ctrl.showObjectInfo(child.name); $event.stopPropagation();">{{ child.name }}</a>
         <ul ng-if="child.children" class="collapsibleList">
