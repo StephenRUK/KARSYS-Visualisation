@@ -32,7 +32,7 @@ function GraphicsService(canvasID) {
 		controls.addEventListener('change', render);
 		
 		// Lighting
-		scene.add(new THREE.AmbientLight(0x404040));
+		scene.add(new THREE.AmbientLight(0x707070));
 		
 		var light = new THREE.PointLight(0x606060);
 		light.position.set(-100, 200, 100);
