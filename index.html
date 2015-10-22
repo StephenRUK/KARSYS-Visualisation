@@ -7,11 +7,11 @@
         <style>
             canvas { width: 100%; height: 100%; }
             #top { border-bottom: 2px solid black; }
-            #objectHierarchy { height: 300px; overflow: scroll; resize: vertical; }
-            
             #objectHierarchy {
+                height: 300px;
+                overflow: scroll;
+                resize: vertical;
                 -moz-user-select:none;
-                position:relative;
             }
 
             #objectHierarchy ul {
@@ -46,9 +46,31 @@
                 background-color: red;
             }
             
+           /* .modal {
+                margin-top: -200px;
+                display: none;
+                background-color: rgba(255, 255, 255, 0.8);
+                margin: 0;
+                
+                opacity: 1;
+                
+                position: fixed;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                
+                z-index: 2147483647;
+            }
+            
+            .modal .fade {
+                transition: all 1s ease 0s;
+            }
+            */
+            
             /* #statusBar { background-color: azure; background-blend-mode: screen; color: navy; font-family: Sans-serif; font-weight: 200; } */
             
-        </style>        
+        </style>
         
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
         <script src="./js/ui-bootstrap-0.14.1.min.js" type="text/javascript" defer></script>
@@ -113,7 +135,7 @@
                     <hr />
                     <div id="details">
                         <b>Details</b>
-                        <div id="details_coordinates" ng-show="ctrl.currentModelID != null">
+                        <div id="details_coordinates" ng-show="ctrl.isModelLoaded">
                             <br />
                             <div ng-show="ctrl.coordinatesEnabled">  
                                 <i>Coordinates</i><br />
@@ -124,7 +146,7 @@
                                                         
                             <div id="objectHierarchy" class="">                              
                                 <ul>
-                                    <li ng-repeat="child in ctrl.objectTree" ng-include="'sceneTree'"></li>
+                                    <li id="hierarchyRoot" ng-repeat="child in ctrl.objectTree" ng-include="'sceneTree'"></li>
                                 </ul>
                             </div>
                             
@@ -145,7 +167,7 @@
     <script type="text/ng-template" id="sceneTree">
         <a ng-click="ctrl.showObjectInfo(child.name); $event.stopPropagation();">{{ child.name }}</a>
         <ul ng-if="child.children" class="collapsibleList">
-            <li ng-repeat="child in (child.children | listObjectInTree) | orderBy: 'name'" ng-include="'sceneTree'" ng-class="{'lastChild list-unstyled': (child.children | listObjectInTree).length==0}">
+            <li ng-repeat="child in (child.children | listObjectInTree) | orderBy: 'name'" ng-include="'sceneTree'" ng-class="{'lastChild': (child.children | listObjectInTree).length==0}">
             </li>
         </ul>
     </script>
