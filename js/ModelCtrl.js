@@ -28,7 +28,7 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
             gfx.scaleObject(loadedModel.name, loadedModel.params.transform.scale);
         }
         
-        ctrl.objectTree = gfx.getObjectHierarchy();        
+        ctrl.objectTree = gfx.getObjectHierarchy();
         $scope.$apply();    // This function is outside of Angular's scope. Tell it to update view.
         
         CollapsibleLists.applyTo(document.getElementById('objectHierarchy'));
@@ -46,7 +46,7 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
             return coords;
         }
         
-        var newCoords = {x:0, y:0, z:0};
+        var newCoords = {x: 0, y: 0, z: 0};
         
         // Scale
         if (transform.scale) {
