@@ -111,20 +111,21 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
         this.coordinatesUnit = loadedModel.params.unit;
 	};
     
-    
-    this.hierarchyObjInfo;
-    this.showObjectInfo = function(name) {
+    this.showObjectInfo = function (name) {
         var obj = gfx.getObjectByName(name);
         var hierarchyObjInfo = repo.getObjectInfo(loadedModel.name, name);
-        
-        //alert("You clicked on " + obj.name + "\r\nInfo: " + repo.getObjectInfo(loadedModel.name, obj.name));
         
         var modalInstance = $uibModal.open({
             templateUrl: 'dialog.html',
             controller: 'ModalInfoController as modalCtrl',
             backdrop: false,
             resolve: {
-                objectInfo: hierarchyObjInfo
+                objectName: function () {
+                    return name;
+                },
+                objectInfo: function () {
+                    return hierarchyObjInfo;
+                }
             }
         });
         
@@ -132,7 +133,8 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
 			console.info("Modal opened successfully!");
 		}, function (error) {
 			console.warn("Modal couldn't be opened. error.");
-		});		
+		});
+        
     };
 	
     //
@@ -181,13 +183,14 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
 }
 
 
-
-
-function ModalInfoController ($modalInstance, objectInfo) {
-    //this.name = objectName;
+/*****************************
+* Modal Dialog Controller
+******************************/
+function ModalInfoController ($modalInstance, objectName, objectInfo) {
+    this.name = objectName;
     this.info = objectInfo;
     
-    this.ok = function() {
-        $modalInstance.dismiss();
-    }
+    this.ok = function () {
+        $modalInstance.close();
+    };
 }
