@@ -32,7 +32,11 @@ function ModelServiceStatic() {
         {
             model: "Spaceship",
             object: "Booster_Blade_001",
-            info: "Helps propel the ship!"
+            info: {
+                description:    "Helps propel the ship!",
+                vendor:         "Rolls Royce",
+                weight:         "0.8 kg"
+            }
         }
     ]
 
