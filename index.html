@@ -99,13 +99,22 @@
     </body>
     
     <script type="text/ng-template" id="dialog.html">
-        <div class="modal-title">Object details</div>
-        <div class="modal-body">
-            <label>Object: </label><span ng-bind="modalCtrl.name"></span>
-            <label>Information: </label><span ng-bind="modalCtrl.info"></span>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="modalCtrl.ok()">OK</button>
+        <div>
+            <div class="modal-header">
+                <h2><span ng-bind="'Details: ' + modalCtrl.name"></span></h2>
+            </div>
+            
+            <div class="modal-body">
+                <div class="alert alert-info" ng-if="!modalCtrl.info">No data is available for this object.</div>
+                <div class="row" ng-repeat="(prop,val) in modalCtrl.info">
+                    <div class="col-md-3"><label ng-bind="prop + ': '"></label></div>
+                    <div class="col-md-6" ng-bind="val"></div>
+                </div>                
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" ng-click="modalCtrl.ok()">OK</button>
+            </div>
         </div>
     </script>
     
