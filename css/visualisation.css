@@ -1,0 +1,48 @@
+canvas { width: 100%; height: 100%; }
+#top { border-bottom: 2px solid black; }
+
+/* #statusBar { background-color: azure; background-blend-mode: screen; color: navy; font-family: Sans-serif; font-weight: 200; } */
+
+
+/***********************
+* Object Hierarchy
+************************/
+
+#objectHierarchy {
+    height: 300px;
+    overflow: scroll;
+    resize: vertical;
+    -moz-user-select:none;
+}
+
+#objectHierarchy ul {
+    margin: 0 0 0 -1em;
+    padding: 0 0 0 1em;
+}
+
+#objectHierarchy li {
+    margin: 0;
+    padding: 0;
+    list-style-position: inside;
+    cursor: auto;
+}
+
+#objectHierarchy li li {
+    padding-left:1.5em;
+}
+
+
+#objectHierarchy li.collapsibleListOpen {
+    list-style-image: url('../img/button-open.png');
+    cursor:pointer;
+}
+
+#objectHierarchy li.collapsibleListClosed {
+    list-style-image: url('../img/button-closed.png');
+    cursor:pointer;
+}
+
+#objectHierarchy li.lastChild {
+    list-style-image: none; !important
+    background-color: red;
+}
