@@ -18,8 +18,11 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
         CROSS_SECTION: 2
     };
     
+    //
     // Event handlers
-    gfx.onModelLoaded = function (name) {
+    //
+    
+    function modelLoadedHandler(name) {
         gfx.resetCamPosition();
         
         // Apply transformations
@@ -36,6 +39,10 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
         
         ctrl.isModelLoaded = true;
     };
+    
+    //
+    // Private util methods
+    //
     
     /*
     * transfromCoordinates
@@ -83,7 +90,8 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
     this.movementEnabled = true;
     this.cameraEnabled = false;
     //this.interactionMode = InteractionMode.MOVE;
-    
+    this.csMode;    // Cross-section Horizontal/Vertical/null
+    this.crossSection = gfx.crossSection;
 	
     //
     // Functions
@@ -136,6 +144,19 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
 		});
         
     };
+    
+    this.toggleCrossSection = function (newMode, oldMode) {
+        if (newMode) {
+            gfx.enableCrossSection();
+        } else {
+            gfx.disableCrossSection();
+        }
+    };
+    
+    this.updateCrossSection = function () {
+        gfx.updateCrossSection();
+    };
+    
 	
     //
     // Data access
@@ -179,14 +200,25 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
         }
         
     };
-	
+    
+    
+    /*************************
+    * Main/Init
+    */
+    
+    function init() {
+        gfx.onModelLoaded = modelLoadedHandler;
+        $scope.$watchCollection('ctrl.csMode', ctrl.toggleCrossSection);        
+    }
+    
+    init();	
 }
 
 
 /*****************************
 * Modal Dialog Controller
 ******************************/
-function ModalInfoController ($modalInstance, objectName, objectInfo) {
+function ModalInfoController($modalInstance, objectName, objectInfo) {
     this.name = objectName;
     this.info = objectInfo;
     

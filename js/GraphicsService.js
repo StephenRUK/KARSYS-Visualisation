@@ -66,6 +66,10 @@ function GraphicsService(canvasID) {
         renderer.setSize(w, h);
     }
     
+    function fixNearToCrossSection() {
+        svc.updateCrossSection();
+    }
+    
     //
     // Private Utility functions
     //
@@ -119,12 +123,12 @@ function GraphicsService(canvasID) {
     ******************************************************/
     
     //
-    // Public utility functions
+    // Camera
     //
     
     this.resetCamPosition = function() {
         camera.position.set(CAM_DEFAULT_POS.x, CAM_DEFAULT_POS.y, CAM_DEFAULT_POS.z);
-        camera.lookAt(new THREE.Vector3(0,0,0));
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
     }
         
     this.moveCamera = function (x, y, z) {    
@@ -133,11 +137,60 @@ function GraphicsService(canvasID) {
 		camera.position.z = z;
     };
     
+    this.cameraLookAt = function (x, y, z) {
+        camera.lookAt(new THREE.Vector3(x, y, z));
+    };
+
+    //
+    // Cross section
+    //
+    
+    this.crossSection = {
+        enabled: false,
+        distance: 0
+    };
+    
+    this.enableCrossSection = function (distance) {
+        this.crossSection.enabled = true;
+        if (distance) {
+            this.crossSection.distance = distance;
+        }
+        
+        this.moveCamera(0, 0, 10);
+        camera.lookAt( new THREE.Vector3(camera.position.x, camera.position.y, -1) );
+        
+        fixNearToCrossSection();
+        renderer.domElement.addEventListener('mousewheel', fixNearToCrossSection);
+        renderer.domElement.addEventListener('DOMMouseScroll', fixNearToCrossSection); // Firefox
+        controls.noRotate = true;        
+    };
+    
+    this.disableCrossSection = function () {
+        this.crossSection.distance = 0;
+        this.crossSection.enabled = false;
+        
+        renderer.domElement.removeEventListener('mousewheel', fixNearToCrossSection);
+        renderer.domElement.removeEventListener('DOMMouseScroll', fixNearToCrossSection); // Firefox
+        controls.noRotate = false;
+        
+        camera.near = CAM_NEAR_PLANE;
+    };
+    
+    this.updateCrossSection = function () {
+        camera.near = camera.position.z + svc.crossSection.distance;
+        camera.updateProjectionMatrix();
+    };
+    
+    //
+    // Controls
+    //
+    
     this.enableMovement = function (isEnabled) {
         controls.enabled = isEnabled;
     };
     
-    // TODO Bugfix: Scaling seems to be reset a moment later??
+    // Transforms
+    
     this.scaleObject = function (name, scale) {
         var obj = scene.getObjectByName(name);
         
