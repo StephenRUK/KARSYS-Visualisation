@@ -101,14 +101,14 @@
     <script type="text/ng-template" id="dialog.html">
         <div>
             <div class="modal-header">
-                <h2><span ng-bind="'Details: ' + modalCtrl.name"></span></h2>
+                <h3><span ng-bind="'Details: ' + modalCtrl.name"></span></h3>
             </div>
             
             <div class="modal-body">
                 <div class="alert alert-info" ng-if="!modalCtrl.info">No data is available for this object.</div>
                 <div class="row" ng-repeat="(prop,val) in modalCtrl.info">
-                    <div class="col-md-3"><label ng-bind="prop + ': '"></label></div>
-                    <div class="col-md-6" ng-bind="val"></div>
+                    <div class="col-md-3"><label ng-bind="(prop|capitalize)"></label></div>
+                    <div class="col-md-9" ng-bind="val"></div>
                 </div>                
             </div>
             
