@@ -6,7 +6,7 @@ app.value('canvasID', 'canvas');
 app.service('GraphicsSvc', ['canvasID', GraphicsService]);
 
 app.controller('ModelController', ['ModelRepo', 'GraphicsSvc', '$scope', '$uibModal', ModelController]);
-app.controller('ModalInfoController', ['$modalInstance', 'objectInfo', ModalInfoController]);
+app.controller('ModalInfoController', ['$modalInstance', 'objectName', 'objectInfo', ModalInfoController]);
 
 app.filter('listObjectInTree', function () {
   return function (sceneObjects) {
