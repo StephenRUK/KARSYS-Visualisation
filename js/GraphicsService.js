@@ -147,6 +147,36 @@ function GraphicsService(canvasID) {
     };
     
     this.enableCrossSection = function (distance) {
+        var clipBoxGeo = new THREE.BoxGeometry(100,100,10);
+        clipBoxGeo.z = distance;
+        var clipBoxObject = new THREE.Mesh(clipBoxGeo, new THREE.MeshLambertMaterial({color: 0xFF0000, alpha: 0.5}));
+        var clipBoxBsp = new ThreeBSP( clipBoxGeo );
+
+        var clippedModel = new THREE.Object3D();
+        clippedModel.name = "_CLIPPED_MODEL";
+
+        scene.children[2].traverse(
+          function(c){
+            if(c instanceof THREE.Mesh){ 
+                var bsp = new ThreeBSP(c);
+                var bsp_clip = bsp.subtract(clipBoxBsp).toMesh(c);
+                bsp_clip.scale.set(c.scale.x, c.scale.y, c.scale.z);
+                clippedModel.add(bsp_clip);
+            }
+          });
+
+        scene.add(clipBoxObject);
+        scene.add(clippedModel);
+        objects[0].visible = false; // TODO
+    };
+    
+    this.disableCrossSection = function () {
+        scene.remove(scene.getObjectByName("_CLIPPED_MODEL"));
+        objects[0].visible = true; // TODO
+    };
+    
+    /*
+    this.enableCrossSection = function (distance) {
         this.crossSection.enabled = true;
         if (distance) {
             this.crossSection.distance = distance;
@@ -179,7 +209,7 @@ function GraphicsService(canvasID) {
         camera.near = camera.position.z + svc.crossSection.distance;
         camera.updateProjectionMatrix();
     };
-    
+    */
     //
     // Controls
     //
