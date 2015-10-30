@@ -41,7 +41,7 @@
                     <br />
                     <div id="controls">
                         
-                        <div class="row-fluid">
+                        <div id="controls_ModelList" class="row-fluid">
                             <label>Model</label>
                             <select id="modelList" ng-model="ctrl.currentModelID">
                                 <option value="">(Please select...)</option>
@@ -50,60 +50,70 @@
                             <br />
                             <input type="button" value="Show" ng-click="ctrl.loadModel(ctrl.currentModelID)" />
                         </div>
-                        <br />
-                        <div class="row-fluid" ng-show="ctrl.cameraEnabled">
-                            <label>Camera</label>
-                            <input type="text" size="3" ng-model="ctrl.camCoords.x">
-                            <input type="text" size="3" ng-model="ctrl.camCoords.y">
-                            <input type="text" size="3" ng-model="ctrl.camCoords.z">
-                        </div>
-                        <br />
-                        <div class="row-fluid">
-                            <input type="checkbox" name="controls_MovementEnabled" ng-model="ctrl.movementEnabled" ng-change="ctrl.toggleMovementControls()">
-                            <label for="controls_MovementEnabled">Movement</label>
+                        
+                        <div class="panel-group" ng-show="ctrl.isModelLoaded">
 
-                            <input type="checkbox" name="controls_CoordinatesEnabled" ng-model="ctrl.coordinatesEnabled">
-                            <label for="controls_MovementEnabled">Coordinates</label>
+                            <div id="controls_Camera" class="panel panel-default" ng-show="ctrl.cameraEnabled">
+                                <div class="panel-heading">Camera</div>
+                                <div class="panel-body">
+                                    <input type="text" size="3" ng-model="ctrl.camCoords.x">
+                                    <input type="text" size="3" ng-model="ctrl.camCoords.y">
+                                    <input type="text" size="3" ng-model="ctrl.camCoords.z">
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <input type="checkbox" name="controls_MovementEnabled" ng-model="ctrl.movementEnabled" ng-change="ctrl.toggleMovementControls()">
+                                <label for="controls_MovementEnabled">Movement</label>
+
+                                <input type="checkbox" name="controls_CoordinatesEnabled" ng-model="ctrl.coordinatesEnabled">
+                                <label for="controls_MovementEnabled">Coordinates</label>
+                            </div>
+                            
+                            <div id="controls_CrossSection" class="panel panel-default">
+                                <div class="panel-heading">Cross Sections</div>
+                                <div class="panel-body">
+                                    <div class="btn-group">
+                                        <label class="btn btn-primary" ng-model="ctrl.csMode" uib-btn-radio="'Horizontal'" uncheckable>Horizontal</label>
+                                        <label class="btn btn-primary" ng-model="ctrl.csMode" uib-btn-radio="'Vertical'" uncheckable>Vertical</label>
+                                    </div>
+                                    <div class="dropdown" uib-dropdown>
+                                      <button class="btn btn-primary dropdown-toggle" type="button" uib-dropdown-toggle>Options<span class="caret"></span></button>
+                                          <ul class="dropdown-menu">
+                                              <li><a href="#" ng-click="ctrl.crossSectionFlip()">Flip</a></li>
+                                              <li><a href="#" ng-click="ctrl.crossSectionDisable()">Disable</a></li>
+                                          </ul>
+                                    </div>
+
+                                    <label for="crossSectionDistance">Cross-section Distance: </label><input id="crossSectionDistance" class="form-control" ng-model="ctrl.crossSection.distance" ng-change="ctrl.updateCrossSection()" type="number" min="-100" max="100" />
+                                </div>
+                            </div>
+                            
                         </div>
-                        <br />
-                        <div class="row-fluid">
-                            
-                            <div class="btn-group">
-                                <label class="btn btn-primary" ng-model="ctrl.csMode" uib-btn-radio="'Horizontal'" uncheckable>Horizontal</label>
-                                <label class="btn btn-primary" ng-model="ctrl.csMode" uib-btn-radio="'Vertical'" uncheckable>Vertical</label>
-                            </div>
-                            
-                            <div class="dropdown" uib-dropdown>
-                              <button class="btn btn-primary dropdown-toggle" type="button" uib-dropdown-toggle>Options<span class="caret"></span></button>
-                                  <ul class="dropdown-menu">
-                                      <li><a href="#" ng-click="ctrl.crossSectionFlip()">Flip</a></li>
-                                      <li><a href="#" ng-click="ctrl.crossSectionDisable()">Disable</a></li>
-                                  </ul>
-                            </div>
-                            
-                            <label for="crossSectionDistance">Cross-section Distance: </label><input id="crossSectionDistance" class="form-control" ng-model="ctrl.crossSection.distance" ng-change="ctrl.updateCrossSection()" type="number" min="-100" max="100" />
+                        
+                        <hr />
+                        
+                        <div id="details" class="panel panel-default">
+                            <div class="panel-heading">Details</div>
+
+                            <div id="details_coordinates">
+                                <div class="panel-body" ng-show="ctrl.coordinatesEnabled">  
+                                    <i>Coordinates</i><br />
+                                    <span ng-repeat="(dim,val) in ctrl.mouseCoordinates" ng-bind="dim + ': ' + (val | number: 2) + ctrl.coordinatesUnit + ($index<2 ? ', ' : '')"></span>
+                                </div>
+                            </div>                            
                             
                         </div>
-                    </div>
-                    <hr />
-                    <div id="details">
-                        <b>Details</b>
-                        <div id="details_coordinates" ng-show="ctrl.isModelLoaded">
-                            <br />
-                            <div ng-show="ctrl.coordinatesEnabled">  
-                                <i>Coordinates</i><br />
-                                <span ng-repeat="(dim,val) in ctrl.mouseCoordinates" ng-bind="dim + ': ' + (val | number: 2) + ctrl.coordinatesUnit + ($index<2 ? ', ' : '')"></span>
-                            </div>
-                            <br />
-                            <h3>Hierarchy</h3>
-                                                        
-                            <div id="objectHierarchy" class="">                              
+                        
+                        <div id="details" class="panel panel-default">
+                            <div class="panel-heading">Hierarchy</div>
+                            <div id="objectHierarchy" class="panel-body">
                                 <ul>
                                     <li id="hierarchyRoot" ng-repeat="child in ctrl.objectTree" ng-include="'sceneTree'"></li>
                                 </ul>
                             </div>
-                            
                         </div>
+                        
                     </div>
                     
                 </div>
