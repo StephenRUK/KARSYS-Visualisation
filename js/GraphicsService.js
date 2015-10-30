@@ -4,12 +4,8 @@ function GraphicsService(canvasID) {
 	var scene, camera, renderer, controls, objects = [];
     
     var CAM_DEFAULT_POS = new THREE.Vector3(0, 40, 100),
-        CAM_NEAR_PLANE = 10,
+        CAM_NEAR_PLANE = 0.1,
         CAM_FAR_PLANE  = 500;
-    
-    // Main
-    init(canvasID);
-    animate();
     
     //
     // Setup functions
@@ -156,8 +152,8 @@ function GraphicsService(canvasID) {
             this.crossSection.distance = distance;
         }
         
-        this.moveCamera(0, 0, 10);
-        camera.lookAt( new THREE.Vector3(camera.position.x, camera.position.y, -1) );
+        //camera.position.y = 0;
+        camera.lookAt( new THREE.Vector3(camera.position.x, camera.position.y, 0) );
         
         fixNearToCrossSection();
         renderer.domElement.addEventListener('mousewheel', fixNearToCrossSection);
@@ -174,9 +170,12 @@ function GraphicsService(canvasID) {
         controls.noRotate = false;
         
         camera.near = CAM_NEAR_PLANE;
+        camera.updateProjectionMatrix();
     };
     
     this.updateCrossSection = function () {
+        if(!this.crossSection.enabled) return;
+        
         camera.near = camera.position.z + svc.crossSection.distance;
         camera.updateProjectionMatrix();
     };
@@ -286,5 +285,10 @@ function GraphicsService(canvasID) {
 	    );
 	};
 	
+    /******************************************************
+    * Main
+    ******************************************************/
+    init(canvasID);
+    animate();
 	
 }

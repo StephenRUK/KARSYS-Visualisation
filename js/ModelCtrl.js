@@ -97,9 +97,13 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
     // Functions
     //
     
-	this.loadModel = function (modelID) {
+	this.loadModel = function (modelID) {        
+        var modelToLoad = repo.getByID(modelID);
+        
+        if (modelToLoad === loadedModel) return;
+        
+        loadedModel = modelToLoad;
         ctrl.isModelLoaded = false;
-        loadedModel = repo.getByID(modelID);
         
 		switch (loadedModel.fileFormat) {
         case ModelFormat.OBJMTL:
