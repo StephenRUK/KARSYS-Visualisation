@@ -151,16 +151,19 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
     
     this.toggleCrossSection = function (newMode, oldMode) {
         if (newMode) {
-            gfx.enableCrossSection();
+            gfx.enableCrossSection(newMode, ctrl.crossSection.distance);
         } else {
             gfx.disableCrossSection();
         }
     };
     
     this.updateCrossSection = function () {
-        gfx.updateCrossSection();
+        gfx.moveCrossSection(ctrl.crossSection.distance);
     };
     
+    this.flipCrossSection = function() {
+        gfx.flipCrossSection();
+    };
 	
     //
     // Data access

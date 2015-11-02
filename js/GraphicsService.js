@@ -3,157 +3,11 @@ function GraphicsService(canvasID) {
     
 	var scene, camera, renderer, controls, objects = [];
     
+    var crossSectionPlaneObj;
+    
     var CAM_DEFAULT_POS = new THREE.Vector3(0, 40, 100),
         CAM_NEAR_PLANE = 0.1,
         CAM_FAR_PLANE  = 500;
-    
-    //
-    // Setup functions
-    //
-        
-    function init(canvasID) {
-		scene = new THREE.Scene();
-        
-        var canvas = document.getElementById(canvasID);
-		renderer = new THREE.WebGLRenderer({canvas: canvas});
-		renderer.setSize(renderer.domElement.clientWidth, renderer.domElement.clientHeight);
-		
-		// Camera
-		camera = new THREE.PerspectiveCamera(75, renderer.domElement.width / renderer.domElement.height, CAM_NEAR_PLANE, CAM_FAR_PLANE);
-        camera.position.set(CAM_DEFAULT_POS.x, CAM_DEFAULT_POS.y, CAM_DEFAULT_POS.z);
-		
-		// Orbit Controls
-		controls = new THREE.OrbitControls(camera, renderer.domElement);
-		controls.damping = 0.2;
-		controls.addEventListener('change', render);
-		
-		// Lighting
-		scene.add(new THREE.AmbientLight(0x707070));
-		
-		var light = new THREE.PointLight(0x606060);
-		light.position.set(-100, 200, 100);
-		scene.add(light);
-
-		// Listeners
-		window.addEventListener('resize', onWindowResize, true);
-	}
-    
-    //
-    // Render loop
-    //
-    function render() {
-        renderer.render(scene, camera);
-    }
-    
-    function animate() {
-        requestAnimationFrame(animate);
-        render();
-    }
-    
-    //
-    // Event handlers
-    //
-        
-    function onWindowResize() {
-        var w = renderer.domElement.clientWidth, h =  renderer.domElement.clientHeight;
-        
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-        renderer.setSize(w, h);
-    }
-    
-    function fixNearToCrossSection() {
-        svc.updateCrossSection();
-    }
-    
-    //
-    // Cross-section
-    //
-    function setCrossSection(distance) {
-        // Set oblique camera frustum
-        // Algorithm & paper:   http://www.terathon.com/code/oblique.html
-        // ThreeJS snippets:    https://github.com/mrdoob/three.js/blob/af21991fc7c4e1d35d6a93031707273d937af0f9/examples/js/WaterShader.js
-        
-        var crossSectionPlane = new THREE.Plane(new THREE.Vector3(0,0,-1), distance);
-        crossSectionPlane.applyMatrix4(camera.matrixWorldInverse);
-        
-        var clipPlaneV = new THREE.Vector4(crossSectionPlane.normal.x, crossSectionPlane.normal.y, crossSectionPlane.normal.z, crossSectionPlane.constant);
-        
-        var q = new THREE.Vector4();
-        var projectionMatrix = camera.projectionMatrix;
-
-        q.x = ( Math.sign( clipPlaneV.x ) + projectionMatrix.elements[ 8 ] ) / projectionMatrix.elements[ 0 ];
-        q.y = ( Math.sign( clipPlaneV.y ) + projectionMatrix.elements[ 9 ] ) / projectionMatrix.elements[ 5 ];
-        q.z = - 1.0;
-        q.w = ( 1.0 + projectionMatrix.elements[ 10 ] ) / projectionMatrix.elements[ 14 ];
-
-        // Calculate the scaled plane vector
-        var c = new THREE.Vector4();
-        //c = clipPlane.multiplyScalar( 2.0 / clipPlane.dot( q ) );
-        c = clipPlaneV.multiplyScalar( 2.0 / clipPlaneV.dot( q ) );
-
-        // Replacing the third row of the projection matrix
-        projectionMatrix.elements[ 2 ] = c.x;
-        projectionMatrix.elements[ 6 ] = c.y;
-        projectionMatrix.elements[ 10 ] = c.z + 1.0;
-        projectionMatrix.elements[ 14 ] = c.w;
-    }
-    
-    //
-    // Private Utility functions
-    //
-    
-    function displayModel(name, object3d, solo) {
-        if (solo) {
-            for (var i=0; i < objects.length; i++) {
-                scene.remove(objects[i]);
-            }
-            objects.splice(0, objects.length);
-        }
-        
-        object3d.name = name;
-        scene.add(object3d);
-        objects.push(object3d);
-        
-        svc.onModelLoaded(name);    // Callback/Event
-        
-        // DEBUG
-        object3d.traverse( function( node ) {
-            if( node.material ) {
-                node.material.side = THREE.DoubleSide;
-            }
-        });
-    }
-    
-    // Calculate world coordinates based on mouse position
-    function calcMouseCoordinates(mouseEvent) {
-        // calculate mouse position in normalized device coordinates
-        // (-1 to +1) for both components
-        var mouse = {x: 0, y: 0};
-
-        mouse.x = ( (mouseEvent.offsetX) / renderer.domElement.width ) * 2 - 1;
-        mouse.y = - ( (mouseEvent.offsetY) / renderer.domElement.height ) * 2 + 1;
-
-        return mouse;
-    }
-
-    // Return objects at mouse position
-    function getMouseIntersections(camera, mouseEvent) {
-        var mouse = calcMouseCoordinates(mouseEvent);
-        var raycaster = new THREE.Raycaster();
-        raycaster.setFromCamera( mouse, camera );
-
-        return raycaster.intersectObjects( scene.children, true );	// 2nd param: Recursive
-    }
-    
-    // Maths util (to be moved?)
-    Math.sign = Math.sign || function(x) {
-      x = +x; // convert to a number
-      if (x === 0 || isNaN(x)) {
-        return x;
-      }
-      return x > 0 ? 1 : -1;
-    }
     
     
     /******************************************************
@@ -185,23 +39,52 @@ function GraphicsService(canvasID) {
     
     this.crossSection = {
         enabled: false,
-        distance: 0
+        normal: new THREE.Vector3(0, 0, -1),    // Plane normal vector
+        distance: 0                             // Plane distance from origin        
     };
     
-    this.enableCrossSection = function (distance) {
-        this.crossSection.enabled = true;
-        this.crossSection.distance = distance;
+    this.enableCrossSection = function (direction, distance) {
+        svc.crossSection.enabled = true;
+        svc.crossSection.distance = distance;
         
-        setCrossSection(distance);
+        var vecFacingOrigin, camDirection;
+        
+        if (direction == 'H') {
+            vecFacingOrigin = new THREE.Vector3(0, 0, 1);
+            camDirection = Math.sign(camera.quaternion.z);
+            
+        } else { // assume vertical
+            vecFacingOrigin = new THREE.Vector3(0, 1, 0);
+            camDirection = Math.sign(camera.quaternion.y);
+        }
+        
+        vecFacingOrigin.multiplyScalar(camDirection);
+        svc.crossSection.normal = vecFacingOrigin;
+
+        setCrossSection(this.crossSection.normal, this.crossSection.distance);
+        crossSectionPlaneObj.visible = true;
     };
     
     this.disableCrossSection = function () {
         camera.updateProjectionMatrix();
+        svc.crossSection.enabled = false;
+        crossSectionPlaneObj.visible = false;
     };
     
-    this.updateCrossSection = function (distance) {
-        setCrossSection(distance);
-    }
+    this.moveCrossSection = function (distance) {
+        if (!svc.crossSection.enabled) return;
+        
+        svc.crossSection.distance = distance;
+        setCrossSection(svc.crossSection.normal, distance);
+    };
+    
+    this.flipCrossSection = function () {
+        svc.crossSection.normal.multiplyScalar(-1);
+        setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
+        
+        camera.position.multiplyScalar(-1);    // Keep or debug only?
+        camera.rotateY(Math.PI);    // Rotate 180° to face back
+    };
     
     //
     // Controls
@@ -307,6 +190,184 @@ function GraphicsService(canvasID) {
             }
 	    );
 	};
+    
+    /******************************************************
+    * Private
+    ******************************************************/
+    
+    function render() {
+        renderer.setViewport(0, 0, renderer.domElement.width, renderer.domElement.height);
+        renderer.render(scene, camera);
+        /*
+        // Render axis overlay
+        renderer.setViewport(10, 10, 20, 20);
+        renderer.render(sceneOverlay, cameraOverlay);
+        */
+    }
+    
+    function animate() {
+        requestAnimationFrame(animate);
+        render();
+    }
+        
+    function init(canvasID) {
+		scene = new THREE.Scene();
+        
+        var canvas = document.getElementById(canvasID);
+		renderer = new THREE.WebGLRenderer({canvas: canvas});
+		renderer.setSize(renderer.domElement.clientWidth, renderer.domElement.clientHeight);
+		
+		// Camera
+		camera = new THREE.PerspectiveCamera(75, renderer.domElement.width / renderer.domElement.height, CAM_NEAR_PLANE, CAM_FAR_PLANE);
+        camera.position.set(CAM_DEFAULT_POS.x, CAM_DEFAULT_POS.y, CAM_DEFAULT_POS.z);
+		
+		// Orbit Controls
+		controls = new THREE.OrbitControls(camera, renderer.domElement);
+		controls.damping = 0.2;
+        controls.addEventListener('change', controlsMovedHandler);
+		controls.addEventListener('change', render);
+        		
+		// Lighting
+		scene.add(new THREE.AmbientLight(0x707070));
+		var light = new THREE.PointLight(0x606060);
+		light.position.set(100, 100, 0);
+		scene.add(light);
+        
+        // Cross-sections
+        var geometry = new THREE.PlaneGeometry(60, 40);
+        var material = new THREE.MeshBasicMaterial( {color: 0xf00000, side: THREE.DoubleSide, transparent: true, opacity: 0.3 } );
+        crossSectionPlaneObj = new THREE.Mesh( geometry, material );
+        crossSectionPlaneObj.visible = false;
+        scene.add( crossSectionPlaneObj );
+
+		// Listeners
+		window.addEventListener('resize', onWindowResize, true);
+        
+        //
+        // Overlay for coordinate axes
+        //
+        sceneOverlay = new THREE.Scene();
+        cameraOverlay = new THREE.OrthographicCamera(-5, 5, 5, -5, 0.1, 5);
+        
+        // Axis helper
+        var AXIS_HELPER_SIZE = 5;
+        var axisHelper = new THREE.AxisHelper(AXIS_HELPER_SIZE);
+        sceneOverlay.add(axisHelper);
+
+	}
+    
+    //
+    // Event handlers
+    //
+        
+    function onWindowResize() {
+        var w = renderer.domElement.clientWidth, h =  renderer.domElement.clientHeight;
+        
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    }
+    
+    function controlsMovedHandler() {
+        if (svc.crossSection.enabled) {
+            setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
+        }
+    }
+    
+    //
+    // Cross-section
+    //
+    function setCrossSection(normalVector, distance) {
+        // Set oblique camera frustum
+        // Algorithm & paper:   http://www.terathon.com/code/oblique.html
+        // ThreeJS snippets:    https://github.com/mrdoob/three.js/blob/af21991fc7c4e1d35d6a93031707273d937af0f9/examples/js/WaterShader.js
+        
+        camera.updateProjectionMatrix();    // Reload original matrix
+        var normal = normalVector.clone();
+        
+        var crossSectionPlane = new THREE.Plane(normal, -distance);
+        crossSectionPlane.applyMatrix4(camera.matrixWorldInverse);
+        
+        var clipPlaneV = new THREE.Vector4(crossSectionPlane.normal.x, crossSectionPlane.normal.y, crossSectionPlane.normal.z, crossSectionPlane.constant);
+        
+        var q = new THREE.Vector4();
+        var projectionMatrix = camera.projectionMatrix;
+
+        q.x = ( Math.sign( clipPlaneV.x ) + projectionMatrix.elements[ 8 ] ) / projectionMatrix.elements[ 0 ];
+        q.y = ( Math.sign( clipPlaneV.y ) + projectionMatrix.elements[ 9 ] ) / projectionMatrix.elements[ 5 ];
+        q.z = - 1.0;
+        q.w = ( 1.0 + projectionMatrix.elements[ 10 ] ) / projectionMatrix.elements[ 14 ];
+
+        // Calculate the scaled plane vector
+        var c = new THREE.Vector4();
+        c = clipPlaneV.multiplyScalar( 2.0 / clipPlaneV.dot( q ) );
+
+        // Replacing the third row of the projection matrix
+        projectionMatrix.elements[ 2 ] = c.x;
+        projectionMatrix.elements[ 6 ] = c.y;
+        projectionMatrix.elements[ 10 ] = c.z + 1.0;
+        projectionMatrix.elements[ 14 ] = c.w;
+        
+        // DEBUG Update plane object
+        crossSectionPlaneObj.position.set(0, 0, 0);
+        crossSectionPlaneObj.translateOnAxis(normalVector, distance);
+    }
+    
+    //
+    // Private Utility functions
+    //
+    
+    function displayModel(name, object3d, solo) {
+        if (solo) {
+            for (var i=0; i < objects.length; i++) {
+                scene.remove(objects[i]);
+            }
+            objects.splice(0, objects.length);
+        }
+        
+        object3d.name = name;
+        scene.add(object3d);
+        objects.push(object3d);
+        
+        svc.onModelLoaded(name);    // Callback/Event
+        
+        // DEBUG
+        object3d.traverse( function( node ) {
+            if( node.material ) {
+                node.material.side = THREE.DoubleSide;
+            }
+        });
+    }
+    
+    // Calculate world coordinates based on mouse position
+    function calcMouseCoordinates(mouseEvent) {
+        // calculate mouse position in normalized device coordinates
+        // (-1 to +1) for both components
+        var mouse = {x: 0, y: 0};
+
+        mouse.x = ( (mouseEvent.offsetX) / renderer.domElement.width ) * 2 - 1;
+        mouse.y = - ( (mouseEvent.offsetY) / renderer.domElement.height ) * 2 + 1;
+
+        return mouse;
+    }
+
+    // Return objects at mouse position
+    function getMouseIntersections(camera, mouseEvent) {
+        var mouse = calcMouseCoordinates(mouseEvent);
+        var raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera( mouse, camera );
+
+        return raycaster.intersectObjects( scene.children, true );	// 2nd param: Recursive
+    }
+    
+    // Maths util (to be moved?)
+    Math.sign = Math.sign || function(x) {
+      x = +x; // convert to a number
+      if (x === 0 || isNaN(x)) {
+        return x;
+      }
+      return x > 0 ? 1 : -1;
+    }
 	
     /******************************************************
     * Main
