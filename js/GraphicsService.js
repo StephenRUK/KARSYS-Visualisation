@@ -67,6 +67,39 @@ function GraphicsService(canvasID) {
     }
     
     //
+    // Cross-section
+    //
+    function setCrossSection(distance) {
+        // Set oblique camera frustum
+        // Algorithm & paper:   http://www.terathon.com/code/oblique.html
+        // ThreeJS snippets:    https://github.com/mrdoob/three.js/blob/af21991fc7c4e1d35d6a93031707273d937af0f9/examples/js/WaterShader.js
+        
+        var crossSectionPlane = new THREE.Plane(new THREE.Vector3(0,0,-1), distance);
+        crossSectionPlane.applyMatrix4(camera.matrixWorldInverse);
+        
+        var clipPlaneV = new THREE.Vector4(crossSectionPlane.normal.x, crossSectionPlane.normal.y, crossSectionPlane.normal.z, crossSectionPlane.constant);
+        
+        var q = new THREE.Vector4();
+        var projectionMatrix = camera.projectionMatrix;
+
+        q.x = ( Math.sign( clipPlaneV.x ) + projectionMatrix.elements[ 8 ] ) / projectionMatrix.elements[ 0 ];
+        q.y = ( Math.sign( clipPlaneV.y ) + projectionMatrix.elements[ 9 ] ) / projectionMatrix.elements[ 5 ];
+        q.z = - 1.0;
+        q.w = ( 1.0 + projectionMatrix.elements[ 10 ] ) / projectionMatrix.elements[ 14 ];
+
+        // Calculate the scaled plane vector
+        var c = new THREE.Vector4();
+        //c = clipPlane.multiplyScalar( 2.0 / clipPlane.dot( q ) );
+        c = clipPlaneV.multiplyScalar( 2.0 / clipPlaneV.dot( q ) );
+
+        // Replacing the third row of the projection matrix
+        projectionMatrix.elements[ 2 ] = c.x;
+        projectionMatrix.elements[ 6 ] = c.y;
+        projectionMatrix.elements[ 10 ] = c.z + 1.0;
+        projectionMatrix.elements[ 14 ] = c.w;
+    }
+    
+    //
     // Private Utility functions
     //
     
@@ -113,6 +146,15 @@ function GraphicsService(canvasID) {
         return raycaster.intersectObjects( scene.children, true );	// 2nd param: Recursive
     }
     
+    // Maths util (to be moved?)
+    Math.sign = Math.sign || function(x) {
+      x = +x; // convert to a number
+      if (x === 0 || isNaN(x)) {
+        return x;
+      }
+      return x > 0 ? 1 : -1;
+    }
+    
     
     /******************************************************
     * Public
@@ -125,8 +167,8 @@ function GraphicsService(canvasID) {
     this.resetCamPosition = function() {
         camera.position.set(CAM_DEFAULT_POS.x, CAM_DEFAULT_POS.y, CAM_DEFAULT_POS.z);
         camera.lookAt(new THREE.Vector3(0, 0, 0));
-    }
-        
+    };
+
     this.moveCamera = function (x, y, z) {    
         camera.position.x = x;
         camera.position.y = y;
@@ -147,69 +189,20 @@ function GraphicsService(canvasID) {
     };
     
     this.enableCrossSection = function (distance) {
-        var clipBoxGeo = new THREE.BoxGeometry(100,100,10);
-        clipBoxGeo.z = distance;
-        var clipBoxObject = new THREE.Mesh(clipBoxGeo, new THREE.MeshLambertMaterial({color: 0xFF0000, alpha: 0.5}));
-        var clipBoxBsp = new ThreeBSP( clipBoxGeo );
-
-        var clippedModel = new THREE.Object3D();
-        clippedModel.name = "_CLIPPED_MODEL";
-
-        scene.children[2].traverse(
-          function(c){
-            if(c instanceof THREE.Mesh){ 
-                var bsp = new ThreeBSP(c);
-                var bsp_clip = bsp.subtract(clipBoxBsp).toMesh(c);
-                bsp_clip.scale.set(c.scale.x, c.scale.y, c.scale.z);
-                clippedModel.add(bsp_clip);
-            }
-          });
-
-        scene.add(clipBoxObject);
-        scene.add(clippedModel);
-        objects[0].visible = false; // TODO
-    };
-    
-    this.disableCrossSection = function () {
-        scene.remove(scene.getObjectByName("_CLIPPED_MODEL"));
-        objects[0].visible = true; // TODO
-    };
-    
-    /*
-    this.enableCrossSection = function (distance) {
         this.crossSection.enabled = true;
-        if (distance) {
-            this.crossSection.distance = distance;
-        }
+        this.crossSection.distance = distance;
         
-        //camera.position.y = 0;
-        camera.lookAt( new THREE.Vector3(camera.position.x, camera.position.y, 0) );
-        
-        fixNearToCrossSection();
-        renderer.domElement.addEventListener('mousewheel', fixNearToCrossSection);
-        renderer.domElement.addEventListener('DOMMouseScroll', fixNearToCrossSection); // Firefox
-        controls.noRotate = true;        
+        setCrossSection(distance);
     };
     
     this.disableCrossSection = function () {
-        this.crossSection.distance = 0;
-        this.crossSection.enabled = false;
-        
-        renderer.domElement.removeEventListener('mousewheel', fixNearToCrossSection);
-        renderer.domElement.removeEventListener('DOMMouseScroll', fixNearToCrossSection); // Firefox
-        controls.noRotate = false;
-        
-        camera.near = CAM_NEAR_PLANE;
         camera.updateProjectionMatrix();
     };
     
-    this.updateCrossSection = function () {
-        if(!this.crossSection.enabled) return;
-        
-        camera.near = camera.position.z + svc.crossSection.distance;
-        camera.updateProjectionMatrix();
-    };
-    */
+    this.updateCrossSection = function (distance) {
+        setCrossSection(distance);
+    }
+    
     //
     // Controls
     //
