@@ -17,6 +17,7 @@
 
         <script src="threejs/ThreeCSG.js"  type="text/javascript"></script>
 
+        <script src="threejs/AxisHelper.js" type="text/javascript" defer></script>
         <script src="js/GraphicsService.js"  type="text/javascript" defer></script>
         <script src="js/Model.js"  type="text/javascript" defer></script>
         <script src="js/ModelService.js"  type="text/javascript" defer></script>
@@ -74,14 +75,13 @@
                                 <div class="panel-heading">Cross Sections</div>
                                 <div class="panel-body">
                                     <div class="btn-group">
-                                        <label class="btn btn-primary" ng-model="ctrl.csMode" uib-btn-radio="'Horizontal'" uncheckable>Horizontal</label>
-                                        <label class="btn btn-primary" ng-model="ctrl.csMode" uib-btn-radio="'Vertical'" uncheckable>Vertical</label>
+                                        <label class="btn btn-primary" ng-model="ctrl.csMode" uib-btn-radio="'H'" uncheckable>Horizontal</label>
+                                        <label class="btn btn-primary" ng-model="ctrl.csMode" uib-btn-radio="'V'" uncheckable>Vertical</label>
                                     </div>
                                     <div class="dropdown" uib-dropdown>
                                       <button class="btn btn-primary dropdown-toggle" type="button" uib-dropdown-toggle>Options<span class="caret"></span></button>
                                           <ul class="dropdown-menu">
-                                              <li><a href="#" ng-click="ctrl.crossSectionFlip()">Flip</a></li>
-                                              <li><a href="#" ng-click="ctrl.crossSectionDisable()">Disable</a></li>
+                                              <li><a href="#" ng-enabled="ctrl.csMode != null" ng-click="ctrl.flipCrossSection()">Flip</a></li>
                                           </ul>
                                     </div>
 
