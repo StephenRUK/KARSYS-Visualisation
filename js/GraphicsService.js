@@ -2,6 +2,7 @@ function GraphicsService(canvasID) {
     var svc = this;
     
 	var scene, camera, renderer, controls, objects = [];
+    var sceneOverlay, cameraOverlay;
     
     var crossSectionPlaneObj;
     
@@ -50,15 +51,15 @@ function GraphicsService(canvasID) {
         var vecFacingOrigin, camDirection;
         
         if (direction == 'H') {
-            vecFacingOrigin = new THREE.Vector3(0, 0, 1);
+            vecFacingOrigin = new THREE.Vector3(0, 0, -1);
             camDirection = Math.sign(camera.quaternion.z);
             
         } else { // assume vertical
-            vecFacingOrigin = new THREE.Vector3(0, 1, 0);
+            vecFacingOrigin = new THREE.Vector3(0, -1, 0);
             camDirection = Math.sign(camera.quaternion.y);
         }
         
-        vecFacingOrigin.multiplyScalar(camDirection);
+        vecFacingOrigin.multiplyScalar(camDirection);   // Is this right??
         svc.crossSection.normal = vecFacingOrigin;
 
         setCrossSection(this.crossSection.normal, this.crossSection.distance);
