@@ -50,13 +50,15 @@ function GraphicsService(canvasID) {
         
         var vecFacingOrigin, camDirection;
         
-        if (direction == 'H') {
-            vecFacingOrigin = new THREE.Vector3(0, 0, -1);
-            camDirection = Math.sign(camera.quaternion.z);
+        if (direction == 'V') {
+            vecFacingOrigin = new THREE.Vector3(0, 0, 1);
+            //camDirection = Math.sign(camera.quaternion.z);
+            camDirection = Math.sign(camera.getWorldDirection().z);
             
-        } else { // assume vertical
-            vecFacingOrigin = new THREE.Vector3(0, -1, 0);
-            camDirection = Math.sign(camera.quaternion.y);
+        } else { // assume horizontal
+            vecFacingOrigin = new THREE.Vector3(0, 1, 0);
+            //camDirection = Math.sign(camera.quaternion.y);
+            camDirection = Math.sign(camera.getWorldDirection().y);
         }
         
         vecFacingOrigin.multiplyScalar(camDirection);   // Is this right??
@@ -80,11 +82,15 @@ function GraphicsService(canvasID) {
     };
     
     this.flipCrossSection = function () {
+        var lookAt = controls.target.clone();
+        
         svc.crossSection.normal.multiplyScalar(-1);
         setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
         
         camera.position.multiplyScalar(-1);    // Keep or debug only?
-        camera.rotateY(Math.PI);    // Rotate 180° to face back
+        //camera.rotateY(Math.PI);    // Rotate 180° to face back
+        //camera.lookAt(lookAt);
+
     };
     
     //
@@ -218,6 +224,8 @@ function GraphicsService(canvasID) {
 		renderer = new THREE.WebGLRenderer({canvas: canvas});
 		renderer.setSize(renderer.domElement.clientWidth, renderer.domElement.clientHeight);
 		
+        renderer.setClearColor(0xdad1d0);
+        
 		// Camera
 		camera = new THREE.PerspectiveCamera(75, renderer.domElement.width / renderer.domElement.height, CAM_NEAR_PLANE, CAM_FAR_PLANE);
         camera.position.set(CAM_DEFAULT_POS.x, CAM_DEFAULT_POS.y, CAM_DEFAULT_POS.z);
@@ -230,9 +238,16 @@ function GraphicsService(canvasID) {
         		
 		// Lighting
 		scene.add(new THREE.AmbientLight(0x707070));
-		var light = new THREE.PointLight(0x606060);
-		light.position.set(100, 100, 0);
+		var light = new THREE.DirectionalLight(0x606060);
+		light.position.set(500, 0, 0);
 		scene.add(light);
+        light = new THREE.DirectionalLight(0x606060);
+        light.position.set(0, 500, 0);
+		scene.add(light);
+        light = new THREE.DirectionalLight(0x505050);
+        light.position.set(0, 0, -500);
+		scene.add(light);
+
         
         // Cross-sections
         var geometry = new THREE.PlaneGeometry(60, 40);
@@ -311,7 +326,7 @@ function GraphicsService(canvasID) {
         
         // DEBUG Update plane object
         crossSectionPlaneObj.position.set(0, 0, 0);
-        crossSectionPlaneObj.translateOnAxis(normalVector, distance);
+        crossSectionPlaneObj.translateOnAxis(normalVector, distance + 1);
     }
     
     //
