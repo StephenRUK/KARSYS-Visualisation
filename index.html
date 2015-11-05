@@ -30,11 +30,11 @@
     <body class="container-fluid" ng-app="karsys">
 		
         <div ng-controller="ModelController as ctrl" class="row-fluid">
-            <div id="left" class="col-md-2">
+            <div id="leftPane" class="col-md-2">
                 <div class="row">
                     <div id="top" class="col-md-12">
                         <h2>Visual KARSYS</h2>
-                        <b><i>by ISSKA</i></b>
+                        <b><i>by SISKA</i></b>
                     </div>
                 </div>
                 
@@ -91,7 +91,7 @@
                         
                         <hr />
                         
-                        <div id="details" class="panel panel-default">
+                        <div class="panel panel-default">
                             <div class="panel-heading">Details</div>
 
                             <div id="details_coordinates">
@@ -103,9 +103,9 @@
                             
                         </div>
                         
-                        <div id="details" class="panel panel-default">
+                        <div class="panel panel-default">
                             <div class="panel-heading">Hierarchy</div>
-                            <div id="objectHierarchy" class="panel-body">
+                            <div id="objectHierarchy" class="panel-body scrollable">
                                 <ul>
                                     <li id="hierarchyRoot" ng-repeat="child in ctrl.objectTree" ng-include="'sceneTree'"></li>
                                 </ul>
