@@ -98,6 +98,8 @@ function GraphicsService(canvasID) {
         controls.update();
         render();
         
+        svc.crossSection.distance *= -1;    // Flip distance to origin
+        
         svc.disableCrossSection();
         svc.enableCrossSection(svc.crossSection.direction, svc.crossSection.distance);
     };
