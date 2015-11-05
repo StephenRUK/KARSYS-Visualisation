@@ -3,7 +3,7 @@ var app = angular.module('karsys', ['ui.bootstrap']);
 app.service('ModelRepo', ModelServiceStatic);
 
 app.value('canvasID', 'canvas');
-app.service('GraphicsSvc', ['canvasID', GraphicsService]);
+app.service('GraphicsSvc', ['canvasID', '$timeout', GraphicsService]);
 
 app.controller('ModelController', ['ModelRepo', 'GraphicsSvc', '$scope', '$uibModal', ModelController]);
 app.controller('ModalInfoController', ['$modalInstance', 'objectName', 'objectInfo', ModalInfoController]);

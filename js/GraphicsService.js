@@ -1,4 +1,4 @@
-function GraphicsService(canvasID) {
+function GraphicsService(canvasID, $timeout) {
     var svc = this;
     
 	var scene, camera, renderer, controls, objects = [];
@@ -347,7 +347,9 @@ function GraphicsService(canvasID) {
         scene.add(object3d);
         objects.push(object3d);
         
-        svc.onModelLoaded(name);    // Callback/Event
+        $timeout(function(){    // Async callback/Event
+            svc.onModelLoaded(name);
+        }, 0);
         
         // DEBUG
         object3d.traverse( function( node ) {
