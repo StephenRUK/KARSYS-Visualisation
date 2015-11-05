@@ -19,9 +19,13 @@ function GraphicsService(canvasID) {
     // Camera
     //
     
-    this.resetCamPosition = function() {
-        camera.position.set(CAM_DEFAULT_POS.x, CAM_DEFAULT_POS.y, CAM_DEFAULT_POS.z);
-        camera.lookAt(new THREE.Vector3(0, 0, 0));
+    this.resetScene = function() {
+        for (var i=0; i < objects.length; i++) {
+            scene.remove(objects[i]);
+        }
+        objects.splice(0, objects.length);
+        
+        controls.reset();
     };
 
     this.moveCamera = function (x, y, z) {    
@@ -157,10 +161,10 @@ function GraphicsService(canvasID) {
 	// Model Loaders
 	//
 	
-	this.loadObjMtl = function(name, objPath, mtlPath, displaySolo) { // TODO: Add asyncCallback to show progress
+	this.loadObjMtl = function(name, objPath, mtlPath) { // TODO: Add asyncCallback to show progress
 		new THREE.OBJMTLLoader().load(objPath, mtlPath,
             function(obj) { // Load complete
-                displayModel(name, obj, displaySolo);
+                displayModel(name, obj);
             },
 
             function ( xhr ) {  // In progress
@@ -175,10 +179,10 @@ function GraphicsService(canvasID) {
         );
 	};
 	
-	this.loadDae = function(name, daePath, displaySolo) { // TODO: Add asyncCallback to show progress
+	this.loadDae = function(name, daePath) { // TODO: Add asyncCallback to show progress
 		new THREE.ColladaLoader().load(daePath,
             function(collada) { // Load complete
-                displayModel(name, collada.scene, displaySolo);
+                displayModel(name, collada.scene);
             },
 
             function ( xhr ) {  // In progress
@@ -330,14 +334,7 @@ function GraphicsService(canvasID) {
     // Private Utility functions
     //
     
-    function displayModel(name, object3d, solo) {
-        if (solo) {
-            for (var i=0; i < objects.length; i++) {
-                scene.remove(objects[i]);
-            }
-            objects.splice(0, objects.length);
-        }
-        
+    function displayModel(name, object3d) {        
         object3d.name = name;
         scene.add(object3d);
         objects.push(object3d);

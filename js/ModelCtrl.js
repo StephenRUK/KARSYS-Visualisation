@@ -7,9 +7,6 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
         repo = ModelRepo,
         gfx = GraphicsController,
         loadedModel;        // Reference to currently loaded model object
-        
-    // Config
-    var LOAD_MODELS_SOLO = true;
     
     // Params
     var InterActionMode = {
@@ -22,9 +19,7 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
     // Event handlers
     //
     
-    function modelLoadedHandler(name) {
-        gfx.resetCamPosition();
-        
+    function modelLoadedHandler(name) {        
         // Apply transformations
         if (loadedModel.params.transform) {
             gfx.translateObject(loadedModel.name, loadedModel.params.transform.offset);
@@ -35,7 +30,11 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
         $scope.$apply();    // This function is outside of Angular's scope. Tell it to update view.
         
         CollapsibleLists.applyTo(document.getElementById('objectHierarchy'));
-        document.getElementById('hierarchyRoot').click(); // Hackily expand first level
+        
+        var hierarchyRootElement = document.getElementById('hierarchyRoot');
+        if (hierarchyRootElement) {
+            hierarchyRootElement.click(); // Hackily expand first level
+        }
         
         ctrl.isModelLoaded = true;
     };
@@ -104,14 +103,15 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
         
         loadedModel = modelToLoad;
         ctrl.isModelLoaded = false;
+        gfx.resetScene();
         
 		switch (loadedModel.fileFormat) {
         case ModelFormat.OBJMTL:
-            gfx.loadObjMtl(loadedModel.name, loadedModel.filePath, loadedModel.params.mtlPath, LOAD_MODELS_SOLO);
+            gfx.loadObjMtl(loadedModel.name, loadedModel.filePath, loadedModel.params.mtlPath);
             break;
 			
         case ModelFormat.DAE:
-            gfx.loadDae(loadedModel.name, loadedModel.filePath, LOAD_MODELS_SOLO);
+            gfx.loadDae(loadedModel.name, loadedModel.filePath);
             break;
 			
         default:
