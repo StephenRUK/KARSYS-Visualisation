@@ -86,12 +86,12 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
     this.objectHierarchy;
     
     // Settings
-    this.coordinatesEnabled = false;
-    this.movementEnabled = true;
-    this.cameraEnabled = false;
-    //this.interactionMode = InteractionMode.MOVE;
-    this.csMode;    // Cross-section Horizontal/Vertical/null
-    this.crossSection = gfx.crossSection;
+    this.coordinatesEnabled = false;    // Toggle coordinates display
+    this.movementEnabled = true;    // Toggle movement controls
+    this.cameraEnabled = true; // Toggle camera controls
+    this.csMode;    // Cross-section Horizontal/Vertical/undefined
+    this.csFlipped; // "Flip" or undefined
+    this.crossSection = gfx.crossSection;   // Binds to distance
 	
     //
     // Functions
