@@ -227,14 +227,14 @@ function GraphicsService(canvasID) {
         		
 		// Lighting
 		scene.add(new THREE.AmbientLight(0x707070));
-		var light = new THREE.DirectionalLight(0x606060);
+		var light = new THREE.DirectionalLight(0x202020);
 		light.position.set(500, 0, 0);
 		scene.add(light);
-        light = new THREE.DirectionalLight(0x606060);
+        light = new THREE.DirectionalLight(0x202020);
         light.position.set(0, 500, 0);
 		scene.add(light);
-        light = new THREE.DirectionalLight(0x505050);
-        light.position.set(0, 0, -500);
+        light = new THREE.DirectionalLight(0x303030);
+        light.position.set(0, 0, 500);
 		scene.add(light);
 
         
