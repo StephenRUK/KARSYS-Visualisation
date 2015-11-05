@@ -51,6 +51,7 @@ function GraphicsService(canvasID) {
     this.enableCrossSection = function (direction, distance) {
         svc.crossSection.enabled = true;
         svc.crossSection.distance = distance;
+        svc.crossSection.direction = direction;
         
         var vecFacingOrigin, camDirection;
         
@@ -86,14 +87,17 @@ function GraphicsService(canvasID) {
     this.flipCrossSection = function () {
         if (!svc.crossSection.enabled) return;
         
-        var lookAt = controls.target.clone();
-        svc.crossSection.normal.multiplyScalar(-1);
-        camera.position.z *= -1;
-        camera.lookAt(new THREE.Vector3(0,0,0));
+//        var lookAt = controls.target.clone();
+//        svc.crossSection.normal.multiplyScalar(-1);
+//        camera.position.multiplyScalar(-1);
+//        camera.lookAt(lookAt);
         
-        setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
-        camera.updateProjectionMatrix();
-        setCrossSection(svc.crossSection.normal, svc.crossSection.distance);        
+        controls.rotateLeft(Math.PI);
+        controls.update();
+        render();
+        
+        svc.disableCrossSection();
+        svc.enableCrossSection(svc.crossSection.direction, svc.crossSection.distance);
     };
     
     //
