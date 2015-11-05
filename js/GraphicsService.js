@@ -223,7 +223,7 @@ function GraphicsService(canvasID) {
 		controls = new THREE.OrbitControls(camera, renderer.domElement);
 		controls.damping = 0.2;
         controls.addEventListener('change', controlsMovedHandler);
-		controls.addEventListener('change', render);
+		//controls.addEventListener('change', render);
         		
 		// Lighting
 		scene.add(new THREE.AmbientLight(0x707070));
@@ -239,8 +239,8 @@ function GraphicsService(canvasID) {
 
         
         // Cross-sections
-        var geometry = new THREE.PlaneGeometry(60, 40);
-        var material = new THREE.MeshBasicMaterial( {color: 0xf00000, side: THREE.DoubleSide, transparent: true, opacity: 0.3 } );
+        var geometry = new THREE.PlaneBufferGeometry(100, 60);
+        var material = new THREE.MeshBasicMaterial( {color: 0xf00000, side: THREE.DoubleSide, transparent: true, opacity: 0.2 } );
         crossSectionPlaneObj = new THREE.Mesh( geometry, material );
         crossSectionPlaneObj.visible = false;
         scene.add( crossSectionPlaneObj );
