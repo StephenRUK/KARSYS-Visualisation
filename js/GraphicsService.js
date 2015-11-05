@@ -52,16 +52,14 @@ function GraphicsService(canvasID) {
         
         if (direction == 'V') {
             vecFacingOrigin = new THREE.Vector3(0, 0, 1);
-            //camDirection = Math.sign(camera.quaternion.z);
             camDirection = Math.sign(camera.getWorldDirection().z);
             
         } else { // assume horizontal
             vecFacingOrigin = new THREE.Vector3(0, 1, 0);
-            //camDirection = Math.sign(camera.quaternion.y);
             camDirection = Math.sign(camera.getWorldDirection().y);
         }
         
-        vecFacingOrigin.multiplyScalar(camDirection);   // Is this right??
+        vecFacingOrigin.multiplyScalar(camDirection);
         svc.crossSection.normal = vecFacingOrigin;
 
         setCrossSection(this.crossSection.normal, this.crossSection.distance);
@@ -82,15 +80,10 @@ function GraphicsService(canvasID) {
     };
     
     this.flipCrossSection = function () {
-        var lookAt = controls.target.clone();
+        if (!svc.crossSection.enabled) return;
         
         svc.crossSection.normal.multiplyScalar(-1);
         setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
-        
-        camera.position.multiplyScalar(-1);    // Keep or debug only?
-        //camera.rotateY(Math.PI);    // Rotate 180° to face back
-        //camera.lookAt(lookAt);
-
     };
     
     //
@@ -106,13 +99,9 @@ function GraphicsService(canvasID) {
     this.scaleObject = function (name, scale) {
         var obj = scene.getObjectByName(name);
         
-        //console.info("GraphicsService.scaleObject: Old " + obj.scale);
-        
         if (obj) {
             obj.scale.set(scale.x, scale.y, scale.z);
         }
-        
-        //console.info("GraphicsService.scaleObject: New " + obj.scale);
     };
     
     this.translateObject = function (name, offset) {
@@ -203,7 +192,6 @@ function GraphicsService(canvasID) {
     ******************************************************/
     
     function render() {
-        renderer.setViewport(0, 0, renderer.domElement.width, renderer.domElement.height);
         renderer.render(scene, camera);
         /*
         // Render axis overlay
@@ -222,8 +210,9 @@ function GraphicsService(canvasID) {
         
         var canvas = document.getElementById(canvasID);
 		renderer = new THREE.WebGLRenderer({canvas: canvas});
-		renderer.setSize(renderer.domElement.clientWidth, renderer.domElement.clientHeight);
-		
+        var w = renderer.domElement.clientWidth, h =  renderer.domElement.clientHeight;
+		renderer.setSize(w, h);
+		renderer.setViewport(0, 0, w, h);
         renderer.setClearColor(0xdad1d0);
         
 		// Camera
@@ -281,7 +270,9 @@ function GraphicsService(canvasID) {
         
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
+        
         renderer.setSize(w, h);
+        renderer.setViewport(0, 0, w, h);
     }
     
     function controlsMovedHandler() {
