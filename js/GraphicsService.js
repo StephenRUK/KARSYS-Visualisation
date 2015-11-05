@@ -26,6 +26,8 @@ function GraphicsService(canvasID) {
         objects.splice(0, objects.length);
         
         controls.reset();
+        camera.near = CAM_NEAR_PLANE;
+        camera.far = CAM_FAR_PLANE;
     };
 
     this.moveCamera = function (x, y, z) {    

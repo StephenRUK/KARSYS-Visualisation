@@ -98,12 +98,17 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
     
 	this.loadModel = function (modelID) {        
         var modelToLoad = repo.getByID(modelID);
-        
         if (modelToLoad === loadedModel) return;
         
-        loadedModel = modelToLoad;
         ctrl.isModelLoaded = false;
         gfx.resetScene();
+        
+        ctrl.csMode = undefined;
+        this.csFlipped = undefined;
+        this.crossSection.distance = 0;
+        gfx.disableCrossSection();
+        
+        loadedModel = modelToLoad;
         
 		switch (loadedModel.fileFormat) {
         case ModelFormat.OBJMTL:
