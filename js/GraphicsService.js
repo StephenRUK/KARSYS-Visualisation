@@ -82,8 +82,14 @@ function GraphicsService(canvasID) {
     this.flipCrossSection = function () {
         if (!svc.crossSection.enabled) return;
         
+        var lookAt = controls.target.clone();
         svc.crossSection.normal.multiplyScalar(-1);
+        camera.position.z *= -1;
+        camera.lookAt(new THREE.Vector3(0,0,0));
+        
         setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
+        camera.updateProjectionMatrix();
+        setCrossSection(svc.crossSection.normal, svc.crossSection.distance);        
     };
     
     //
