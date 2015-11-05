@@ -11,10 +11,9 @@ function ModelServiceStatic() {
 	var models = [
 		new Model("Box", "models/Box/Box.obj", ModelFormat.OBJMTL, {
             unit: "cm",
-            transform: new Transform(10, 10, 10, 3, 3, 3),
+            transform: new Transform(0, 0, 0, 3, 3, 3),
             mtlPath:  "models/Box/Box.mtl"
         }),
-		new Model("Cross Scene", "models/CrossScene/CrossScene.obj", ModelFormat.OBJMTL, { mtlPath: "models/CrossScene/CrossScene.mtl"}),
 		new Model("Male Three.js example", "models/male02/male02.obj", ModelFormat.OBJMTL, { mtlPath: "models/male02/male02.mtl"}),
 		new Model("Spaceship", "models/Spaceship/Spaceship.obj", ModelFormat.OBJMTL, { mtlPath: "models/Spaceship/Spaceship.mtl"}),
 		new Model("House", "models/StephenHouse/StephenHouse.obj", ModelFormat.OBJMTL, { mtlPath: "models/StephenHouse/StephenHouse.mtl"}),
@@ -25,7 +24,8 @@ function ModelServiceStatic() {
             coordinatesTransform: new Transform(1000, 100, 0,  1, 1, 1),
             unit: "km",
             transform: new Transform(0, 0, 0, 0.1, 0.1, 0.1)
-        })
+        }),
+        new Model("Tunnel", "models/Tunnel/Tunnel.dae", ModelFormat.DAE)
 	];
     
     var modelObjectInfo = [
@@ -34,6 +34,15 @@ function ModelServiceStatic() {
             object: "Booster_Blade_001",
             info: {
                 description:    "Helps propel the ship!",
+                vendor:         "Rolls Royce",
+                weight:         "0.8 kg"
+            }
+        },
+        {
+            model: "Spaceship",
+            object: "Booster_Blade_002",
+            info: {
+                description:    "Another booster blade",
                 vendor:         "Rolls Royce",
                 weight:         "0.8 kg"
             }
