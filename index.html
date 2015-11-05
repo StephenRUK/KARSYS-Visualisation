@@ -75,17 +75,15 @@
                                 <div class="panel-heading">Cross Sections</div>
                                 <div class="panel-body">
                                     <div class="btn-group">
-                                        <label class="btn btn-primary" ng-model="ctrl.csMode" uib-btn-radio="'H'" uncheckable>Horizontal</label>
-                                        <label class="btn btn-primary" ng-model="ctrl.csMode" uib-btn-radio="'V'" uncheckable>Vertical</label>
+                                        <label class="btn btn-primary" ng-model="ctrl.csMode" uib-btn-radio="'V'" uncheckable>Cut</label>
                                     </div>
-                                    <div class="dropdown" uib-dropdown>
-                                      <button class="btn btn-primary dropdown-toggle" type="button" uib-dropdown-toggle>Options<span class="caret"></span></button>
-                                          <ul class="dropdown-menu">
-                                              <li><a href="#" ng-enabled="ctrl.csMode != null" ng-click="ctrl.flipCrossSection()">Flip</a></li>
-                                          </ul>
+                                    <div class="btn-group">
+                                        <input type="button" class="btn btn-primary" ng-enabled="true || ctrl.csMode != null" ng-click="ctrl.flipCrossSection()" value="Flip" />
                                     </div>
-
-                                    <label for="crossSectionDistance">Cross-section Distance: </label><input id="crossSectionDistance" class="form-control" ng-model="ctrl.crossSection.distance" ng-change="ctrl.updateCrossSection()" type="number" min="-100" max="100" />
+                                    <div class="form-group">
+                                        <label for="crossSectionDistance">Move</label>
+                                        <input id="crossSectionDistance" class="form-control" ng-model="ctrl.crossSection.distance" ng-change="ctrl.updateCrossSection()" type="number" min="-100" max="100" />
+                                    </div>
                                 </div>
                             </div>
                             
