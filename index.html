@@ -31,7 +31,7 @@
 		
         <div ng-controller="ModelController as ctrl">
             <div id="leftPane" class="col-md-2">
-                <div class="row-fluid">
+                <div class="row">
                     <h3>Visual KARSYS</h3><small> by SISKA</small>
                 </div>
                 
@@ -93,7 +93,7 @@
                             </div>
 
                             <div class="panel panel-default">
-                                <div class="panel-heading" ng-click="collapse_cs = !collapse_cs">
+                                <div class="panel-heading collapsible" ng-click="collapse_cs = !collapse_cs">
                                     Cross Sections <span class="navbar-right glyphicon" ng-class="collapse_cs ? 'glyphicon-menu-right' : 'glyphicon-menu-down'"></span>
                                 </div>
                                 
@@ -107,14 +107,14 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="crossSectionDistance">Distance</label>
-                                            <input id="crossSectionDistance" class="form-control" ng-model="ctrl.crossSection.distance" ng-change="ctrl.updateCrossSection()" type="number" min="-100" max="100" />
+                                            <input id="crossSectionDistance" class="form-control" ng-model="ctrl.crossSection.distance" ng-change="ctrl.updateCrossSection()" type="number" min="-100" max="100" width="4" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="panel panel-default">
-                                <div class="panel-heading" ng-click="collapse_hierarchy = !collapse_hierarchy">
+                                <div class="panel-heading collapsible" ng-click="collapse_hierarchy = !collapse_hierarchy">
                                     Hierarchy <span class="navbar-right glyphicon" ng-class="collapse_hierarchy ? 'glyphicon-menu-right' : 'glyphicon-menu-down'"></span>
                                 </div>
                                 
