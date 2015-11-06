@@ -29,55 +29,76 @@
     
     <body class="container-fluid" ng-app="karsys">
 		
-        <div ng-controller="ModelController as ctrl" class="row-fluid">
+        <div ng-controller="ModelController as ctrl">
             <div id="leftPane" class="col-md-2">
-                <div class="row">
-                    <div id="top" class="col-md-12">
-                        <h3>Visual KARSYS</h3>
-                        <b><i>by SISKA</i></b>
-                    </div>
+                <div class="row-fluid">
+                    <h3>Visual KARSYS</h3><small> by SISKA</small>
                 </div>
                 
+                <br />
+                
                 <div class="row">
-                    <br />
-                    <div id="controls">
-                        
-                        <div id="controls_ModelList" class="row-fluid">
-                            <select id="modelList" ng-model="ctrl.currentModelID">
-                                <option value="">(Please select a model...)</option>
-                                <option ng-repeat="model in ctrl.getAll" value="{{$index}}">{{model.name}}</option>
-                            </select>
-                            <input type="button" value="Load" ng-click="ctrl.loadModel(ctrl.currentModelID)" class="btn btn-primary btn-xs" />
+                
+                    <div id="controls_ModelList" class="row-fluid">
+                        <select id="modelList" ng-model="ctrl.currentModelID">
+                            <option value="">(Please select a model...)</option>
+                            <option ng-repeat="model in ctrl.getAll" value="{{$index}}">{{model.name}}</option>
+                        </select>
+                        <input type="button" value="Load" ng-click="ctrl.loadModel(ctrl.currentModelID)" class="btn btn-primary btn-xs" />
+                    </div>
+
+                    <hr />
+
+                    <div ng-show="ctrl.isModelLoaded">
+
+                        <div class="panel-group">
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Controls</div>
+
+                                <div class="panel-body">
+                                    <input type="checkbox" name="controls_MovementEnabled" ng-model="ctrl.movementEnabled" ng-change="ctrl.toggleMovementControls()">
+                                    <label for="controls_MovementEnabled">Movement</label>
+
+                                    <input type="checkbox" name="controls_CoordinatesEnabled" ng-model="ctrl.coordinatesEnabled">
+                                    <label for="controls_MovementEnabled">Coordinates</label>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Details</div>
+
+                                <div id="details_coordinates">
+                                    <div class="panel-body" ng-show="ctrl.coordinatesEnabled">  
+                                        <i>Coordinates</i><br />
+                                        <span ng-repeat="(dim,val) in ctrl.mouseCoordinates" ng-bind="dim + ': ' + (val | number: 2) + ctrl.coordinatesUnit + ($index<2 ? ', ' : '')"></span>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
-                        
+
                         <hr />
-                        
-                        <div ng-show="ctrl.isModelLoaded">
-                            <div class="panel-group">
 
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">Controls</div>
-                                    <div class="panel-body">
-                                        <input type="checkbox" name="controls_MovementEnabled" ng-model="ctrl.movementEnabled" ng-change="ctrl.toggleMovementControls()">
-                                        <label for="controls_MovementEnabled">Movement</label>
+                        <div class="panel-group">
 
-                                        <input type="checkbox" name="controls_CoordinatesEnabled" ng-model="ctrl.coordinatesEnabled">
-                                        <label for="controls_MovementEnabled">Coordinates</label>
-                                    </div>
+                            <div class="panel panel-default" ng-show="ctrl.cameraEnabled">
+                                <div class="panel-heading">Camera</div>
+
+                                <div class="panel-body">
+                                    <input type="text" size="3" ng-model="ctrl.camCoords.x">
+                                    <input type="text" size="3" ng-model="ctrl.camCoords.y">
+                                    <input type="text" size="3" ng-model="ctrl.camCoords.z">
                                 </div>
+                            </div>
 
-                                <div id="controls_Camera" class="panel panel-default" ng-show="ctrl.cameraEnabled">
-                                    <div class="panel-heading">Camera</div>
-                                    <div class="panel-body">
-                                        <input type="text" size="3" ng-model="ctrl.camCoords.x">
-                                        <input type="text" size="3" ng-model="ctrl.camCoords.y">
-                                        <input type="text" size="3" ng-model="ctrl.camCoords.z">
-                                    </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" ng-click="collapse_cs = !collapse_cs">
+                                    Cross Sections <span class="navbar-right glyphicon" ng-class="collapse_cs ? 'glyphicon-menu-right' : 'glyphicon-menu-down'"></span>
                                 </div>
-
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" ng-click="collapse_cs = !collapse_cs">Cross Sections</a></div>
-                                    <div id="controls_CrossSection" class="panel-body" uib-collapse="collapse_cs">
+                                
+                                <div uib-collapse="collapse_cs">
+                                    <div class="panel-body">
                                         <div class="btn-group">
                                             <label class="btn btn-primary" ng-model="ctrl.csMode" ng-change="ctrl.toggleCrossSection()" uib-btn-radio="'V'" uncheckable>Cut</label>
                                         </div>
@@ -90,37 +111,28 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
 
-                            <hr />
-
                             <div class="panel panel-default">
-                                <div class="panel-heading">Details</div>
-
-                                <div id="details_coordinates">
-                                    <div class="panel-body" ng-show="ctrl.coordinatesEnabled">  
-                                        <i>Coordinates</i><br />
-                                        <span ng-repeat="(dim,val) in ctrl.mouseCoordinates" ng-bind="dim + ': ' + (val | number: 2) + ctrl.coordinatesUnit + ($index<2 ? ', ' : '')"></span>
+                                <div class="panel-heading" ng-click="collapse_hierarchy = !collapse_hierarchy">
+                                    Hierarchy <span class="navbar-right glyphicon" ng-class="collapse_hierarchy ? 'glyphicon-menu-right' : 'glyphicon-menu-down'"></span>
+                                </div>
+                                
+                                <div id="objectHierarchy" uib-collapse="collapse_hierarchy">
+                                    <div class="panel-body scrollable">
+                                        <ul>
+                                            <li id="hierarchyRoot" ng-repeat="child in ctrl.objectTree" ng-include="'sceneTree'"></li>
+                                        </ul>
                                     </div>
-                                </div>                            
-
-                            </div>
-
-                            <div class="panel panel-default">
-                                <div class="panel-heading" ng-click="collapse_hierarchy = !collapse_hierarchy">Hierarchy</div>
-                                <div id="objectHierarchy" class="panel-body scrollable" uib-collapse="collapse_hierarchy">
-                                    <ul>
-                                        <li id="hierarchyRoot" ng-repeat="child in ctrl.objectTree" ng-include="'sceneTree'"></li>
-                                    </ul>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                            
+                        </div>                        
+                    </div> <!-- End lower controls -->
                     
                 </div>
-
-            </div>
+                    
+            </div> <!-- End left pain -->
 
             <div id="visualisation" class="col-md-10">
                 <canvas ng-mousemove="ctrl.canvasMouseMoved($event)" id="canvas"></canvas>
@@ -152,7 +164,7 @@
     <script type="text/ng-template" id="sceneTree">
         <a ng-click="ctrl.showObjectInfo(child.name); $event.stopPropagation();">{{ child.name }}</a>
         <ul ng-if="child.children" class="collapsibleList">
-            <li ng-repeat="child in (child.children | listObjectInTree) | orderBy: 'name'" ng-include="'sceneTree'" ng-class="{'lastChild': (child.children | listObjectInTree).length==0}">
+            <li ng-repeat="child in (child.children | listObjectInTree) | orderBy: 'name'" ng-include="'sceneTree'" ng-class="{'lastChild': (child.children | listObjectInTree).length==0, 'text-muted': !child.visible}">
             </li>
         </ul>
     </script>
