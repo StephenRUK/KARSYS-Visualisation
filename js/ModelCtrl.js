@@ -87,7 +87,7 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
     // Settings
     this.coordinatesEnabled = false;    // Toggle coordinates display
     this.movementEnabled = true;    // Toggle movement controls
-    this.cameraEnabled = true; // Toggle camera controls
+    this.cameraEnabled = false; // Toggle camera controls
     this.csMode;    // Cross-section Horizontal/Vertical/undefined
     this.csFlipped; // "Flip" or undefined
     this.crossSection = gfx.crossSection;   // Binds to distance
@@ -96,7 +96,7 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
     // Functions
     //
     
-	this.loadModel = function (modelID) {        
+	this.loadModel = function (modelID) {
         var modelToLoad = repo.getByID(modelID);
         if (modelToLoad === loadedModel) return;
         
