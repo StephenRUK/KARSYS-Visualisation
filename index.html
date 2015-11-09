@@ -126,8 +126,8 @@
                                     Hierarchy <span class="navbar-right glyphicon" ng-class="collapse_hierarchy ? 'glyphicon-menu-right' : 'glyphicon-menu-down'"></span>
                                 </div>
                                 
-                                <div id="objectHierarchy" uib-collapse="collapse_hierarchy">
-                                    <div class="panel-body scrollable">
+                                <div id="panelObjectHierarchy" class="scrollable" uib-collapse="collapse_hierarchy">
+                                    <div id="objectHierarchy" class="panel-body">
                                         <ul>
                                             <li id="hierarchyRoot" ng-repeat="child in ctrl.objectTree" ng-include="'sceneTree'"></li>
                                         </ul>
