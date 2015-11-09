@@ -129,6 +129,10 @@ function GraphicsService(canvasID, $timeout) {
         svc.crossSection.angleY = 0;
     };
     
+    this.showCrossSectionPlane = function (isVisible) {
+        crossSectionPlaneObj.visible = isVisible;
+    };
+    
     //
     // Controls
     //

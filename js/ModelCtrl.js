@@ -90,6 +90,7 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
     this.cameraEnabled = false; // Toggle camera controls
     this.csMode;    // Cross-section Horizontal/Vertical/undefined
     this.csFlipped; // "Flip" or undefined
+    this.csShowPlane = 'Show';   // Show or hide the red plane
     this.crossSection = gfx.crossSection;   // Binds to distance
 	
     //
@@ -160,6 +161,10 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
         } else {
             gfx.disableCrossSection();
         }
+    };
+    
+    this.toggleCrossSectionPlane = function () {
+        gfx.showCrossSectionPlane(ctrl.csShowPlane == 'Show');
     };
     
     this.moveCrossSection = function () {
