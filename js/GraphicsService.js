@@ -271,15 +271,15 @@ function GraphicsService(canvasID, $timeout) {
 		// Lighting
 		var light;
         // Key
-        light = new THREE.DirectionalLight(0xFFFFFF, 0.6);
+        light = new THREE.DirectionalLight(0xFFFFFF, 0.8);
         light.position.set(-7, 4.5, 3);
 		scene.add(light);
         // Fill
-        light = new THREE.DirectionalLight(0xFFFFFF, 0.3);
+        light = new THREE.DirectionalLight(0xFFFFFF, 0.4);
 		light.position.set(5, 3.5, 4);
 		scene.add(light);
         // Back
-        light = new THREE.DirectionalLight(0xFFFFFF, 0.2);
+        light = new THREE.DirectionalLight(0xFFFFFF, 0.3);
         light.position.set(0, 8, -10);
 		scene.add(light);
         
