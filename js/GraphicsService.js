@@ -244,17 +244,19 @@ function GraphicsService(canvasID, $timeout) {
 		//controls.addEventListener('change', render);
         		
 		// Lighting
-		scene.add(new THREE.AmbientLight(0x707070));
-		var light = new THREE.DirectionalLight(0x202020);
-		light.position.set(500, 0, 0);
+		var light;
+        // Key
+        light = new THREE.DirectionalLight(0xFFFFFF, 0.6);
+        light.position.set(-7, 4.5, 3);
 		scene.add(light);
-        light = new THREE.DirectionalLight(0x202020);
-        light.position.set(0, 500, 0);
+        // Fill
+        light = new THREE.DirectionalLight(0xFFFFFF, 0.3);
+		light.position.set(5, 3.5, 4);
 		scene.add(light);
-        light = new THREE.DirectionalLight(0x303030);
-        light.position.set(0, 0, 500);
+        // Back
+        light = new THREE.DirectionalLight(0xFFFFFF, 0.2);
+        light.position.set(0, 8, -10);
 		scene.add(light);
-
         
         // Cross-sections
         var geometry = new THREE.PlaneBufferGeometry(100, 60);
