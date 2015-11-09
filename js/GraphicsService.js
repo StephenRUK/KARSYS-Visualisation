@@ -47,7 +47,9 @@ function GraphicsService(canvasID, $timeout) {
     this.crossSection = {
         enabled: false,
         normal: new THREE.Vector3(0, 0, -1),    // Plane normal vector
-        distance: 0                             // Plane distance from origin        
+        distance: 0,                             // Plane distance from origin
+        angleX: 0,
+        angleY: 0,                              // Angle (in rad) the normal is rotated by (Used for storage only)
     };
     
     this.enableCrossSection = function (direction, distance) {
@@ -83,25 +85,48 @@ function GraphicsService(canvasID, $timeout) {
         if (!svc.crossSection.enabled) return;
         
         svc.crossSection.distance = distance;
-        setCrossSection(svc.crossSection.normal, distance);
+        setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
     };
+    
+    /**
+    * axis: 'X' or 'Y'
+    * deltaAngle: In degrees
+    **/
+    this.rotateCrossSection = function (axis, deltaAngle) {
+        if (!svc.crossSection.enabled) return;
+        
+        var rotAxis;
+        if (axis === 'X') {
+            rotAxis = new THREE.Vector3(1, 0, 0);
+        } else { // Assume 'Y'
+             rotAxis = new THREE.Vector3(0, 1, 0);
+        }
+        
+        var radAngle = deltaAngle / 180 * Math.PI;
+        
+        svc.crossSection.normal.applyAxisAngle(rotAxis, radAngle);
+        setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
+    }
     
     this.flipCrossSection = function () {
         if (!svc.crossSection.enabled) return;
         
-//        var lookAt = controls.target.clone();
-//        svc.crossSection.normal.multiplyScalar(-1);
-//        camera.position.multiplyScalar(-1);
-//        camera.lookAt(lookAt);
-        
         controls.rotateLeft(Math.PI);
         controls.update();
-        render();
+        render();   // May be superfluous
         
         svc.crossSection.distance *= -1;    // Flip distance to origin
         
         svc.disableCrossSection();
         svc.enableCrossSection(svc.crossSection.direction, svc.crossSection.distance);
+    };
+    
+    this.resetCrossSection = function () {
+        svc.crossSection.enabled = false;
+        svc.crossSection.normal = new THREE.Vector3(0, 0, -1);
+        svc.crossSection.distance = 0;
+        svc.crossSection.angleX = 0;
+        svc.crossSection.angleY = 0;
     };
     
     //
@@ -337,7 +362,10 @@ function GraphicsService(canvasID, $timeout) {
         
         // DEBUG Update plane object
         crossSectionPlaneObj.position.set(0, 0, 0);
+        crossSectionPlaneObj.rotation.set(0, 0, 0);
         crossSectionPlaneObj.translateOnAxis(normalVector, distance + 1);
+        crossSectionPlaneObj.rotateOnAxis(new THREE.Vector3(1, 0, 0), svc.crossSection.angleX/180*Math.PI);    // TODO Make independent from the crossSection variable
+        crossSectionPlaneObj.rotateOnAxis(new THREE.Vector3(0, 1, 0), svc.crossSection.angleY/180*Math.PI);    // TODO Make independent from the crossSection variable
     }
     
     //

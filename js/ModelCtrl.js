@@ -105,8 +105,8 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
         
         ctrl.csMode = undefined;
         this.csFlipped = undefined;
-        this.crossSection.distance = 0;
         gfx.disableCrossSection();
+        gfx.resetCrossSection();
         
         loadedModel = modelToLoad;
         
@@ -162,8 +162,13 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
         }
     };
     
-    this.updateCrossSection = function () {
+    this.moveCrossSection = function () {
         gfx.moveCrossSection(ctrl.crossSection.distance);
+    };
+    
+    this.rotateCrossSection = function (axis, newAngle, oldAngle) {
+        var deltaAngle = newAngle - oldAngle;
+        gfx.rotateCrossSection(axis, deltaAngle);
     };
     
     this.flipCrossSection = function() {

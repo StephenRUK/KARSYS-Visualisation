@@ -107,7 +107,12 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="crossSectionDistance">Distance</label>
-                                            <input id="crossSectionDistance" class="form-control" ng-model="ctrl.crossSection.distance" ng-change="ctrl.updateCrossSection()" type="number" min="-100" max="100" width="4" />
+                                            <input id="crossSectionDistance" class="form-control" ng-model="ctrl.crossSection.distance" ng-change="ctrl.moveCrossSection()" type="number" min="-100" max="100" width="4" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="crossSectionAngle">Angle (X / Y)</label>
+                                            <input id="crossSectionAngle" class="form-control" ng-model="ctrl.crossSection.angleX" ng-change="ctrl.rotateCrossSection('X', ctrl.crossSection.angleX, {{ctrl.crossSection.angleX}})" type="number" min="-90" max="90" width="4" />
+                                            <input id="crossSectionAngle" class="form-control" ng-model="ctrl.crossSection.angleY" ng-change="ctrl.rotateCrossSection('Y', ctrl.crossSection.angleY, {{ctrl.crossSection.angleY}})" type="number" min="-90" max="90" width="4" />
                                         </div>
                                     </div>
                                 </div>
