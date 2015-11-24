@@ -1,12 +1,19 @@
+'use strict';
+
 var app = angular.module('karsys', ['ui.bootstrap']);
 
 app.service('ModelRepo', ModelServiceStatic);
 
 app.value('canvasID', 'canvas');
-app.service('GraphicsSvc', ['canvasID', '$timeout', GraphicsService]);
+app.value('arcGisAPI', 'http://localhost/backend/gisapi.php');
 
-app.controller('ModelController', ['ModelRepo', 'GraphicsSvc', '$scope', '$uibModal', ModelController]);
+app.service('GraphicsSvc', ['canvasID', '$timeout', GraphicsService]);
+app.service('ObjectDataService', ['arcGisAPI', '$http', ArcGisService]);
+
+app.controller('ModelController', ['ModelRepo', 'GraphicsSvc', 'ObjectDataService', '$scope', '$uibModal', ModelController]);
 app.controller('ModalInfoController', ['$modalInstance', 'objectName', 'objectInfo', ModalInfoController]);
+
+
 
 app.filter('listObjectInTree', function () {
   return function (sceneObjects) {

@@ -138,7 +138,9 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
                     return name;
                 },
                 objectInfo: function () {
-                    return hierarchyObjInfo;
+                    if(ods.isValidID(name)) {
+                        return ods.getObjectData(name);
+                    }
                 }
             }
         });
