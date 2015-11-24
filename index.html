@@ -58,10 +58,10 @@
                                 <div class="panel-heading">Controls</div>
 
                                 <div class="panel-body">
-                                    <input type="checkbox" name="controls_MovementEnabled" ng-model="ctrl.movementEnabled" ng-change="ctrl.toggleMovementControls()">
+                                    <input type="checkbox" name="controls_MovementEnabled" ng-model="ctrl.movementEnabled" ng-change="ctrl.toggleMovementControls()" />
                                     <label for="controls_MovementEnabled">Movement</label>
 
-                                    <input type="checkbox" name="controls_CoordinatesEnabled" ng-model="ctrl.coordinatesEnabled">
+                                    <input type="checkbox" name="controls_CoordinatesEnabled" ng-model="ctrl.coordinatesEnabled" />
                                     <label for="controls_MovementEnabled">Coordinates</label>
                                 </div>
                             </div>
@@ -171,7 +171,7 @@
     </script>
     
     <script type="text/ng-template" id="sceneTree">
-        <a ng-click="ctrl.showObjectInfo(child.name); $event.stopPropagation();">{{ child.name }}</a>
+        <input type="checkbox" ng-model="child.visible" ng-change="ctrl.toggleObjectVisibility(child.name); $event.stopPropagation();" />&nbsp;<a ng-click="ctrl.showObjectInfo(child.name); $event.stopPropagation();">{{ child.name }}</a>
         <ul ng-if="child.children" class="collapsibleList">
             <li ng-repeat="child in (child.children | listObjectInTree) | orderBy: 'name'" ng-include="'sceneTree'" ng-class="{'lastChild': (child.children | listObjectInTree).length==0, 'text-muted': !child.visible}">
             </li>

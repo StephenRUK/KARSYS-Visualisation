@@ -141,6 +141,11 @@ function GraphicsService(canvasID, $timeout) {
         controls.enabled = isEnabled;
     };
     
+    this.toggleObjectVisibility = function (objectName) {
+        var obj = scene.getObjectByName(name);
+        obj.visible = !obj.visible;
+    };
+    
     // Transforms
     
     this.scaleObject = function (name, scale) {
@@ -193,7 +198,6 @@ function GraphicsService(canvasID, $timeout) {
       return scene.getObjectByName(name).clone();
     };
     
-	
 	//
 	// Model Loaders
 	//

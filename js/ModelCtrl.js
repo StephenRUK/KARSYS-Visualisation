@@ -203,6 +203,10 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
         gfx.enableCoordinatesDisplay(ctrl.coordinatesEnabled);
     };
     
+    this.toggleObjectVisibility = function (objectName) {
+        gfx.toggleObjectVisibility(objectName);
+    };
+    
     //
     // Event Handlers
     //
