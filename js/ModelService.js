@@ -2,7 +2,7 @@
 * ModelService.js
 * Manages the list of available models.
 *
-* Date:		1st October 2015
+* Date:		24th November 2015
 * Author:	Stephen Randles
 */
 
@@ -25,29 +25,9 @@ function ModelServiceStatic() {
             unit: "km",
             transform: new Transform(0, 0, 0, 0.1, 0.1, 0.1)
         }),
-        new Model("Tunnel", "models/Tunnel/Tunnel.dae", ModelFormat.DAE)
+        new Model("Tunnel", "models/Tunnel/Tunnel.dae", ModelFormat.DAE),
+        new Model("ArcGIS Test", "models/ArcGIS_Test/ArcGIS_Test.dae", ModelFormat.DAE)
 	];
-    
-    var modelObjectInfo = [
-        {
-            model: "Spaceship",
-            object: "Booster_Blade_001",
-            info: {
-                description:    "Helps propel the ship!",
-                vendor:         "Rolls Royce",
-                weight:         "0.8 kg"
-            }
-        },
-        {
-            model: "Spaceship",
-            object: "Booster_Blade_002",
-            info: {
-                description:    "Another booster blade",
-                vendor:         "Rolls Royce",
-                weight:         "0.8 kg"
-            }
-        }
-    ]
 
 	this.getAll = function () {
 		return models;
@@ -56,13 +36,5 @@ function ModelServiceStatic() {
     this.getByID = function (id) {
         return models[id];
     };
-    
-    this.getObjectInfo = function (modelName, objName) {
-        for (var i=0; i<modelObjectInfo.length; i++) {
-            if (modelObjectInfo[i].model == modelName && modelObjectInfo[i].object == objName) {
-                return modelObjectInfo[i].info;
-            }
-        }
-    }
 
 }
