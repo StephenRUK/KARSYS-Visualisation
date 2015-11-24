@@ -15,7 +15,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     // Event handlers
     //
     
-    function modelLoadedHandler(name) {        
+    function modelLoadedHandler(name) {
         // Apply transformations
         if (loadedModel.params.transform) {
             gfx.translateObject(loadedModel.name, loadedModel.params.transform.offset);
@@ -33,7 +33,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
         }
         
         ctrl.isModelLoaded = true;
-    };
+    }
     
     //
     // Private util methods
@@ -95,7 +95,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     
 	this.loadModel = function (modelID) {
         var modelToLoad = repo.getByID(modelID);
-        if (modelToLoad === loadedModel) return;
+        if (modelToLoad === loadedModel) { return; }
         
         ctrl.isModelLoaded = false;
         gfx.resetScene();
@@ -138,7 +138,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
                     return name;
                 },
                 objectInfo: function () {
-                    if(ods.isValidID(name)) {
+                    if (ods.isValidID(name)) {
                         return ods.getObjectData(name);
                     }
                 }
@@ -162,7 +162,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     };
     
     this.toggleCrossSectionPlane = function () {
-        gfx.showCrossSectionPlane(ctrl.csShowPlane == 'Show');
+        gfx.showCrossSectionPlane(ctrl.csShowPlane === 'Show');
     };
     
     this.moveCrossSection = function () {
@@ -174,7 +174,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
         gfx.rotateCrossSection(axis, deltaAngle);
     };
     
-    this.flipCrossSection = function() {
+    this.flipCrossSection = function () {
         gfx.flipCrossSection();
     };
 	
