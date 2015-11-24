@@ -1,19 +1,15 @@
-function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
+'use strict';
+
+function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uibModal) {
     /***********************************************
     * Private
     ***********************************************/
 
     var ctrl = this,        // Sometimes needed to 'escape' the current 'this' scope
         repo = ModelRepo,
-        gfx = GraphicsController,
+        gfx = GraphicsSvc,
+        ods = ObjectDataService,
         loadedModel;        // Reference to currently loaded model object
-    
-    // Params
-    var InterActionMode = {
-        MOVE: 0,
-        MEASURE: 1,
-        CROSS_SECTION: 2
-    };
     
     //
     // Event handlers
@@ -226,14 +222,14 @@ function ModelController(ModelRepo, GraphicsController, $scope, $uibModal) {
     
     /*************************
     * Main/Init
-    */
+    *************************/
     
     function init() {
         gfx.onModelLoaded = modelLoadedHandler;
-        $scope.$watchCollection('ctrl.csMode', ctrl.toggleCrossSection);        
+        $scope.$watchCollection('ctrl.csMode', ctrl.toggleCrossSection);     // TODO Replace with ngChange in view
     }
     
-    init();	
+    init();
 }
 
 
