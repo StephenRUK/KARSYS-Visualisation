@@ -171,7 +171,7 @@
     </script>
     
     <script type="text/ng-template" id="sceneTree">
-        <input type="checkbox" ng-model="child.visible" ng-change="ctrl.toggleObjectVisibility(child.name); $event.stopPropagation();" />&nbsp;<a ng-click="ctrl.showObjectInfo(child.name); $event.stopPropagation();">{{ child.name }}</a>
+        <input type="checkbox" ng-model="child.visible" ng-click="$event.stopPropagation();" />&nbsp;<a ng-click="ctrl.showObjectInfo(child.name); $event.stopPropagation();">{{ child.name }}</a>
         <ul ng-if="child.children" class="collapsibleList">
             <li ng-repeat="child in (child.children | listObjectInTree) | orderBy: 'name'" ng-include="'sceneTree'" ng-class="{'lastChild': (child.children | listObjectInTree).length==0, 'text-muted': !child.visible}">
             </li>

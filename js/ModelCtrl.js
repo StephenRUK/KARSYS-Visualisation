@@ -125,10 +125,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
         this.coordinatesUnit = loadedModel.params.unit;
 	};
     
-    this.showObjectInfo = function (name) {
-        var obj = gfx.getObjectByName(name);
-        var hierarchyObjInfo = repo.getObjectInfo(loadedModel.name, name);
-        
+    this.showObjectInfo = function (name) {        
         var modalInstance = $uibModal.open({
             templateUrl: 'dialog.html',
             controller: 'ModalInfoController as modalCtrl',
@@ -201,10 +198,6 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     
     this.toggleCoordinatesDisplay = function () {
         gfx.enableCoordinatesDisplay(ctrl.coordinatesEnabled);
-    };
-    
-    this.toggleObjectVisibility = function (objectName) {
-        gfx.toggleObjectVisibility(objectName);
     };
     
     //

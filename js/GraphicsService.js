@@ -1,3 +1,5 @@
+'use strict';
+
 function GraphicsService(canvasID, $timeout) {
     var svc = this;
     
@@ -139,11 +141,6 @@ function GraphicsService(canvasID, $timeout) {
     
     this.enableMovement = function (isEnabled) {
         controls.enabled = isEnabled;
-    };
-    
-    this.toggleObjectVisibility = function (objectName) {
-        var obj = scene.getObjectByName(name);
-        obj.visible = !obj.visible;
     };
     
     // Transforms
