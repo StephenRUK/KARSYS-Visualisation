@@ -2,7 +2,9 @@
 
 function ModelListDirective(ModelRepo, Graphics) {
     return {
-        scope: {},
+        scope: {
+            model: '='
+        },
         
         controller: function ($scope) {
             var model;
@@ -12,16 +14,17 @@ function ModelListDirective(ModelRepo, Graphics) {
                     Graphics.translateObject(model.name, model.params.transform.offset);
                     Graphics.scaleObject(model.name, model.params.transform.scale);
                 }
+                $scope.model = model;
             }
             
-            $scope.currentModelID;
+            $scope.currentModelID;  // Is assigned via dropdown. Must not have a value.
             
             $scope.models = ModelRepo.getAll();
             
             $scope.loadModel = function (modelID) {
                 model = ModelRepo.getByID(modelID);
                 Graphics.resetScene();
-
+                
                 switch (model.fileFormat) {
                 case ModelFormat.OBJMTL:
                     Graphics.loadObjMtl(model.name, model.filePath, model.params.mtlPath, loadCompleted);

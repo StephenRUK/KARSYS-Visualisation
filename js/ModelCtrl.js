@@ -73,8 +73,6 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     this.currentModelID;
     this.camCoords = gfx.getCameraPosition();
     
-    this.isModelLoaded = false;
-
     // Display variables
     this.mouseCoordinates = {x: 0, y: 0, z: 0};
     this.coordinatesUnit = "";
@@ -147,8 +145,6 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     // Data access
     //
     
-	this.getAll = repo.getAll();
-    
     this.getModelName = function () {
         if (loadedModel) {
             return loadedModel.name;
@@ -192,7 +188,6 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     *************************/
     
     function init() {
-        gfx.onModelLoaded = modelLoadedHandler;
         $scope.$watchCollection('ctrl.csMode', ctrl.toggleCrossSection);     // TODO Replace with ngChange in view
     }
     

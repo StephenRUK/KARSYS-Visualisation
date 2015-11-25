@@ -38,11 +38,11 @@
                 
                 <div class="row">
                 
-                    <vk-model-list></vk-model-list>
+                    <vk-model-list model="ctrl.loadedModel"></vk-model-list>
 
                     <hr />
 
-                    <div ng-show="ctrl.isModelLoaded">
+                    <div ng-hide="ctrl.loadedModel == null">
 
                         <div class="panel-group">
 
