@@ -10,18 +10,18 @@
         <script src="js/ui-bootstrap-0.14.1.min.js" type="text/javascript" defer></script>
         
         <script src="threejs/three.min.js" type="text/javascript" defer></script>
-        <script src="threejs/OrbitControls.js"  type="text/javascript" defer></script>
-        <script src="threejs/MTLLoader.js"  type="text/javascript" defer></script> <!-- To probably be removed in future -->
-        <script src="threejs/OBJMTLLoader.js"  type="text/javascript" defer></script> <!-- To probably be removed in future -->
-        <script src="threejs/ColladaLoader.js"  type="text/javascript" defer></script> <!-- To probably be removed in future -->
+        <script src="threejs/OrbitControls.js" type="text/javascript" defer></script>
+        <script src="threejs/MTLLoader.js" type="text/javascript" defer></script> <!-- To probably be removed in future -->
+        <script src="threejs/OBJMTLLoader.js" type="text/javascript" defer></script> <!-- To probably be removed in future -->
+        <script src="threejs/ColladaLoader.js" type="text/javascript" defer></script> <!-- To probably be removed in future -->
 
-        <script src="threejs/AxisHelper.js" type="text/javascript" defer></script>
-        <script src="js/GraphicsService.js"  type="text/javascript" defer></script>
-        <script src="js/ArcGisService.js"  type="text/javascript" defer></script>
-        <script src="js/Model.js"  type="text/javascript" defer></script>
-        <script src="js/ModelService.js"  type="text/javascript" defer></script>
-        <script src="js/ModelCtrl.js"  type="text/javascript" defer></script>
-        <script src="js/app.js"  type="text/javascript" defer></script>
+        <script src="js/ModelListDirective.js" type="text/javascript" defer></script>
+        <script src="js/GraphicsService.js" type="text/javascript" defer></script>
+        <script src="js/ArcGisService.js" type="text/javascript" defer></script>
+        <script src="js/Model.js" type="text/javascript" defer></script>
+        <script src="js/ModelService.js" type="text/javascript" defer></script>
+        <script src="js/ModelCtrl.js" type="text/javascript" defer></script>
+        <script src="js/app.js" type="text/javascript" defer></script>
         
         <script src="js/CollapsibleLists.min.js" type="text/javascript" defer></script>
     </head>
@@ -38,13 +38,7 @@
                 
                 <div class="row">
                 
-                    <div id="controls_ModelList" class="row-fluid">
-                        <select id="modelList" ng-model="ctrl.currentModelID">
-                            <option value="">(Please select a model...)</option>
-                            <option ng-repeat="model in ctrl.getAll" value="{{$index}}">{{model.name}}</option>
-                        </select>
-                        <input type="button" value="Load" ng-click="ctrl.loadModel(ctrl.currentModelID)" class="btn btn-primary btn-xs" />
-                    </div>
+                    <vk-model-list></vk-model-list>
 
                     <hr />
 

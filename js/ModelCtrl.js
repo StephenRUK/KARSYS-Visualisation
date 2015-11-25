@@ -93,39 +93,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     // Functions
     //
     
-	this.loadModel = function (modelID) {
-        var modelToLoad = repo.getByID(modelID);
-        if (modelToLoad === loadedModel) { return; }
-        
-        ctrl.isModelLoaded = false;
-        gfx.resetScene();
-        
-        ctrl.csMode = undefined;
-        this.csFlipped = undefined;
-        gfx.disableCrossSection();
-        gfx.resetCrossSection();
-        
-        loadedModel = modelToLoad;
-        
-		switch (loadedModel.fileFormat) {
-        case ModelFormat.OBJMTL:
-            gfx.loadObjMtl(loadedModel.name, loadedModel.filePath, loadedModel.params.mtlPath);
-            break;
-			
-        case ModelFormat.DAE:
-            gfx.loadDae(loadedModel.name, loadedModel.filePath);
-            break;
-			
-        default:
-            break;
-		}
-                
-        // Set up coordinate display
-        this.mouseCoordinates = {x: 0, y: 0, z: 0};
-        this.coordinatesUnit = loadedModel.params.unit;
-	};
-    
-    this.showObjectInfo = function (name) {        
+    this.showObjectInfo = function (name) {
         var modalInstance = $uibModal.open({
             templateUrl: 'dialog.html',
             controller: 'ModalInfoController as modalCtrl',

@@ -198,10 +198,10 @@ function GraphicsService(canvasID, $timeout) {
 	// Model Loaders
 	//
 	
-	this.loadObjMtl = function(name, objPath, mtlPath) { // TODO: Add asyncCallback to show progress
+	this.loadObjMtl = function(name, objPath, mtlPath, successHandler) { // TODO: Add asyncCallback to show progress
 		new THREE.OBJMTLLoader().load(objPath, mtlPath,
             function(obj) { // Load complete
-                displayModel(name, obj);
+                displayModel(name, obj, successHandler);
             },
 
             function ( xhr ) {  // In progress
@@ -216,10 +216,10 @@ function GraphicsService(canvasID, $timeout) {
         );
 	};
 	
-	this.loadDae = function(name, daePath) { // TODO: Add asyncCallback to show progress
+	this.loadDae = function(name, daePath, successHandler) { // TODO: Add asyncCallback to show progress
 		new THREE.ColladaLoader().load(daePath,
             function(collada) { // Load complete
-                displayModel(name, collada.scene);
+                displayModel(name, collada.scene, successHandler);
             },
 
             function ( xhr ) {  // In progress
@@ -359,14 +359,12 @@ function GraphicsService(canvasID, $timeout) {
     // Private Utility functions
     //
     
-    function displayModel(name, object3d) {        
+    function displayModel(name, object3d, callback) {        
         object3d.name = name;
         scene.add(object3d);
         objects.push(object3d);
         
-        $timeout(function(){    // Async callback/Event
-            svc.onModelLoaded(name);
-        }, 0);
+        $timeout(callback, 0);
         
         // DEBUG
         object3d.traverse( function( node ) {

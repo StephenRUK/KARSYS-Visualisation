@@ -1,0 +1,7 @@
+<div class="row-fluid">
+    <select ng-model="currentModelID">
+        <option value="">(Please select a model...)</option>
+        <option ng-repeat="model in models" value="{{model.id}}">{{model.name}}</option>
+    </select>
+    <input type="button" value="Load" ng-click="loadModel(currentModelID)" class="btn btn-primary btn-xs" />
+</div>
