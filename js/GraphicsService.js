@@ -4,7 +4,6 @@ function GraphicsService(canvasID, $timeout) {
     var svc = this;
     
 	var scene, camera, renderer, controls, objects = [];
-    var sceneOverlay, cameraOverlay;
     
     var crossSectionPlaneObj;
     
@@ -241,11 +240,6 @@ function GraphicsService(canvasID, $timeout) {
     
     function render() {
         renderer.render(scene, camera);
-        /*
-        // Render axis overlay
-        renderer.setViewport(10, 10, 20, 20);
-        renderer.render(sceneOverlay, cameraOverlay);
-        */
     }
     
     function animate() {
@@ -271,7 +265,6 @@ function GraphicsService(canvasID, $timeout) {
 		controls = new THREE.OrbitControls(camera, renderer.domElement);
 		controls.damping = 0.2;
         controls.addEventListener('change', controlsMovedHandler);
-		//controls.addEventListener('change', render);
         		
 		// Lighting
 		var light;
@@ -297,17 +290,6 @@ function GraphicsService(canvasID, $timeout) {
 
 		// Listeners
 		window.addEventListener('resize', onWindowResize, true);
-        
-        //
-        // Overlay for coordinate axes
-        //
-        sceneOverlay = new THREE.Scene();
-        cameraOverlay = new THREE.OrthographicCamera(-5, 5, 5, -5, 0.1, 5);
-        
-        // Axis helper
-        var AXIS_HELPER_SIZE = 5;
-        var axisHelper = new THREE.AxisHelper(AXIS_HELPER_SIZE);
-        sceneOverlay.add(axisHelper);
 
 	}
     
