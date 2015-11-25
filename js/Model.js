@@ -1,3 +1,5 @@
+'use strict';
+
 /*
 * Model class
 *
@@ -21,7 +23,8 @@ var Transform = function Transform(offsetX, offsetY, offsetZ, scaleX, scaleY, sc
     this.scale = {x: scaleX, y: scaleY, z: scaleZ };
 };
 
-var Model = function Model(name, filePath, fileFormat, params) {
+var Model = function Model(id, name, filePath, fileFormat, params) {
+    this.id = id;
 	this.name = name;
 	this.filePath = filePath;
 	this.fileFormat = fileFormat;
