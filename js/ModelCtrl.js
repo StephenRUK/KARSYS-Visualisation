@@ -149,8 +149,8 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     //
     
     this.getModelName = function () {
-        if (loadedModel) {
-            return loadedModel.name;
+        if (ctrl.loadedModel) {
+            return ctrl.loadedModel.name;
         }
     };
     
@@ -167,7 +167,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
         
         var coords = gfx.getMouseWorldCoordinates($event);
         if (coords) {
-            this.mouseCoordinates = transformCoordinates(coords, loadedModel.params.coordinatesTransform);
+            this.mouseCoordinates = transformCoordinates(coords, ctrl.loadedModel.params.coordinatesTransform);
         }
         
     };
