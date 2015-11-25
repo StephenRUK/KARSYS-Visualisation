@@ -138,8 +138,12 @@ function GraphicsService(canvasID, $timeout) {
     // Controls
     //
     
-    this.enableMovement = function (isEnabled) {
-        controls.enabled = isEnabled;
+    this.toggleMovementControls = function (state) {
+        if (state!=undefined) {
+            controls.enabled = state;
+        } else {
+            controls.enabled = !controls.enabled;
+        }
     };
     
     // Transforms

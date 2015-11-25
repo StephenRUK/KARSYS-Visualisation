@@ -13,6 +13,7 @@ app.controller('ModelController', ['ModelRepo', 'GraphicsSvc', 'ObjectDataServic
 app.controller('ModalInfoController', ['$modalInstance', 'objectName', 'objectInfo', ModalInfoController]);
 
 app.directive('vkModelList', ['ModelRepo', 'GraphicsSvc', ModelListDirective]);
+app.directive('vkControls', ['GraphicsSvc', ControlsDirective]);
 
 app.filter('listObjectInTree', function () {
   return function (sceneObjects) {

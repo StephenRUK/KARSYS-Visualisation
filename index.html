@@ -16,6 +16,8 @@
         <script src="threejs/ColladaLoader.js" type="text/javascript" defer></script> <!-- To probably be removed in future -->
 
         <script src="js/ModelListDirective.js" type="text/javascript" defer></script>
+        <script src="js/ControlsDirective.js" type="text/javascript" defer></script>
+        
         <script src="js/GraphicsService.js" type="text/javascript" defer></script>
         <script src="js/ArcGisService.js" type="text/javascript" defer></script>
         <script src="js/Model.js" type="text/javascript" defer></script>
@@ -45,18 +47,8 @@
                     <div ng-hide="ctrl.loadedModel == null">
 
                         <div class="panel-group">
-
-                            <div class="panel panel-default">
-                                <div class="panel-heading">Controls</div>
-
-                                <div class="panel-body">
-                                    <input type="checkbox" name="controls_MovementEnabled" ng-model="ctrl.movementEnabled" ng-change="ctrl.toggleMovementControls()" />
-                                    <label for="controls_MovementEnabled">Movement</label>
-
-                                    <input type="checkbox" name="controls_CoordinatesEnabled" ng-model="ctrl.coordinatesEnabled" />
-                                    <label for="controls_MovementEnabled">Coordinates</label>
-                                </div>
-                            </div>
+                            
+                            <vk-controls movement-enabled="ctrl.movementEnabled" coordinates-enabled="ctrl.coordinatesEnabled"></vk-controls>
 
                             <div class="panel panel-default">
                                 <div class="panel-heading">Details</div>

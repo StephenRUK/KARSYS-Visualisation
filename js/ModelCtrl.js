@@ -31,8 +31,6 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
         if (hierarchyRootElement) {
             hierarchyRootElement.click(); // Hackily expand first level
         }
-        
-        ctrl.isModelLoaded = true;
     }
     
     //
@@ -69,6 +67,12 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     * Public
     ***********************************************/
     
+    // Refactoring - to keep
+    this.movementEnabled = true;
+    this.coordinatesEnabled = false;
+    this.loadedModel = null;
+
+    
     // Temporary variables
     this.currentModelID;
     this.camCoords = gfx.getCameraPosition();
@@ -79,8 +83,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     this.objectHierarchy;
     
     // Settings
-    this.coordinatesEnabled = false;    // Toggle coordinates display
-    this.movementEnabled = true;    // Toggle movement controls
+    
     this.cameraEnabled = false; // Toggle camera controls
     this.csMode;    // Cross-section Horizontal/Vertical/undefined
     this.csFlipped; // "Flip" or undefined
@@ -149,19 +152,6 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
         if (loadedModel) {
             return loadedModel.name;
         }
-    };
-
-    
-    //
-    // Config change
-    //
-    
-    this.toggleMovementControls = function () {
-        gfx.enableMovement(ctrl.movementEnabled);
-    };
-    
-    this.toggleCoordinatesDisplay = function () {
-        gfx.enableCoordinatesDisplay(ctrl.coordinatesEnabled);
     };
     
     //
