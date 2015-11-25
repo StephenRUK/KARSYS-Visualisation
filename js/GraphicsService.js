@@ -191,7 +191,8 @@ function GraphicsService(canvasID, $timeout) {
     }
     
     this.getObjectHierarchy = function() {
-        return objects.slice(0);    // Clone
+        //return objects.slice(0);    // Clone
+        return objects;
     };
     
     this.getObjectByName = function(name) {
