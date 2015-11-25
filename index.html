@@ -17,6 +17,7 @@
 
         <script src="js/ModelListDirective.js" type="text/javascript" defer></script>
         <script src="js/ControlsDirective.js" type="text/javascript" defer></script>
+        <script src="js/HierarchyDirective.js" type="text/javascript" defer></script>
         
         <script src="js/GraphicsService.js" type="text/javascript" defer></script>
         <script src="js/ArcGisService.js" type="text/javascript" defer></script>
@@ -105,20 +106,8 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="panel panel-default">
-                                <div class="panel-heading collapsible" ng-click="collapse_hierarchy = !collapse_hierarchy">
-                                    Hierarchy <span class="navbar-right glyphicon" ng-class="collapse_hierarchy ? 'glyphicon-menu-right' : 'glyphicon-menu-down'"></span>
-                                </div>
-                                
-                                <div id="panelObjectHierarchy" class="scrollable" uib-collapse="collapse_hierarchy">
-                                    <div id="objectHierarchy" class="panel-body">
-                                        <ul>
-                                            <li id="hierarchyRoot" ng-repeat="child in ctrl.objectTree" ng-include="'sceneTree'"></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                            
+                            <vk-model-hierarchy></vk-model-hierarchy>
                             
                         </div>                        
                     </div> <!-- End lower controls -->
@@ -152,14 +141,6 @@
                 <button class="btn btn-primary" type="button" ng-click="modalCtrl.ok()">OK</button>
             </div>
         </div>
-    </script>
-    
-    <script type="text/ng-template" id="sceneTree">
-        <input type="checkbox" ng-model="child.visible" ng-click="$event.stopPropagation();" />&nbsp;<a ng-click="ctrl.showObjectInfo(child.name); $event.stopPropagation();" ng-class="{'text-muted': !child.visible}">{{ child.name }}</a>
-        <ul ng-if="child.children" class="collapsibleList">
-            <li ng-repeat="child in (child.children | listObjectInTree) | orderBy: 'name'" ng-include="'sceneTree'" ng-class="{'lastChild': (child.children | listObjectInTree).length==0}">
-            </li>
-        </ul>
     </script>
         
 </html>

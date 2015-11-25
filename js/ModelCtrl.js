@@ -1,37 +1,13 @@
 'use strict';
 
-function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uibModal) {
+function ModelController(ModelRepo, GraphicsSvc, $scope) {
     /***********************************************
     * Private
     ***********************************************/
 
     var ctrl = this,        // Sometimes needed to 'escape' the current 'this' scope
         repo = ModelRepo,
-        gfx = GraphicsSvc,
-        ods = ObjectDataService,
-        loadedModel;        // Reference to currently loaded model object
-    
-    //
-    // Event handlers
-    //
-    
-    function modelLoadedHandler(name) {
-        // Apply transformations
-        if (loadedModel.params.transform) {
-            gfx.translateObject(loadedModel.name, loadedModel.params.transform.offset);
-            gfx.scaleObject(loadedModel.name, loadedModel.params.transform.scale);
-        }
-        
-        ctrl.objectTree = gfx.getObjectHierarchy();
-        $scope.$apply();    // This function is outside of Angular's scope. Tell it to update view.
-        
-        CollapsibleLists.applyTo(document.getElementById('objectHierarchy'));
-        
-        var hierarchyRootElement = document.getElementById('hierarchyRoot');
-        if (hierarchyRootElement) {
-            hierarchyRootElement.click(); // Hackily expand first level
-        }
-    }
+        gfx = GraphicsSvc;
     
     //
     // Private util methods
@@ -93,31 +69,6 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     //
     // Functions
     //
-    
-    this.showObjectInfo = function (name) {
-        var modalInstance = $uibModal.open({
-            templateUrl: 'dialog.html',
-            controller: 'ModalInfoController as modalCtrl',
-            backdrop: false,
-            resolve: {
-                objectName: function () {
-                    return name;
-                },
-                objectInfo: function () {
-                    if (ods.isValidID(name)) {
-                        return ods.getObjectData(name);
-                    }
-                }
-            }
-        });
-        
-        modalInstance.result.then(function () {
-			console.info("Modal opened successfully!");
-		}, function (error) {
-			console.warn("Modal couldn't be opened. error.");
-		});
-        
-    };
     
     this.toggleCrossSection = function (newMode, oldMode) {
         if (newMode) {
@@ -184,14 +135,13 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     init();
 }
 
-
 /*****************************
 * Modal Dialog Controller
 ******************************/
 function ModalInfoController($modalInstance, objectName, objectInfo) {
     this.name = objectName;
     this.info = objectInfo;
-    
+
     this.ok = function () {
         $modalInstance.close();
     };
