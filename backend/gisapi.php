@@ -9,32 +9,19 @@ function getTypeIdFromObjectId ($objectID) {
     return substr($objectID, 0, 2);
 }
 
+function getTypeCodeFromId ($dbConn, $typeCode) {
+    $query = "SELECT Code FROM " . $DB_dataTypeTable . " WHERE ID = " . $typeCode;
+    $result = doQueryAssoc($dbConn, $query);
+
+    return $result->Code;
+}
+
 function getObjectData ($dbConn, $objectID) {
-    $typeID = getTypeIdFromObjectId ($objectID);
-    $query = "";
-    
-    switch ($typeID) {
-        case 12:    // Cross-section
-            $query = "SELECT cs_filenam AS 'File Name', cs_author AS 'Author', cs_rem AS 'Comments' FROM cs WHERE cs_id = '" . $objectID . "'";
-            break;
-        case 17:    // po???
-            $query = "SELECT po_name AS 'Name', po_x AS 'x', po_y AS 'y', po_z AS 'z', po_rem AS 'Comments' FROM po WHERE po_id = '" . $objectID . "'";
-            break;
-        case 18:    // tr???
-            $query = "SELECT tr_po_id AS 'Related PO ID', tr_rem AS 'Comments' FROM tr WHERE tr_id = '" . $objectID . "'";
-            break;
-        case 14:    // Springs
-            $query = "SELECT ip_name AS 'Name', ip_rem AS 'Comments' FROM ip WHERE ip_id = '" . $objectID . "'";
-            break;
-        case 24:    // Phreatic Zone
-            $query = "SELECT nk_type AS 'Type', nk_vol AS 'Volume' FROM nk WHERE nk_id = '" . $objectID . "'";
-            break;
-        case 52:    // oq???
-            $query = "SELECT oq_type AS 'Type', oq_rem AS 'Comments' FROM oq WHERE oq_id = '" . $objectID . "'";
-            break;
-            
-    }
-    
+    $typeID = getTypeIdFromObjectId($objectID);
+    $dataTable = getTypeCodeFromId($dbConn, $typeID);
+
+    $query = "SELECT * FROM " . $dataTable . " WHERE ID = " . $objectID;
+
     if ($query) {
         return doQueryAssoc($dbConn, $query);
     } else {
@@ -44,7 +31,7 @@ function getObjectData ($dbConn, $objectID) {
 }
 
 function getObjectDataJSON ($dbConn, $objectID) {
-    return json_encode(getObjectData($dbConn, $objectID), JSON_PRETTY_PRINT);
+    return json_encode(getObjectData($dbConn, $objectID));
 }
 
 /************************************************
