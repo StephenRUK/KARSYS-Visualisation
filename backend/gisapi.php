@@ -9,25 +9,30 @@ function getTypeIdFromObjectId ($objectID) {
     return substr($objectID, 0, 2);
 }
 
-function getTypeCodeFromId ($dbConn, $typeCode) {
-    $query = "SELECT Code FROM " . $DB_dataTypeTable . " WHERE ID = " . $typeCode;
+function getTypeIdDetails ($dbConn, $typeId) {
+    $query = "SELECT code,displayname FROM " . DB_Table_DataTypes . " WHERE ID = " . $typeId;
     $result = doQueryAssoc($dbConn, $query);
 
-    return $result->Code;
+    return $result;
 }
 
 function getObjectData ($dbConn, $objectID) {
     $typeID = getTypeIdFromObjectId($objectID);
-    $dataTable = getTypeCodeFromId($dbConn, $typeID);
+    $typeDetails = getTypeIdDetails($dbConn, $typeID);
+    $dataTable = DB_View_Prefix . $typeDetails['code'];
 
-    $query = "SELECT * FROM " . $dataTable . " WHERE ID = " . $objectID;
-
-    if ($query) {
-        return doQueryAssoc($dbConn, $query);
-    } else {
-        return array(); // Return empty array representing "no data"
+    $query = "SELECT * FROM " . $dataTable . " WHERE ID = '" . $objectID . "'";
+    $objectData = doQueryAssoc($dbConn, $query);
+    
+    if (!$objectData) {
+        $objectData = array();
     }
     
+    if ($typeDetails) {
+        $objectData['title'] = $typeDetails['displayname'];
+    }
+    
+    return $objectData;
 }
 
 function getObjectDataJSON ($dbConn, $objectID) {
@@ -51,7 +56,7 @@ function doQueryAssoc($dbConn, $sql) {
 * Request handling
 ************************************************/
 
-$conn = new mysqli($DB_serv, $DB_user, $DB_pass, $DB_name);
+$conn = new mysqli(DB_Server, DB_User, DB_Pass, DB_Name);
 
 if ($conn->connect_error) {
     die ('SQL Connection failed: ' . $conn->connect_error);
