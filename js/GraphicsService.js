@@ -172,7 +172,7 @@ function GraphicsService(canvasID, $timeout) {
     // Hooks, listeners
     //
     
-    this.onModelLoaded = function (name){};     // Assigned function is called when model loading is completed
+    this.onModelLoaded = [];     // Assigned functions are called when model loading is completed
     
     //
     // Read-only data functions
