@@ -139,6 +139,11 @@ function ModelController(ModelRepo, GraphicsSvc, $scope) {
 * Modal Dialog Controller
 ******************************/
 function ModalInfoController($modalInstance, objectName, objectInfo) {
+    
+    // Remove title from objectInfo
+    this.title = objectInfo.title;
+    delete objectInfo.title
+    
     this.name = objectName;
     this.info = objectInfo;
 

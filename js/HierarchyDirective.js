@@ -10,7 +10,7 @@ function HierarchyDirective(Graphics, ObjectDataService, $uibModal) {
             $scope.objects = Graphics.getObjectHierarchy();
             
             $scope.updateHierarchy = function () {
-                CollapsibleLists.applyTo($scope.elem);
+                CollapsibleLists.applyTo(document.getElementById("objectHierarchy"));
         
                 /*var hierarchyRootElement = document.getElementById('hierarchyRoot');
                 if (hierarchyRootElement) {
@@ -21,7 +21,7 @@ function HierarchyDirective(Graphics, ObjectDataService, $uibModal) {
             $scope.showObjectInfo = function (name) {
                 
                 var modalInstance = $uibModal.open({
-                    templateUrl: 'dialog.html',
+                    templateUrl: 'partials/objectDetailDialog.html',
                     controller: 'ModalInfoController as modalCtrl',
                     backdrop: false,
                     resolve: {
@@ -43,10 +43,6 @@ function HierarchyDirective(Graphics, ObjectDataService, $uibModal) {
                 });
 
             };
-        },
-        
-        link: function (scope, element, attrs, controllers) {
-            scope.elem = element;
         },
         
         templateUrl: 'partials/modelHierarchy.html'
