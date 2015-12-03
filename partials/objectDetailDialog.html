@@ -1,13 +1,13 @@
 <div>
     <div class="modal-header">
-        <h3><span ng-bind="'Details: ' + modalCtrl.title"></span></h3>
+        <h3><span ng-bind="'Details: ' + modalCtrl.info.title"></span></h3>
     </div>
 
     <div class="modal-body">
-        <div class="alert alert-info" ng-if="!modalCtrl.info">No data is available for this object.</div>
-        <div class="row" ng-repeat="(prop,val) in modalCtrl.info">
-            <div class="col-md-4"><label ng-bind="(prop|capitalize)"></label></div>
-            <div class="col-md-8" ng-bind="val"></div>
+        <div class="alert alert-info" ng-if="!modalCtrl.info || !modalCtrl.info.fields">No data is available for this object.</div>
+        <div class="row" ng-repeat="field in modalCtrl.info.fields">
+            <div class="col-md-4"><label ng-bind="(field.name|capitalize)"></label></div>
+            <div class="col-md-8" ng-bind="field.value "></div>
         </div>                
     </div>
 
