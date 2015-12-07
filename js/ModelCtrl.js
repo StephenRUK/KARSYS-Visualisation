@@ -147,10 +147,14 @@ function ModelController(ModelRepo, GraphicsSvc, $scope) {
 /*****************************
 * Modal Dialog Controller
 ******************************/
-function ModalInfoController($modalInstance, objectName, objectInfo) {
+function ModalInfoController($modalInstance, objectName, ObjectDataService) {
     
     this.name = objectName;
-    this.info = objectInfo;
+    this.info = null;
+    
+    if (ObjectDataService.isValidID(objectName)) {
+        this.info = ObjectDataService.getObjectData(objectName);
+    }
 
     this.ok = function () {
         $modalInstance.close();

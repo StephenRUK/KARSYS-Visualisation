@@ -1,6 +1,6 @@
 'use strict';
 
-function HierarchyDirective(Graphics, ObjectDataService, $uibModal) {
+function HierarchyDirective(Graphics, $uibModal) {
     return {
         scope: {},
         
@@ -29,18 +29,11 @@ function HierarchyDirective(Graphics, ObjectDataService, $uibModal) {
                     resolve: {
                         objectName: function () {
                             return name;
-                        },
-                        objectInfo: function () {
-                            if (ods.isValidID(name)) {
-                                return ods.getObjectData(name);
-                            }
                         }
                     }
                 });
 
-                modalInstance.result.then(function () {
-                    console.info("Modal opened successfully!");
-                }, function (error) {
+                modalInstance.result.then(function () {}, function (error) {
                     console.warn("Object info modal couldn't be opened. error.");
                 });
 

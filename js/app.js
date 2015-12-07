@@ -10,11 +10,11 @@ app.service('GraphicsSvc', ['canvasID', '$timeout', GraphicsService]);
 app.service('ObjectDataService', ['arcGisAPI', '$http', ArcGisService]);
 
 app.controller('ModelController', ['ModelRepo', 'GraphicsSvc', '$scope', ModelController]);
-app.controller('ModalInfoController', ['$modalInstance', 'objectName', 'objectInfo', ModalInfoController]);
+app.controller('ModalInfoController', ['$modalInstance', 'objectName', 'ObjectDataService', ModalInfoController]);
 
 app.directive('vkModelList', ['ModelRepo', 'GraphicsSvc', ModelListDirective]);
 app.directive('vkControls', ['GraphicsSvc', ControlsDirective]);
-app.directive('vkModelHierarchy', ['GraphicsSvc', 'ObjectDataService', '$uibModal', HierarchyDirective]);
+app.directive('vkModelHierarchy', ['GraphicsSvc', '$uibModal', HierarchyDirective]);
 
 app.filter('listObjectInTree', function () {
   return function (sceneObjects) {
