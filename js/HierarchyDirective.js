@@ -5,8 +5,6 @@ function HierarchyDirective(Graphics, $uibModal) {
         scope: {},
         
         controller: function ($scope) {
-            var ods = ObjectDataService;
-            
             $scope.objects = Graphics.getObjectHierarchy();
             
             $scope.$on('UPDATE', function () {
