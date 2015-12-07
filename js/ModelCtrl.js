@@ -51,16 +51,11 @@ function ModelController(ModelRepo, GraphicsSvc, $scope) {
     
     // Temporary variables
     this.currentModelID;
-    this.camCoords = gfx.getCameraPosition();
     
     // Display variables
     this.mouseCoordinates = {x: 0, y: 0, z: 0};
     this.coordinatesUnit = "";
     this.objectHierarchy;
-    
-    // Settings
-    
-    this.cameraEnabled = false; // Toggle camera controls
     
     // Refactor: To cross-section
     this.csMode;    // Cross-section Horizontal/Vertical/undefined
