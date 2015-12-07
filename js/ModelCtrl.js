@@ -129,10 +129,8 @@ function ModelController(ModelRepo, GraphicsSvc, $scope) {
         $scope.$watchCollection('ctrl.csMode', ctrl.toggleCrossSection);     // TODO Replace with ngChange in view
         
         // Event handling
-        $scope.$on(ev, function () {
-            if (ev.name == "MODEL_LOADED") {
-                $scope.$broadcast("MODEL_LOADED");  // Forward event to child directives
-            }
+        $scope.$on('MODEL_LOADED', function () {
+            $scope.$broadcast('UPDATE');  // Forward event to child directives
         });
     }
     

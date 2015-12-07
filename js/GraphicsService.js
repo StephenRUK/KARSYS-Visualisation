@@ -371,9 +371,8 @@ function GraphicsService(canvasID, $timeout) {
         scene.add(object3d);
         objects.push(object3d);
         
-        $timeout(callback, 0);
+        $timeout(callback, 200);
         
-        // DEBUG
         object3d.traverse( function( node ) {
             if( node.material ) {
                 node.material.side = THREE.DoubleSide;
