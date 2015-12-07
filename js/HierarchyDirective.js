@@ -9,14 +9,16 @@ function HierarchyDirective(Graphics, ObjectDataService, $uibModal) {
             
             $scope.objects = Graphics.getObjectHierarchy();
             
-            $scope.updateHierarchy = function () {
-                CollapsibleLists.applyTo(document.getElementById("objectHierarchy"));
-        
-                /*var hierarchyRootElement = document.getElementById('hierarchyRoot');
-                if (hierarchyRootElement) {
-                    hierarchyRootElement.click(); // Hackily expand first level
-                }*/
-            };
+            $scope.$on(ev, function () {
+                if (ev.name == "MODEL_LOADED") {
+                    CollapsibleLists.applyTo(document.getElementById("objectHierarchy"));
+
+                    /*var hierarchyRootElement = document.getElementById('hierarchyRoot');
+                    if (hierarchyRootElement) {
+                        hierarchyRootElement.click(); // Hackily expand first level
+                    }*/
+                }
+            });
             
             $scope.showObjectInfo = function (name) {
                 

@@ -15,6 +15,7 @@ function ModelListDirective(ModelRepo, Graphics) {
                     Graphics.scaleObject(model.name, model.params.transform.scale);
                 }
                 $scope.model = model;
+                $scope.$emit("MODEL_LOADED");   // Notify controller to update other directives
             }
             
             $scope.currentModelID;  // Is assigned via dropdown. Must not have a value.

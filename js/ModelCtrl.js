@@ -61,6 +61,8 @@ function ModelController(ModelRepo, GraphicsSvc, $scope) {
     // Settings
     
     this.cameraEnabled = false; // Toggle camera controls
+    
+    // Refactor: To cross-section
     this.csMode;    // Cross-section Horizontal/Vertical/undefined
     this.csFlipped; // "Flip" or undefined
     this.csShowPlane = 'Show';   // Show or hide the red plane
@@ -130,6 +132,13 @@ function ModelController(ModelRepo, GraphicsSvc, $scope) {
     
     function init() {
         $scope.$watchCollection('ctrl.csMode', ctrl.toggleCrossSection);     // TODO Replace with ngChange in view
+        
+        // Event handling
+        $scope.$on(ev, function () {
+            if (ev.name == "MODEL_LOADED") {
+                $scope.$broadcast("MODEL_LOADED");  // Forward event to child directives
+            }
+        });
     }
     
     init();
