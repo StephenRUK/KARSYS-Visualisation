@@ -17,68 +17,12 @@ function getTypeIdDetails ($dbConn, $typeId) {
 }
 
 function getFieldsForTypeId ($dbConn, $typeID) {
-    $query = "SELECT Field FROM " . DB_Table_Data_Fields . " WHERE LayerID = " . $typeID;
+    $query = "SELECT Field, DisplayName, isDomainVal FROM " . DB_Table_Data_Fields . " WHERE LayerID = " . $typeID;
     $result = $dbConn->query($query);
-    
-    $fields = array();
-    
-    while ($row = $result->fetch_array()) {
-        $fields[] = $row[0];
+    if ($result) {
+        $result = $result->fetch_all(MYSQLI_ASSOC);
     }
-
-    return $fields;
-}
-
-function getFieldDisplayNames ($dbConn, $typeID) {
-    // TODO Add language check in future
-    $query = "SELECT DisplayName FROM " . DB_Table_Data_Fields . " WHERE LayerID = " . $typeID;
-    $result = $dbConn->query($query);
-    
-    $names = array();
-    
-    while ($row = $result->fetch_array()) {
-        $names[] = $row[0];
-    }
-
-    return $names;
-}
-
-function getValuesForFields ($dbConn, $table, $fields, $objectID) {
-    $fieldList = '';
-    foreach ($fields as $field) {
-        $fieldList .= $field . ',';
-    }
-    $fieldList = substr($fieldList, 0, strlen($fieldList)-1);  // Trim last comma
-
-    $query = 'SELECT ' . $fieldList . ' FROM ' . $table . ' WHERE ' . $table . "_id = '" . $objectID . "'";
-    $result = $dbConn->query($query);
-    
-    $values = array();
-    $row = $result->fetch_array(MYSQLI_ASSOC);
-    
-    foreach ($row as $k=>$v) {
-        /*if (is_string($v)) {
-            $v = utf8_encode($v);
-        }*/
-        $values[] = $v;
-    }
-    
-    return $values;
-}
-
-function getDomainValues ($dbConn, $table, $fields, $values) {
-    $conditions = '';
-    $len = count($fields);
-    // Assemble query condition
-    for ($i=0; $i < $len-1; $i++) {
-        $conditions .= "(field = '" . $fields[$i] ."' AND code = '" . $values[$i] ."')";
-        $conditions .= " OR ";
-    }
-    $conditions .= "(field = '" . $fields[$len-1] ."' AND code = '" . $values[$len-1] ."')";    // Append last without 'or'
-    
-    $query = 'SELECT * FROM ' . DB_Table_Data_Domain . ' WHERE ' . $conditions;
-    
-    // TODO perform query, return array of assoc arrays
+    return $result;
 }
 
 function getObjectData ($dbConn, $objectID) {
@@ -86,23 +30,45 @@ function getObjectData ($dbConn, $objectID) {
     $typeDetails = getTypeIdDetails($dbConn, $typeID);
     
     if (!$typeDetails) return null;
-    
     $typeTable = $typeDetails['code'];
     
-    $fields = getFieldsForTypeId($dbConn, $typeID);                         // Internal field names
-    $fieldDisplayNames = getFieldDisplayNames($dbConn, $typeID);            // Display name for each field
-    $values = getValuesForFields($dbConn, $typeTable, $fields, $objectID);  // Value of each field
-        
+    $fields = getFieldsForTypeId($dbConn, $typeID);
+    
+    //echo "FIELDS:<pre>"; print_r($fields); echo "</pre>";
+    
+    // Build super-query to retrieve values with domain values
+    $columns = array();
+    $joins   = array();
+    for ($i=0; $i < count($fields); $i++) {
+        $f = $fields[$i];
+        $fName = $f['Field'];
+        $fDisp = $f['DisplayName'];
+
+        if ($f['isDomainVal']) {
+            $d = "dom_{$fName}";          // Domain alias
+            $fNameOrig = $f['Field'];     // Original field name
+            $fName = "{$d}.value";        // Replace field in query with the domain value
+            $joins[] = "INNER JOIN " . DB_Table_Data_Domain ." $d ON {$d}.LayerID = $typeID AND {$d}.Field = '$fNameOrig' AND {$d}.Code = $fNameOrig";
+        }
+
+        $columns[] = "$fName AS '$fDisp'";
+    }
+    
+    $colsStr = join(',', $columns);
+    $joinStr = join(' ', $joins);
+    $query = "SELECT $colsStr FROM $typeTable $joinStr WHERE {$typeTable}.{$typeTable}_id = '$objectID'";
+    
+    $values = doQueryAssoc($dbConn, $query);
+    //echo "VALUES:<pre>"; print_r($values); echo "</pre>";
+    
     // Generate output array with title and fields
     $map = array();
     $map['title'] = $typeDetails['displayname'];
     
-    for ($i=0; $i < count($fields); $i++) {
-        // TODO Check if there's a domain value for each field
-
+    foreach ($values as $k => $v) {
         $map['fields'][] = array(
-            'name' => $fieldDisplayNames[$i],
-            'value' => $values[$i]
+            'name' => $k,
+            'value' => $v
             // TODO get unit and format
         );
     }
