@@ -66,6 +66,21 @@ function getValuesForFields ($dbConn, $table, $fields, $objectID) {
     return $values;
 }
 
+function getDomainValues ($dbConn, $table, $fields, $values) {
+    $conditions = '';
+    $len = count($fields);
+    // Assemble query condition
+    for ($i=0; $i < $len-1; $i++) {
+        $conditions .= "(field = '" . $fields[$i] ."' AND code = '" . $values[$i] ."')";
+        $conditions .= " OR ";
+    }
+    $conditions .= "(field = '" . $fields[$len-1] ."' AND code = '" . $values[$len-1] ."')";    // Append last without 'or'
+    
+    $query = 'SELECT * FROM ' . DB_Table_Data_Domain . ' WHERE ' . $conditions;
+    
+    // TODO perform query, return array of assoc arrays
+}
+
 function getObjectData ($dbConn, $objectID) {
     $typeID = getTypeIdFromObjectId($objectID);
     $typeDetails = getTypeIdDetails($dbConn, $typeID);
