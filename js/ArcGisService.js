@@ -14,15 +14,11 @@ function ArcGisService(serverURL, $http) {
     **********************/
     
     function performQuery(queryString) {
-        return $http
-            .get(url + '?' + queryString)
-            .then(function (result) {
-                return result.data;
-            });
+        return $http.get(url + '?' + queryString);
     }
     
     function init() {
-        // Test server connectivity
+        // Test server connectivity?
         url = serverURL;
     }
     
