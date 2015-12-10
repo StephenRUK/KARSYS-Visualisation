@@ -21,7 +21,34 @@ function getFieldsForTypeId ($dbConn, $typeID) {
     return $result;
 }
 
-function getObjectData ($dbConn, $objectID) {
+function getObjectDataSingle ($dbConn, $objectID, $fieldName) {
+    $map = array();
+    
+    $typeID = getTypeIdFromObjectId($objectID);
+    $typeDetails = getTypeIdDetails($dbConn, $typeID);
+    
+    if (!$typeDetails) {
+        $map['error'] = "Object has an invalid type ID $typeID";
+        return $map;
+    }
+    
+    $typeTable = $typeDetails['code'];
+    $field = mysqli_real_escape_string($dbConn, $fieldName);
+    
+    $query = "SELECT {$typeTable}_$field AS '$fieldName' FROM $typeTable WHERE {$typeTable}_id = '$objectID'";
+    $values = doQueryAssoc($dbConn, $query);
+    
+    foreach ($values as $k => $v) {
+        $map['fields'][] = array(
+            'name' => $k,
+            'value' => $v
+        );
+    }
+    
+    return $map;
+}
+
+function getObjectDataAll ($dbConn, $objectID) {
     $map = array();
     
     $typeID = getTypeIdFromObjectId($objectID);
@@ -80,9 +107,8 @@ function getObjectData ($dbConn, $objectID) {
     return $map;
 }
 
-function getObjectDataJSON ($dbConn, $objectID) {
-    $dataArray = getObjectData($dbConn, $objectID);
-    $json = json_encode($dataArray, JSON_UNESCAPED_UNICODE);
+function dataToJSON ($data) {
+    $json = json_encode($data, JSON_UNESCAPED_UNICODE);
     
     if (json_last_error()==JSON_ERROR_UTF8) {
         die('JSON Encode error: Malformed UTF8 characters');
@@ -118,10 +144,16 @@ if ($conn->connect_error) {
 }
 
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];   // TODO Maybe need to sanitize input
+    $id = $_GET['id'];
     
-    echo getObjectDataJSON($conn, $id);
-
+    if (isset($_GET['field'])) {
+        $field = $_GET['field'];
+        $data = getObjectDataSingle($conn, $id, $field);
+    } else {
+        $data = getObjectDataAll($conn, $id);
+    }
+    
+    echo dataToJSON($data);
 }
 
 $conn->close();
