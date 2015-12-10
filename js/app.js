@@ -9,7 +9,7 @@ app.service('ModelRepo', ModelServiceStatic);
 app.service('GraphicsSvc', ['canvasID', '$timeout', GraphicsService]);
 app.service('ObjectDataService', ['arcGisAPI', '$http', ArcGisService]);
 
-app.controller('ModelController', ['ModelRepo', 'GraphicsSvc', '$scope', ModelController]);
+app.controller('ModelController', ['ModelRepo', 'GraphicsSvc', 'ObjectDataService', '$scope', ModelController]);
 app.controller('ModalInfoController', ['$modalInstance', 'objectName', 'ObjectDataService', ModalInfoController]);
 
 app.directive('vkModelList', ['ModelRepo', 'GraphicsSvc', ModelListDirective]);

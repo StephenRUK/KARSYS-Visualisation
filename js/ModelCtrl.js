@@ -1,17 +1,42 @@
 'use strict';
 
-function ModelController(ModelRepo, GraphicsSvc, $scope) {
+function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope) {
     /***********************************************
     * Private
     ***********************************************/
 
     var ctrl = this,        // Sometimes needed to 'escape' the current 'this' scope
         repo = ModelRepo,
-        gfx = GraphicsSvc;
+        gfx = GraphicsSvc,
+        ods = ObjectDataService;
     
     //
     // Private util methods
     //
+    
+    function replaceIDsWithNames() {
+        var objects = gfx.getObjectHierarchy();
+        
+        for (var i = 0; i < objects.length; i++) {
+            var o = objects[i];
+            o.traverse(function (node) {
+                if (ods.isValidID(node.name)) {
+                    var id = node.name;
+                    ods.getObjectField(id, 'name').then(function(result) {
+                        if (result.data.fields) {
+                            var displayName = result.data.fields[0].value;
+                            if (displayName != null && displayName.length > 0) {
+                                node.name = displayName;
+                                node.userData = id;
+                            }
+                        }
+                    });
+                    
+                    
+                }
+            });
+        }
+    }
     
     /*
     * transfromCoordinates
@@ -130,6 +155,7 @@ function ModelController(ModelRepo, GraphicsSvc, $scope) {
         
         // Event handling
         $scope.$on('MODEL_LOADED', function () {
+            replaceIDsWithNames();
             $scope.$broadcast('UPDATE');  // Forward event to child directives
         });
     }
@@ -144,7 +170,7 @@ function ModalInfoController($modalInstance, objectName, ObjectDataService) {
     var modal = this;
     
     this.loading = false;
-    this.error = 'LOL';
+    this.error = null;
     
     this.name = objectName;
     this.info = null;
