@@ -1,18 +1,22 @@
 <div>
     <div class="modal-header">
-        <h3><span ng-bind="'Details: ' + modalCtrl.info.title"></span></h3>
+        <h3>Details: <span ng-bind="modalCtrl.info.title ? modalCtrl.info.title : modalCtrl.name"></span></h3>
     </div>
 
     <div class="modal-body">
-        <div class="alert alert-info" ng-if="!modalCtrl.info || !modalCtrl.info.fields">No data is available for this object.</div>
-        <div class="row" ng-repeat="field in modalCtrl.info.fields">
-            <div class="col-md-4"><label ng-bind="(field.name|capitalize)"></label></div>
-            <div class="col-md-8">
-                <span ng-if="field.digits" ng-bind="field.value | number: field.digits"></span>
-                <span ng-if="!field.digits" ng-bind="field.value"></span>
-                <span ng-bind="' ' + field.unit"></span>
-        </div>                
-    </div>
+        <div ng-show="modalCtrl.loading" class="alert alert-info">Loading data...</div>
+        <div ng-show="!modalCtrl.loading && !modalCtrl.error">
+            <div class="alert alert-info" ng-if="!modalCtrl.info || !modalCtrl.info.fields">No data is available for this object.</div>
+            <div class="row" ng-repeat="field in modalCtrl.info.fields">
+                <div class="col-md-4"><label ng-bind="(field.name|capitalize)"></label></div>
+                <div class="col-md-8">
+                    <span ng-if="field.digits" ng-bind="field.value | number: field.digits"></span>
+                    <span ng-if="!field.digits" ng-bind="field.value"></span>
+                    <span ng-bind="' ' + field.unit"></span>
+                </div>
+            </div>
+        </div>
+        <div ng-show="modalCtrl.error" ng-bind="modalCtrl.error" class="alert alert-warning"></div>
 
     <div class="modal-footer">
         <button class="btn btn-primary" type="button" ng-click="modalCtrl.ok()">OK</button>

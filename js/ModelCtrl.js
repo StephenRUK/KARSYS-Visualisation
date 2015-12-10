@@ -141,12 +141,31 @@ function ModelController(ModelRepo, GraphicsSvc, $scope) {
 * Modal Dialog Controller
 ******************************/
 function ModalInfoController($modalInstance, objectName, ObjectDataService) {
+    var modal = this;
+    
+    this.loading = false;
+    this.error = 'LOL';
     
     this.name = objectName;
     this.info = null;
     
     if (ObjectDataService.isValidID(objectName)) {
-        this.info = ObjectDataService.getObjectData(objectName);
+        modal.loading = true;
+        ObjectDataService.getObjectData(objectName).then(
+            function success(response) {
+                var data = response.data;
+                if (data.error) {
+                    modal.error = data.error;
+                } else {
+                    modal.info = data;
+                }
+                modal.loading = false;
+            },
+            function error(response) {
+                modal.error = 'Data could not be retrieved (HTTP ' + response.status + ')';
+                modal.loading = false;
+            }
+        );
     }
 
     this.ok = function () {
