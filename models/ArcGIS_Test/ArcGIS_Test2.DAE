@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset><contributor><author></author><authoring_tool>FBX COLLADA exporter</authoring_tool><comments></comments></contributor><created>2015-12-10T10:50:27Z</created><keywords></keywords><modified>2015-12-10T10:50:27Z</modified><revision></revision><subject></subject><title></title><unit meter="0.025400" name="centimeter"></unit><up_axis>Y_UP</up_axis></asset>
+  <library_geometries>
+    <geometry id="_141248BE0006-lib" name="_141248BE0006Mesh">
+      <mesh>
+        <source id="_141248BE0006-POSITION">
+          <float_array id="_141248BE0006-POSITION-array" count="24">
+-6.408657 -5.282715 0.000000
+6.408657 -5.282715 0.000000
+-6.408657 5.282715 0.000000
+6.408657 5.282715 0.000000
+-6.408657 -5.282715 5.094055
+6.408657 -5.282715 5.094055
+-6.408657 5.282715 5.094055
+6.408657 5.282715 5.094055
+</float_array>
+          <technique_common>
+            <accessor source="#_141248BE0006-POSITION-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="_141248BE0006-Normal0">
+          <float_array id="_141248BE0006-Normal0-array" count="72">
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#_141248BE0006-Normal0-array" count="24" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="_141248BE0006-UV0">
+          <float_array id="_141248BE0006-UV0-array" count="48">
+1.000000 0.000000
+0.000000 0.000000
+1.000000 1.000000
+0.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+</float_array>
+          <technique_common>
+            <accessor source="#_141248BE0006-UV0-array" count="24" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="_141248BE0006-VERTEX">
+          <input semantic="POSITION" source="#_141248BE0006-POSITION"/>
+        </vertices>
+        <polylist count="6"><input semantic="VERTEX" offset="0" source="#_141248BE0006-VERTEX"/><input semantic="NORMAL" offset="1" source="#_141248BE0006-Normal0"/><input semantic="TEXCOORD" offset="2" set="0" source="#_141248BE0006-UV0"/><vcount>4 4 4 4 4 4 </vcount><p> 0 0 0 2 1 2 3 2 3 1 3 1 4 4 4 5 5 5 7 6 7 6 7 6 0 8 8 1 9 9 5 10 11 4 11 10 1 12 12 3 13 13 7 14 15 5 15 14 3 16 16 2 17 17 6 18 19 7 19 18 2 20 20 0 21 21 4 22 23 6 23 22</p></polylist>
+      </mesh>
+    </geometry>
+    <geometry id="_121163NE0001-lib" name="_121163NE0001Mesh">
+      <mesh>
+        <source id="_121163NE0001-POSITION">
+          <float_array id="_121163NE0001-POSITION-array" count="24">
+-10.716171 -5.802902 0.000000
+10.716171 -5.802902 0.000000
+-10.716171 5.802902 0.000000
+10.716171 5.802902 0.000000
+-10.716171 -5.802902 15.371442
+10.716171 -5.802902 15.371442
+-10.716171 5.802902 15.371442
+10.716171 5.802902 15.371442
+</float_array>
+          <technique_common>
+            <accessor source="#_121163NE0001-POSITION-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="_121163NE0001-Normal0">
+          <float_array id="_121163NE0001-Normal0-array" count="72">
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#_121163NE0001-Normal0-array" count="24" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="_121163NE0001-UV0">
+          <float_array id="_121163NE0001-UV0-array" count="48">
+1.000000 0.000000
+0.000000 0.000000
+1.000000 1.000000
+0.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+</float_array>
+          <technique_common>
+            <accessor source="#_121163NE0001-UV0-array" count="24" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="_121163NE0001-VERTEX">
+          <input semantic="POSITION" source="#_121163NE0001-POSITION"/>
+        </vertices>
+        <polylist count="6"><input semantic="VERTEX" offset="0" source="#_121163NE0001-VERTEX"/><input semantic="NORMAL" offset="1" source="#_121163NE0001-Normal0"/><input semantic="TEXCOORD" offset="2" set="0" source="#_121163NE0001-UV0"/><vcount>4 4 4 4 4 4 </vcount><p> 0 0 0 2 1 2 3 2 3 1 3 1 4 4 4 5 5 5 7 6 7 6 7 6 0 8 8 1 9 9 5 10 11 4 11 10 1 12 12 3 13 13 7 14 15 5 15 14 3 16 16 2 17 17 6 18 19 7 19 18 2 20 20 0 21 21 4 22 23 6 23 22</p></polylist>
+      </mesh>
+    </geometry>
+    <geometry id="_531065JU0003-lib" name="_531065JU0003Mesh">
+      <mesh>
+        <source id="_531065JU0003-POSITION">
+          <float_array id="_531065JU0003-POSITION-array" count="24">
+-6.244545 -1.608677 0.000000
+6.244545 -1.608677 0.000000
+-6.244545 1.608677 0.000000
+6.244545 1.608677 0.000000
+-6.244545 -1.608677 7.002247
+6.244545 -1.608677 7.002247
+-6.244545 1.608677 7.002247
+6.244545 1.608677 7.002247
+</float_array>
+          <technique_common>
+            <accessor source="#_531065JU0003-POSITION-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="_531065JU0003-Normal0">
+          <float_array id="_531065JU0003-Normal0-array" count="72">
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#_531065JU0003-Normal0-array" count="24" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="_531065JU0003-UV0">
+          <float_array id="_531065JU0003-UV0-array" count="48">
+1.000000 0.000000
+0.000000 0.000000
+1.000000 1.000000
+0.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+</float_array>
+          <technique_common>
+            <accessor source="#_531065JU0003-UV0-array" count="24" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="_531065JU0003-VERTEX">
+          <input semantic="POSITION" source="#_531065JU0003-POSITION"/>
+        </vertices>
+        <polylist count="6"><input semantic="VERTEX" offset="0" source="#_531065JU0003-VERTEX"/><input semantic="NORMAL" offset="1" source="#_531065JU0003-Normal0"/><input semantic="TEXCOORD" offset="2" set="0" source="#_531065JU0003-UV0"/><vcount>4 4 4 4 4 4 </vcount><p> 0 0 0 2 1 2 3 2 3 1 3 1 4 4 4 5 5 5 7 6 7 6 7 6 0 8 8 1 9 9 5 10 11 4 11 10 1 12 12 3 13 13 7 14 15 5 15 14 3 16 16 2 17 17 6 18 19 7 19 18 2 20 20 0 21 21 4 22 23 6 23 22</p></polylist>
+      </mesh>
+    </geometry>
+    <geometry id="_241106BE0003-lib" name="_241106BE0003Mesh">
+      <mesh>
+        <source id="_241106BE0003-POSITION">
+          <float_array id="_241106BE0003-POSITION-array" count="24">
+-14.241425 -7.009262 0.000000
+14.241425 -7.009262 0.000000
+-14.241425 7.009262 0.000000
+14.241425 7.009262 0.000000
+-14.241425 -7.009262 20.642086
+14.241425 -7.009262 20.642086
+-14.241425 7.009262 20.642086
+14.241425 7.009262 20.642086
+</float_array>
+          <technique_common>
+            <accessor source="#_241106BE0003-POSITION-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="_241106BE0003-Normal0">
+          <float_array id="_241106BE0003-Normal0-array" count="72">
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#_241106BE0003-Normal0-array" count="24" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="_241106BE0003-UV0">
+          <float_array id="_241106BE0003-UV0-array" count="48">
+1.000000 0.000000
+0.000000 0.000000
+1.000000 1.000000
+0.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+</float_array>
+          <technique_common>
+            <accessor source="#_241106BE0003-UV0-array" count="24" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="_241106BE0003-VERTEX">
+          <input semantic="POSITION" source="#_241106BE0003-POSITION"/>
+        </vertices>
+        <polylist count="6"><input semantic="VERTEX" offset="0" source="#_241106BE0003-VERTEX"/><input semantic="NORMAL" offset="1" source="#_241106BE0003-Normal0"/><input semantic="TEXCOORD" offset="2" set="0" source="#_241106BE0003-UV0"/><vcount>4 4 4 4 4 4 </vcount><p> 0 0 0 2 1 2 3 2 3 1 3 1 4 4 4 5 5 5 7 6 7 6 7 6 0 8 8 1 9 9 5 10 11 4 11 10 1 12 12 3 13 13 7 14 15 5 15 14 3 16 16 2 17 17 6 18 19 7 19 18 2 20 20 0 21 21 4 22 23 6 23 22</p></polylist>
+      </mesh>
+    </geometry>
+    <geometry id="_251285VD0004-lib" name="_251285VD0004Mesh">
+      <mesh>
+        <source id="_251285VD0004-POSITION">
+          <float_array id="_251285VD0004-POSITION-array" count="24">
+-16.107021 -7.210114 0.000000
+16.107021 -7.210114 0.000000
+-16.107021 7.210114 0.000000
+16.107021 7.210114 0.000000
+-16.107021 -7.210114 20.157133
+16.107021 -7.210114 20.157133
+-16.107021 7.210114 20.157133
+16.107021 7.210114 20.157133
+</float_array>
+          <technique_common>
+            <accessor source="#_251285VD0004-POSITION-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="_251285VD0004-Normal0">
+          <float_array id="_251285VD0004-Normal0-array" count="72">
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#_251285VD0004-Normal0-array" count="24" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="_251285VD0004-UV0">
+          <float_array id="_251285VD0004-UV0-array" count="48">
+1.000000 0.000000
+0.000000 0.000000
+1.000000 1.000000
+0.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+0.000000 0.000000
+1.000000 0.000000
+0.000000 1.000000
+1.000000 1.000000
+</float_array>
+          <technique_common>
+            <accessor source="#_251285VD0004-UV0-array" count="24" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="_251285VD0004-VERTEX">
+          <input semantic="POSITION" source="#_251285VD0004-POSITION"/>
+        </vertices>
+        <polylist count="6"><input semantic="VERTEX" offset="0" source="#_251285VD0004-VERTEX"/><input semantic="NORMAL" offset="1" source="#_251285VD0004-Normal0"/><input semantic="TEXCOORD" offset="2" set="0" source="#_251285VD0004-UV0"/><vcount>4 4 4 4 4 4 </vcount><p> 0 0 0 2 1 2 3 2 3 1 3 1 4 4 4 5 5 5 7 6 7 6 7 6 0 8 8 1 9 9 5 10 11 4 11 10 1 12 12 3 13 13 7 14 15 5 15 14 3 16 16 2 17 17 6 18 19 7 19 18 2 20 20 0 21 21 4 22 23 6 23 22</p></polylist>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="ArcGIS-LinkedNames-Test" name="ArcGIS-LinkedNames-Test">
+      <node name="_141248BE0006" id="_141248BE0006" sid="_141248BE0006"><translate sid="translate">-27.559246 9.575943 -0.730362</translate><rotate sid="jointOrientX">1 0 0 -90.000000</rotate><instance_geometry url="#_141248BE0006-lib"/><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra></node>
+      <node name="_121163NE0001" id="_121163NE0001" sid="_121163NE0001"><translate sid="translate">0.099579 -3.772423 -7.874390</translate><rotate sid="jointOrientX">1 0 0 -90.000000</rotate><instance_geometry url="#_121163NE0001-lib"/><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra></node>
+      <node name="_531065JU0003" id="_531065JU0003" sid="_531065JU0003"><translate sid="translate">6.508064 0.000000 15.340763</translate><rotate sid="jointOrientX">1 0 0 -90.000000</rotate><instance_geometry url="#_531065JU0003-lib"/><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra></node>
+      <node name="_241106BE0003" id="_241106BE0003" sid="_241106BE0003"><translate sid="translate">26.934967 4.213402 -3.856949</translate><rotate sid="jointOrientX">1 0 0 -90.000000</rotate><instance_geometry url="#_241106BE0003-lib"/><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra></node>
+      <node name="_251285VD0004" id="_251285VD0004" sid="_251285VD0004"><translate sid="translate">-14.953869 0.000000 -29.786026</translate><rotate sid="jointOrientX">1 0 0 -90.000000</rotate><instance_geometry url="#_251285VD0004-lib"/><extra><technique profile="FCOLLADA"><visibility>1.000000</visibility></technique></extra></node>
+      <extra><technique profile="MAX3D"><frame_rate>30.000000</frame_rate></technique><technique profile="FCOLLADA"><start_time>0.000000</start_time><end_time>3.333333</end_time></technique></extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#ArcGIS-LinkedNames-Test"></instance_visual_scene>
+  </scene>
+</COLLADA>

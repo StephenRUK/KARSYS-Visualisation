@@ -14,18 +14,17 @@ function ModelServiceStatic() {
             transform: new Transform(0, 0, 0, 3, 3, 3),
             mtlPath:  "models/Box/Box.mtl"
         }),
-		new Model(1, "Male Three.js example", "models/male02/male02.obj", ModelFormat.OBJMTL, { mtlPath: "models/male02/male02.mtl"}),
-		new Model(2, "Spaceship", "models/Spaceship/Spaceship.obj", ModelFormat.OBJMTL, { mtlPath: "models/Spaceship/Spaceship.mtl"}),
-		new Model(3, "KARSYS Model 1", "models/KARSYS_1/KARSYS_1.dae", ModelFormat.DAE, {
+		new Model(1, "KARSYS Model 1", "models/KARSYS_1/KARSYS_1.dae", ModelFormat.DAE, {
             transform: new Transform(10, 10, 10, 5, 5, 5)
         }),
-		new Model(4, "ISSKA 3D (level 6)", "models/ISSKA_3D/Model_isska3d_6.dae", ModelFormat.DAE, {
+		new Model(2, "ISSKA 3D (level 6)", "models/ISSKA_3D/Model_isska3d_6.dae", ModelFormat.DAE, {
             coordinatesTransform: new Transform(1000, 100, 0,  1, 1, 1),
             unit: "km",
             transform: new Transform(0, 0, 0, 0.1, 0.1, 0.1)
         }),
-        new Model(5, "Tunnel", "models/Tunnel/Tunnel.dae", ModelFormat.DAE),
-        new Model(6, "ArcGIS Test", "models/ArcGIS_Test/ArcGIS_Test.dae", ModelFormat.DAE)
+        new Model(3, "Tunnel", "models/Tunnel/Tunnel.dae", ModelFormat.DAE),
+        new Model(4, "ArcGIS Test", "models/ArcGIS_Test/ArcGIS_Test.dae", ModelFormat.DAE),
+        new Model(5, "ArcGIS Test (Boxes)", "models/ArcGIS_Test/ArcGIS_Test2.dae", ModelFormat.DAE)
 	];
 
 	this.getAll = function () {
