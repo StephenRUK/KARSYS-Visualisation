@@ -47,6 +47,13 @@ function ArcGisService(serverURL, $http) {
         return performQuery(queryParams);
     };
     
+    this.getObjectField = function (ObjectID, fieldName) {
+        var idClean = parseID(ObjectID);
+        var queryParams = 'id=' + idClean + '&field=' + fieldName;
+        
+        return performQuery(queryParams);
+    };
+    
     /**********************/
     init();
     
