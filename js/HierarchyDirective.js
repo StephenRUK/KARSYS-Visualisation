@@ -25,6 +25,9 @@ function HierarchyDirective(Graphics, $uibModal) {
                     resolve: {
                         objectName: function () {
                             return object.name;
+                        },
+                        objectData: function () {
+                            return object.userData;
                         }
                     }
                 });

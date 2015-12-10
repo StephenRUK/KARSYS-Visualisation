@@ -22,16 +22,17 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope) {
             o.traverse(function (node) {
                 if (ods.isValidID(node.name)) {
                     var id = node.name;
+                    
+                    node.userData.id = id;
+                    
                     ods.getObjectField(id, 'name').then(function(result) {
                         if (result.data.fields) {
                             var displayName = result.data.fields[0].value;
                             if (displayName != null && displayName.length > 0) {
                                 node.name = displayName;
-                                node.userData = id;
                             }
                         }
                     });
-                    
                     
                 }
             });
@@ -166,7 +167,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope) {
 /*****************************
 * Modal Dialog Controller
 ******************************/
-function ModalInfoController($modalInstance, objectName, ObjectDataService) {
+function ModalInfoController($uibModalInstance, objectName, objectData, ObjectDataService) {
     var modal = this;
     
     this.loading = false;
@@ -175,9 +176,10 @@ function ModalInfoController($modalInstance, objectName, ObjectDataService) {
     this.name = objectName;
     this.info = null;
     
-    if (ObjectDataService.isValidID(objectName)) {
+    if ('id' in objectData) {
+        var objectID = objectData.id;
         modal.loading = true;
-        ObjectDataService.getObjectData(objectName).then(
+        ObjectDataService.getObjectData(objectID).then(
             function success(response) {
                 var data = response.data;
                 if (data.error) {
@@ -195,6 +197,6 @@ function ModalInfoController($modalInstance, objectName, ObjectDataService) {
     }
 
     this.ok = function () {
-        $modalInstance.close();
+        $uibModalInstance.close();
     };
 }
