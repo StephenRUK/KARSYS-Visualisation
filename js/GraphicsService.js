@@ -167,13 +167,7 @@ function GraphicsService(canvasID, $timeout) {
             obj.translateZ(offset.z);
         }
     };
-    
-    //
-    // Hooks, listeners
-    //
-    
-    this.onModelLoaded = [];     // Assigned functions are called when model loading is completed
-    
+        
     //
     // Read-only data functions
     //
