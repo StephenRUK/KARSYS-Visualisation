@@ -16,7 +16,7 @@ function HierarchyDirective(Graphics, $uibModal) {
                 }
             });
             
-            $scope.showObjectInfo = function (name) {
+            $scope.showObjectInfo = function (object) {
                 
                 var modalInstance = $uibModal.open({
                     templateUrl: 'partials/objectDetailDialog.html',
@@ -24,7 +24,7 @@ function HierarchyDirective(Graphics, $uibModal) {
                     backdrop: false,
                     resolve: {
                         objectName: function () {
-                            return name;
+                            return object.name;
                         }
                     }
                 });
