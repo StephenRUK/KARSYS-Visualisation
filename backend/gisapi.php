@@ -17,7 +17,7 @@ function getTypeIdDetails ($dbConn, $typeId) {
 }
 
 function getFieldsForTypeId ($dbConn, $typeID) {
-    $query = "SELECT Field, DisplayName, isDomainVal FROM " . DB_Table_Data_Fields . " WHERE LayerID = " . $typeID;
+    $query = "SELECT * FROM " . DB_Table_Data_Fields . " WHERE LayerID = " . $typeID;
     $result = $dbConn->query($query);
     if ($result) {
         $result = $result->fetch_all(MYSQLI_ASSOC);
@@ -65,12 +65,16 @@ function getObjectData ($dbConn, $objectID) {
     $map = array();
     $map['title'] = $typeDetails['displayname'];
     
+    $i=0;
     foreach ($values as $k => $v) {
         $map['fields'][] = array(
             'name' => $k,
-            'value' => $v
+            'value' => $v,
+            'unit' => $fields[$i]['Unit'],
+            'digits' => $fields[$i]['DecimalDigits']
             // TODO get unit and format
         );
+        $i++;
     }
     
     return $map;
