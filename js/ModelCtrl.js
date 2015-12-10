@@ -195,6 +195,13 @@ function ModalInfoController($uibModalInstance, objectName, objectData, ObjectDa
             }
         );
     }
+    
+    this.keyHandler = function ($event) {
+        // ENTER or ESCAPE pressed?
+        if ($event.keyCode == 13 || $event.keyCode == 27) {
+            $uibModalInstance.close();
+        }
+    };
 
     this.ok = function () {
         $uibModalInstance.close();

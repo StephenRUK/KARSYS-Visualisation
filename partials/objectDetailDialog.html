@@ -1,4 +1,4 @@
-<div>
+<div ng-keyup="modalCtrl.keyHandler($event)">
     <div class="modal-header">
         <h3>Details: <span ng-bind="modalCtrl.info.title ? modalCtrl.info.title : modalCtrl.name"></span></h3>
     </div>
@@ -19,6 +19,6 @@
         <div ng-show="modalCtrl.error" ng-bind="modalCtrl.error" class="alert alert-warning"></div>
 
     <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="modalCtrl.ok()">OK</button>
+        <button class="btn btn-primary" type="button" ng-click="modalCtrl.ok()" tabindex="1">OK</button>
     </div>
 </div>

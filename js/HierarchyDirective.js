@@ -16,6 +16,7 @@ function HierarchyDirective(Graphics, $uibModal) {
                 }
             });
             
+            // TODO Move logic to ModelController or separate info modal service
             $scope.showObjectInfo = function (object) {
                 
                 var modalInstance = $uibModal.open({
