@@ -368,6 +368,8 @@ function GraphicsService(canvasID, $timeout) {
         $timeout(callback, 200);
         
         object3d.traverse( function( node ) {
+            node.name = node.name.replace('_', ' ').trim();
+            
             if( node.material ) {
                 node.material.side = THREE.DoubleSide;
             }
