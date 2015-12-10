@@ -1,19 +1,23 @@
 'use strict';
 
-function HierarchyDirective(Graphics, $uibModal) {
+function HierarchyDirective(Graphics, $uibModal, $timeout) {
     return {
         scope: {},
         
-        controller: function ($scope) {
+        controller: function ($scope, $timeout) {
             $scope.objects = Graphics.getObjectHierarchy();
             
-            $scope.$on('UPDATE', function () {
+            function makeTreeCollapsible() {
                 CollapsibleLists.applyTo(document.getElementById("objectHierarchy"));
 
                 var hierarchyRootElement = document.getElementById('hierarchyRoot');
                 if (hierarchyRootElement) {
                     hierarchyRootElement.click(); // Hackily expand first level
                 }
+            }
+            
+            $scope.$on('UPDATE', function () {
+                $timeout(makeTreeCollapsible, 0, false);    // Schedule for next digest cycle, to ensure DOM element was updated
             });
             
             // TODO Move logic to ModelController or separate info modal service

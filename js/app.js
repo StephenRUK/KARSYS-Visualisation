@@ -14,7 +14,7 @@ app.controller('ModalInfoController', ['$uibModalInstance', 'objectName', 'objec
 
 app.directive('vkModelList', ['ModelRepo', 'GraphicsSvc', ModelListDirective]);
 app.directive('vkControls', ['GraphicsSvc', ControlsDirective]);
-app.directive('vkModelHierarchy', ['GraphicsSvc', '$uibModal', HierarchyDirective]);
+app.directive('vkModelHierarchy', ['GraphicsSvc', '$uibModal', '$timeout', HierarchyDirective]);
 
 app.filter('listObjectInTree', function () {
   return function (sceneObjects) {
