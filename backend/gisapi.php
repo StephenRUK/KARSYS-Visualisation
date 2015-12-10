@@ -1,9 +1,5 @@
 <?php
-require('db.php');  // TODO improve security
-
-/************************************************
-* Top-level methods
-************************************************/
+require('db.php');
 
 function getTypeIdFromObjectId ($objectID) {
     return substr($objectID, 0, 2);
@@ -26,14 +22,13 @@ function getFieldsForTypeId ($dbConn, $typeID) {
 }
 
 function getObjectData ($dbConn, $objectID) {
-    // Generate output array
     $map = array();
     
     $typeID = getTypeIdFromObjectId($objectID);
     $typeDetails = getTypeIdDetails($dbConn, $typeID);
     
     if (!$typeDetails) {
-        $map['error'] = "No type found with ID $typeID";
+        $map['error'] = "Object has an invalid type ID $typeID";
         return $map;
     }
     
@@ -69,7 +64,6 @@ function getObjectData ($dbConn, $objectID) {
     $joinStr = join(' ', $joins);
     $query = "SELECT $colsStr FROM $typeTable $joinStr WHERE {$typeTable}.{$typeTable}_id = '$objectID'";
     $values = doQueryAssoc($dbConn, $query);
-    //echo "VALUES:<pre>"; print_r($values); echo "</pre>";
 
     // Populate output array with field data
     $i=0;
