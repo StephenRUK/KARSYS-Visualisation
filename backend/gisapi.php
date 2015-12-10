@@ -26,15 +26,26 @@ function getFieldsForTypeId ($dbConn, $typeID) {
 }
 
 function getObjectData ($dbConn, $objectID) {
+    // Generate output array
+    $map = array();
+    
     $typeID = getTypeIdFromObjectId($objectID);
     $typeDetails = getTypeIdDetails($dbConn, $typeID);
     
-    if (!$typeDetails) return null;
-    $typeTable = $typeDetails['code'];
+    if (!$typeDetails) {
+        $map['error'] = "No type found with ID $typeID";
+        return $map;
+    }
     
+    $typeTable = $typeDetails['code'];
+    $map['title'] = $typeDetails['displayname'];
+    
+    // Get fields for the object type
     $fields = getFieldsForTypeId($dbConn, $typeID);
     
-    //echo "FIELDS:<pre>"; print_r($fields); echo "</pre>";
+    if (count($fields) == 0) {
+        return $map;
+    }
     
     // Build super-query to retrieve values with domain values
     $columns = array();
@@ -53,18 +64,14 @@ function getObjectData ($dbConn, $objectID) {
 
         $columns[] = "$fName AS '$fDisp'";
     }
-    
+
     $colsStr = join(',', $columns);
     $joinStr = join(' ', $joins);
     $query = "SELECT $colsStr FROM $typeTable $joinStr WHERE {$typeTable}.{$typeTable}_id = '$objectID'";
-    
     $values = doQueryAssoc($dbConn, $query);
     //echo "VALUES:<pre>"; print_r($values); echo "</pre>";
-    
-    // Generate output array with title and fields
-    $map = array();
-    $map['title'] = $typeDetails['displayname'];
-    
+
+    // Populate output array with field data
     $i=0;
     foreach ($values as $k => $v) {
         $map['fields'][] = array(
@@ -72,7 +79,6 @@ function getObjectData ($dbConn, $objectID) {
             'value' => $v,
             'unit' => $fields[$i]['Unit'],
             'digits' => $fields[$i]['DecimalDigits']
-            // TODO get unit and format
         );
         $i++;
     }
@@ -99,6 +105,8 @@ function doQueryAssoc($dbConn, $sql) {
     $result = $dbConn->query($sql);
     if ($result) {
         $result = $result->fetch_assoc();
+    } else {
+        $result = array();  // Return empty result instead of NULL
     }
 
     return $result;
