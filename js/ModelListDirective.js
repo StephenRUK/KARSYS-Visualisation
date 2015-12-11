@@ -9,11 +9,14 @@ function ModelListDirective(ModelRepo, Graphics) {
         controller: function ($scope) {
             var model;
             
+            // TODO Move this logic to ModelController & pass a reference
             function loadCompleted() {
                 if (model.params.transform) {
                     Graphics.translateObject(model.name, model.params.transform.offset);
                     Graphics.scaleObject(model.name, model.params.transform.scale);
                 }
+                Graphics.zoomToObject(model.name);
+                
                 $scope.model = model;
                 $scope.$emit("MODEL_LOADED");   // Notify controller to update other directives
             }

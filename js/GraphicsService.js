@@ -43,6 +43,56 @@ function GraphicsService(canvasID, $timeout) {
         camera.lookAt(new THREE.Vector3(x, y, z));
     };
 
+    /**
+    * Zooms into an object so it fills most of the screen.
+    * Assumes camera is looking towards negative z.
+    **/
+    this.zoomToObject = function (name) {
+        var obj = scene.getObjectByName(name);
+        if (!obj) return;
+        
+        var targetRatio = 0.80; // Percentage of screen to fill when zoomed
+        
+        var minX = Infinity, maxX = -Infinity;
+        var minY = Infinity, maxY = -Infinity;
+        var minZ = Infinity, maxZ = -Infinity;
+        
+        var bbox;
+        obj.traverseVisible(function (node){
+            if (node instanceof THREE.Mesh) {
+                node.geometry.computeBoundingBox();
+                bbox = node.geometry.boundingBox;
+
+                if (bbox.min.x < minX) minX = bbox.min.x;
+                if (bbox.max.x > maxX) maxX = bbox.max.x;
+                if (bbox.min.y < minY) minY = bbox.min.y;
+                if (bbox.max.y > maxY) maxY = bbox.max.y;
+                if (bbox.min.z < minZ) minZ = bbox.min.z;
+                if (bbox.max.z > maxZ) maxZ = bbox.max.z;
+            }
+        });
+        
+        // Catch if there wasn't any geometry in the first place
+        if (!bbox) return;
+        
+        var bboxGeo = new THREE.BoxGeometry(maxX-minX, maxY-minY, maxZ-minZ);
+        var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+        var cube = new THREE.Mesh(bboxGeo, material);
+        cube.position.set(minX+(maxX-minX)/2,minY+(maxY-minY)/2,minZ+(maxZ-minZ)/2);
+        scene.add(cube);
+        
+        // calculate object width to plane width ratio
+        var width = maxX - minX;
+        var distance = maxZ - camera.position.z;
+        var ratio = width / (2*Math.tan(camera.fov/2)*distance);
+
+        var newDistance = distance * ratio / targetRatio;
+
+        camera.position.x = minX + (maxX-minX)/2;
+        camera.position.y = minY + (maxY-minY)/2;
+        camera.position.z = camera.position.z + newDistance;
+    };
+    
     //
     // Cross section
     //
@@ -336,7 +386,7 @@ function GraphicsService(canvasID, $timeout) {
         requestAnimationFrame(animate);
         render();
     }
-        
+
     function init(canvasID) {
 		scene = new THREE.Scene();
         
