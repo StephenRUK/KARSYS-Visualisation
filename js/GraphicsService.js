@@ -75,13 +75,13 @@ function GraphicsService(canvasID, $timeout) {
         svc.crossSection.normal = vecFacingOrigin;
 
         setCrossSection(this.crossSection.normal, this.crossSection.distance);
-        crossSectionPlaneObj.visible = true;
+        scene.add(crossSectionPlaneObj);
     };
     
     this.disableCrossSection = function () {
         camera.updateProjectionMatrix();
         svc.crossSection.enabled = false;
-        crossSectionPlaneObj.visible = false;
+        scene.remove(crossSectionPlaneObj);
     };
     
     this.moveCrossSection = function (distance) {
@@ -347,10 +347,8 @@ function GraphicsService(canvasID, $timeout) {
         
         // Cross-sections
         var geometry = new THREE.PlaneBufferGeometry(100, 60);
-        var material = new THREE.MeshBasicMaterial( {color: 0xf00000, side: THREE.DoubleSide, transparent: true, opacity: 0.2 } );
+        var material = new THREE.MeshBasicMaterial( {color: 0xf00000, side: THREE.DoubleSide, transparent: true, opacity: 0.1 } );
         crossSectionPlaneObj = new THREE.Mesh( geometry, material );
-        crossSectionPlaneObj.visible = false;
-        scene.add( crossSectionPlaneObj );
 
 		// Listeners
 		window.addEventListener('resize', onWindowResize, true);
