@@ -60,14 +60,14 @@ function GraphicsService(canvasID, $timeout) {
         var bboxGeo = new THREE.BoxGeometry(bbox.size().x, bbox.size().y, bbox.size().z);
         var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
         var cube = new THREE.Mesh(bboxGeo, material);
-        cube.position.set(bbox.center);
+        cube.position.set(bbox.center().x,bbox.center().y,bbox.center().z);
         scene.add(cube);
         
         // calculate object width to plane width ratio
         var newDistance = bbox.size().x / (2*Math.tan(camera.fov/2)*targetRatio);
 
-        camera.position.x = bbox.centre.x;
-        camera.position.y = bbox.centre.y * 1.15;    // Note: Elevation factor
+        camera.position.x = bbox.center().x;
+        camera.position.y = bbox.center().y * 1.15;    // Note: Elevation factor
         camera.position.z = bbox.max.z - newDistance;
         
         controls.update();
