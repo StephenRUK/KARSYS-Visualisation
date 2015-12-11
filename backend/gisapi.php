@@ -13,7 +13,7 @@ function getTypeIdDetails ($dbConn, $typeId) {
 }
 
 function getFieldsForTypeId ($dbConn, $typeID) {
-    $query = "SELECT * FROM " . DB_Table_Data_Fields . " WHERE LayerID = " . $typeID;
+    $query = "SELECT * FROM " . DB_Table_Data_Fields . " WHERE LayerID = $typeID ORDER BY DisplayOrder";
     $result = $dbConn->query($query);
     if ($result) {
         $result = $result->fetch_all(MYSQLI_ASSOC);
