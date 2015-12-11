@@ -51,7 +51,7 @@ function GraphicsService(canvasID, $timeout) {
         var obj = scene.getObjectByName(name);
         if (!obj) return;
         
-        var targetRatio = 0.80; // Percentage of screen to fill when zoomed
+        var targetRatio = 0.9; // Percentage of screen to fill when zoomed
 
         var bbox = new THREE.Box3();
         bbox.setFromObject(obj);
@@ -64,14 +64,11 @@ function GraphicsService(canvasID, $timeout) {
         scene.add(cube);
         
         // calculate object width to plane width ratio
-        var distance = bbox.max.z - camera.position.z;
-        var ratio = bbox.size().x / (2*Math.tan(camera.fov/2)*distance);
+        var newDistance = bbox.size().x / (2*Math.tan(camera.fov/2)*targetRatio);
 
-        var newDistance = distance * ratio / targetRatio;
-
-        camera.position.x = bbox.min.x + bbox.size().x/2;
-        camera.position.y = (bbox.min.y + bbox.size().y/2)*1.15;    // Note: Elevation factor
-        camera.position.z = bbox.min.z - newDistance;
+        camera.position.x = bbox.centre.x;
+        camera.position.y = bbox.centre.y * 1.15;    // Note: Elevation factor
+        camera.position.z = bbox.max.z - newDistance;
         
         controls.update();
     };
