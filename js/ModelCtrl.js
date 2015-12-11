@@ -167,13 +167,14 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope) {
 /*****************************
 * Modal Dialog Controller
 ******************************/
-function ModalInfoController($uibModalInstance, objectName, objectData, ObjectDataService) {
+function ModalInfoController($uibModalInstance, objectName, objectData, ObjectDataService, GraphicsService) {
     var modal = this;
     
     this.loading = false;
     this.error = null;
     
     this.name = objectName;
+    this.isolated = ('isolated' in objectData);
     this.info = null;
     
     if ('id' in objectData) {
@@ -194,6 +195,16 @@ function ModalInfoController($uibModalInstance, objectName, objectData, ObjectDa
                 modal.loading = false;
             }
         );
+    }
+    
+    this.isolateObject = function () {
+        GraphicsService.isolateObject(objectName);
+        modal.isolated = true;
+    }
+    
+    this.deisolateObject = function () {
+        GraphicsService.deisolateObject(objectName);
+        modal.isolated = false;
     }
     
     this.keyHandler = function ($event) {

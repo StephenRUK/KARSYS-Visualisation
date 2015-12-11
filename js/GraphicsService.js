@@ -195,6 +195,44 @@ function GraphicsService(canvasID, $timeout) {
       return scene.getObjectByName(name).clone();
     };
     
+    this.isolateObject = function(name) {
+        var isoObject = scene.getObjectByName(name);
+        isoObject.userData.isolated = true;
+
+        // Hide all objects initially
+        for (var i = 0; i < objects.length; i++) {
+            var o = objects[i];
+            o.traverse(function (node) {
+                node.userData.visible = node.visible;   // Store current state for restoring later
+                node.visible = false;                
+            });
+        }
+        
+        // Show the specified object (children included) & its parents
+        var o = isoObject;
+        o.traverse(function (node) {
+            node.visible = true;
+        });
+        while(o.parent != null) {
+            o = o.parent;
+            o.visible = true;
+        }
+    };
+    
+    this.deisolateObject = function(name) {
+        var isoObject = scene.getObjectByName(name);
+        delete isoObject.userData.isolated;
+        
+        // Restore all objects visibility
+        for (var i = 0; i < objects.length; i++) {
+            var o = objects[i];
+            o.traverse(function (node) {
+                node.visible = node.userData.visible;   // Store current state for restoring later
+                delete node.userData.visible;
+            });
+        }
+    };
+    
 	//
 	// Model Loaders
 	//
