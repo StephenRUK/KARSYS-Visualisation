@@ -205,6 +205,15 @@ function GraphicsService(canvasID, $timeout) {
     };
     
     this.showChildren = function(name) {
+        
+        for (var i = 0; i < objects.length; i++) {
+            objects[i].traverse(function(node){
+                // Showing objects cancels isolation mode.
+                // More efficient if we store a reference to isolated object (future idea ;) )
+                delete node.userData.isolated;
+            });
+        }
+        
         var o = scene.getObjectByName(name);
         o.traverse(function (node) {
             if (node != o) {
@@ -214,8 +223,7 @@ function GraphicsService(canvasID, $timeout) {
                 } else {
                     node.visible = true;
                 }
-                delete node.userData.isolated;   // Showing objects cancels isolation mode
-            }            
+            }
         });
     };
     
@@ -227,17 +235,17 @@ function GraphicsService(canvasID, $timeout) {
             svc.hideChildren(objects[i].name);
         }
         
-        // Show the specified object (children included)
+        // Revert child visibility
         isoObject.traverse(function(node) {
-            node.visible = true;
+            node.visible = node.userData.visible;
         });
+        
+        isoObject.userData.visible = true;
 
         // Show parents, otherwise child object isn't visible
-        var o = isoObject;
-        while(o.parent != null) {
-            o = o.parent;
-            o.visible = true;
-        }
+        isoObject.traverseAncestors(function(parent) {
+            parent.visible = true;
+        });
     };
     
     this.deisolateObject = function(name) {
