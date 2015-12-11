@@ -52,45 +52,28 @@ function GraphicsService(canvasID, $timeout) {
         if (!obj) return;
         
         var targetRatio = 0.80; // Percentage of screen to fill when zoomed
-        
-        var minX = Infinity, maxX = -Infinity;
-        var minY = Infinity, maxY = -Infinity;
-        var minZ = Infinity, maxZ = -Infinity;
-        
-        var bbox;
-        obj.traverseVisible(function (node){
-            if (node instanceof THREE.Mesh) {
-                node.geometry.computeBoundingBox();
-                bbox = node.geometry.boundingBox;
 
-                if (bbox.min.x < minX) minX = bbox.min.x;
-                if (bbox.max.x > maxX) maxX = bbox.max.x;
-                if (bbox.min.y < minY) minY = bbox.min.y;
-                if (bbox.max.y > maxY) maxY = bbox.max.y;
-                if (bbox.min.z < minZ) minZ = bbox.min.z;
-                if (bbox.max.z > maxZ) maxZ = bbox.max.z;
-            }
-        });
-        
-        // Catch if there wasn't any geometry in the first place
+        var bbox = new THREE.Box3();
+        bbox.setFromObject(obj);
         if (!bbox) return;
         
-        var bboxGeo = new THREE.BoxGeometry(maxX-minX, maxY-minY, maxZ-minZ);
+        var bboxGeo = new THREE.BoxGeometry(bbox.size().x, bbox.size().y, bbox.size().z);
         var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
         var cube = new THREE.Mesh(bboxGeo, material);
-        cube.position.set(minX+(maxX-minX)/2,minY+(maxY-minY)/2,minZ+(maxZ-minZ)/2);
+        cube.position.set(bbox.center);
         scene.add(cube);
         
         // calculate object width to plane width ratio
-        var width = maxX - minX;
-        var distance = maxZ - camera.position.z;
-        var ratio = width / (2*Math.tan(camera.fov/2)*distance);
+        var distance = bbox.max.z - camera.position.z;
+        var ratio = bbox.size().x / (2*Math.tan(camera.fov/2)*distance);
 
         var newDistance = distance * ratio / targetRatio;
 
-        camera.position.x = minX + (maxX-minX)/2;
-        camera.position.y = minY + (maxY-minY)/2;
-        camera.position.z = camera.position.z + newDistance;
+        camera.position.x = bbox.min.x + bbox.size().x/2;
+        camera.position.y = (bbox.min.y + bbox.size().y/2)*1.15;    // Note: Elevation factor
+        camera.position.z = bbox.min.z - newDistance;
+        
+        controls.update();
     };
     
     //
