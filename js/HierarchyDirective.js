@@ -1,11 +1,11 @@
 'use strict';
 
-function HierarchyDirective(Graphics, $uibModal, $timeout) {
+function HierarchyDirective(GraphicsService, $uibModal, $timeout) {
     return {
         scope: {},
         
         controller: function ($scope, $timeout) {
-            $scope.objects = Graphics.getObjectHierarchy();
+            $scope.objects = GraphicsService.getObjectHierarchy();
             
             function makeTreeCollapsible() {
                 CollapsibleLists.applyTo(document.getElementById("objectHierarchy"));

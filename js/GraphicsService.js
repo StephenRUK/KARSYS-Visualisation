@@ -20,7 +20,7 @@ function GraphicsService(canvasID, $timeout) {
     // Camera
     //
     
-    this.resetScene = function() {
+    this.resetScene = function () {
         for (var i=0; i < objects.length; i++) {
             scene.remove(objects[i]);
         }
@@ -187,7 +187,6 @@ function GraphicsService(canvasID, $timeout) {
     }
     
     this.getObjectHierarchy = function() {
-        //return objects.slice(0);    // Clone
         return objects;
     };
     
