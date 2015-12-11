@@ -167,6 +167,32 @@ function GraphicsService(canvasID, $timeout) {
             obj.translateZ(offset.z);
         }
     };
+    
+    this.highlightObject = function(name, colorHex) {
+        var obj = scene.getObjectByName(name);
+        if (!obj) return;
+        
+        obj.traverse(function(node){
+            if ('material' in node) {
+                //console.log(node.id + " | " + node.name + " >> Orig: " + node.material.color.);
+                node.material.colorOrig = node.material.color.clone();
+                node.material.color.setHex(colorHex);
+            }
+        });
+    };
+    
+    this.unhighlightObject = function(name) {
+        var obj = scene.getObjectByName(name);
+        if (!obj) return;
+        
+        obj.traverse(function (node) {
+            if ('material' in node) {
+                node.material.color.set(node.material.colorOrig);
+                delete node.material.colorOrig;
+            }
+        });
+        
+    };
         
     //
     // Read-only data functions
