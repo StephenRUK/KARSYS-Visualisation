@@ -214,6 +214,7 @@ function GraphicsService(canvasID, $timeout) {
                 } else {
                     node.visible = true;
                 }
+                delete node.userData.isolated;   // Showing objects cancels isolation mode
             }            
         });
     };
