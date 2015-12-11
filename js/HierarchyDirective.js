@@ -6,6 +6,7 @@ function HierarchyDirective(GraphicsService, $uibModal, $timeout) {
         
         controller: function ($scope, $timeout) {
             $scope.objects = GraphicsService.getObjectHierarchy();
+            var highlightColor = 0xffb3b3;
             
             function makeTreeCollapsible() {
                 CollapsibleLists.applyTo(document.getElementById("objectHierarchy"));
@@ -19,6 +20,14 @@ function HierarchyDirective(GraphicsService, $uibModal, $timeout) {
             $scope.$on('UPDATE', function () {
                 $timeout(makeTreeCollapsible, 0, false);    // Schedule for next digest cycle, to ensure DOM element was updated
             });
+            
+            $scope.objectMouseOver = function(object) {
+                GraphicsService.highlightObject(object.name, highlightColor);
+            };
+            
+            $scope.objectMouseOut = function(object) {
+                GraphicsService.unhighlightObject(object.name);
+            };
             
             $scope.toggleVisibility = function (object, show) {
                 // Visibility after model change
