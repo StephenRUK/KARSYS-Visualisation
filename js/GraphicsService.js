@@ -195,24 +195,45 @@ function GraphicsService(canvasID, $timeout) {
       return scene.getObjectByName(name).clone();
     };
     
+    this.hideChildren = function(name) {
+        var o = scene.getObjectByName(name);
+        o.traverse(function (node) {
+            if (node != o) {
+                node.userData.visible = node.visible;   // Store current state for restoring later
+                node.visible = false;
+            }
+        });
+    };
+    
+    this.showChildren = function(name) {
+        var o = scene.getObjectByName(name);
+        o.traverse(function (node) {
+            if (node != o) {
+                if ('visible' in node.userData) {
+                    node.visible = node.userData.visible;   // Restore previous visibility state
+                    delete node.userData.visible;
+                } else {
+                    node.visible = true;
+                }
+            }            
+        });
+    };
+    
     this.isolateObject = function(name) {
         var isoObject = scene.getObjectByName(name);
         isoObject.userData.isolated = true;
 
-        // Hide all objects initially
         for (var i = 0; i < objects.length; i++) {
-            var o = objects[i];
-            o.traverse(function (node) {
-                node.userData.visible = node.visible;   // Store current state for restoring later
-                node.visible = false;                
-            });
+            svc.hideChildren(objects[i].name);
         }
         
-        // Show the specified object (children included) & its parents
-        var o = isoObject;
-        o.traverse(function (node) {
+        // Show the specified object (children included)
+        isoObject.traverse(function(node) {
             node.visible = true;
         });
+
+        // Show parents, otherwise child object isn't visible
+        var o = isoObject;
         while(o.parent != null) {
             o = o.parent;
             o.visible = true;
@@ -225,11 +246,7 @@ function GraphicsService(canvasID, $timeout) {
         
         // Restore all objects visibility
         for (var i = 0; i < objects.length; i++) {
-            var o = objects[i];
-            o.traverse(function (node) {
-                node.visible = node.userData.visible;   // Store current state for restoring later
-                delete node.userData.visible;
-            });
+            svc.showChildren(objects[i].name);
         }
     };
     
