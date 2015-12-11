@@ -20,6 +20,15 @@ function HierarchyDirective(GraphicsService, $uibModal, $timeout) {
                 $timeout(makeTreeCollapsible, 0, false);    // Schedule for next digest cycle, to ensure DOM element was updated
             });
             
+            $scope.toggleVisibility = function (object, show) {
+                // Visibility after model change
+                if (show) {
+                    GraphicsService.showChildren(object.name);
+                } else {
+                    GraphicsService.hideChildren(object.name);
+                }
+            };
+            
             // TODO Move logic to ModelController or separate info modal service
             $scope.showObjectInfo = function (object) {
                 
