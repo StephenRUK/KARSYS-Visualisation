@@ -72,7 +72,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope) {
     // Refactoring - to keep
     this.movementEnabled = true;
     this.coordinatesEnabled = false;
-    this.loadedModel = null;
+    this.model = null;
 
     
     // Temporary variables
@@ -123,8 +123,8 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope) {
     //
     
     this.getModelName = function () {
-        if (ctrl.loadedModel) {
-            return ctrl.loadedModel.name;
+        if (ctrl.model) {
+            return ctrl.model.name;
         }
     };
     
@@ -141,7 +141,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope) {
         
         var coords = gfx.getMouseWorldCoordinates($event);
         if (coords) {
-            this.mouseCoordinates = transformCoordinates(coords, ctrl.loadedModel.params.coordinatesTransform);
+            this.mouseCoordinates = transformCoordinates(coords, ctrl.model.params.coordinatesTransform);
         }
         
     };
@@ -155,8 +155,13 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope) {
         $scope.$watchCollection('ctrl.csMode', ctrl.toggleCrossSection);     // TODO Replace with ngChange in view
         
         // Event handling
-        $scope.$on('MODEL_LOADED', function () {
+        $scope.$on('MODEL_LOADED', function (event, model) {
             replaceIDsWithNames();
+			if (model.params.transform) {
+				gfx.translateObject(model.name, model.params.transform.offset);
+				gfx.scaleObject(model.name, model.params.transform.scale);
+			}
+			gfx.zoomToObject(model.name);
             $scope.$broadcast('UPDATE');  // Forward event to child directives
         });
     }
