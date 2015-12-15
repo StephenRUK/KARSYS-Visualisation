@@ -74,10 +74,6 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope) {
     this.coordinatesEnabled = false;
     this.model = null;
 
-    
-    // Temporary variables
-    this.currentModelID;
-    
     // Display variables
     this.mouseCoordinates = {x: 0, y: 0, z: 0};
     this.coordinatesUnit = "";
@@ -157,6 +153,9 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope) {
         // Event handling
         $scope.$on('MODEL_LOADED', function (event, model) {
             replaceIDsWithNames();
+            if (model.params.unit) {
+                ctrl.coordinatesUnit = model.params.unit;
+            }
 			if (model.params.transform) {
 				gfx.translateObject(model.name, model.params.transform.offset);
 				gfx.scaleObject(model.name, model.params.transform.scale);
