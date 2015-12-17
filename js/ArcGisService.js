@@ -14,15 +14,11 @@ function ArcGisService(serverURL, $http) {
     **********************/
     
     function performQuery(queryString) {
-        return $http
-            .get(url + '?' + queryString)
-            .then(function (result) {
-                return result.data;
-            });
+        return $http.get(url + '?' + queryString);
     }
     
     function init() {
-        // Test server connectivity
+        // Test server connectivity?
         url = serverURL;
     }
     
@@ -47,6 +43,13 @@ function ArcGisService(serverURL, $http) {
     this.getObjectData = function (ObjectID) {
         var idClean = parseID(ObjectID);
         var queryParams = 'id=' + idClean;
+        
+        return performQuery(queryParams);
+    };
+    
+    this.getObjectField = function (ObjectID, fieldName) {
+        var idClean = parseID(ObjectID);
+        var queryParams = 'id=' + idClean + '&field=' + fieldName;
         
         return performQuery(queryParams);
     };

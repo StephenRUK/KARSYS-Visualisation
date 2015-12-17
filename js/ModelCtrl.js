@@ -1,6 +1,6 @@
 'use strict';
 
-function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uibModal) {
+function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope) {
     /***********************************************
     * Private
     ***********************************************/
@@ -8,36 +8,36 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     var ctrl = this,        // Sometimes needed to 'escape' the current 'this' scope
         repo = ModelRepo,
         gfx = GraphicsSvc,
-        ods = ObjectDataService,
-        loadedModel;        // Reference to currently loaded model object
-    
-    //
-    // Event handlers
-    //
-    
-    function modelLoadedHandler(name) {
-        // Apply transformations
-        if (loadedModel.params.transform) {
-            gfx.translateObject(loadedModel.name, loadedModel.params.transform.offset);
-            gfx.scaleObject(loadedModel.name, loadedModel.params.transform.scale);
-        }
-        
-        ctrl.objectTree = gfx.getObjectHierarchy();
-        $scope.$apply();    // This function is outside of Angular's scope. Tell it to update view.
-        
-        CollapsibleLists.applyTo(document.getElementById('objectHierarchy'));
-        
-        var hierarchyRootElement = document.getElementById('hierarchyRoot');
-        if (hierarchyRootElement) {
-            hierarchyRootElement.click(); // Hackily expand first level
-        }
-        
-        ctrl.isModelLoaded = true;
-    }
+        ods = ObjectDataService;
     
     //
     // Private util methods
     //
+    
+    function replaceIDsWithNames() {
+        var objects = gfx.getObjectHierarchy();
+        
+        for (var i = 0; i < objects.length; i++) {
+            var o = objects[i];
+            o.traverse(function (node) {
+                if (ods.isValidID(node.name)) {
+                    var id = node.name;
+                    
+                    node.userData.id = id;
+                    
+                    ods.getObjectField(id, 'name').then(function(result) {
+                        if (result.data.fields) {
+                            var displayName = result.data.fields[0].value;
+                            if (displayName != null && displayName.length > 0) {
+                                node.name = displayName;
+                            }
+                        }
+                    });
+                    
+                }
+            });
+        }
+    }
     
     /*
     * transfromCoordinates
@@ -69,21 +69,17 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     * Public
     ***********************************************/
     
-    // Temporary variables
-    this.currentModelID;
-    this.camCoords = gfx.getCameraPosition();
-    
-    this.isModelLoaded = false;
+    // Refactoring - to keep
+    this.movementEnabled = true;
+    this.coordinatesEnabled = false;
+    this.model = null;
 
     // Display variables
     this.mouseCoordinates = {x: 0, y: 0, z: 0};
     this.coordinatesUnit = "";
     this.objectHierarchy;
     
-    // Settings
-    this.coordinatesEnabled = false;    // Toggle coordinates display
-    this.movementEnabled = true;    // Toggle movement controls
-    this.cameraEnabled = false; // Toggle camera controls
+    // Refactor: To cross-section
     this.csMode;    // Cross-section Horizontal/Vertical/undefined
     this.csFlipped; // "Flip" or undefined
     this.csShowPlane = 'Show';   // Show or hide the red plane
@@ -92,63 +88,6 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     //
     // Functions
     //
-    
-	this.loadModel = function (modelID) {
-        var modelToLoad = repo.getByID(modelID);
-        if (modelToLoad === loadedModel) { return; }
-        
-        ctrl.isModelLoaded = false;
-        gfx.resetScene();
-        
-        ctrl.csMode = undefined;
-        this.csFlipped = undefined;
-        gfx.disableCrossSection();
-        gfx.resetCrossSection();
-        
-        loadedModel = modelToLoad;
-        
-		switch (loadedModel.fileFormat) {
-        case ModelFormat.OBJMTL:
-            gfx.loadObjMtl(loadedModel.name, loadedModel.filePath, loadedModel.params.mtlPath);
-            break;
-			
-        case ModelFormat.DAE:
-            gfx.loadDae(loadedModel.name, loadedModel.filePath);
-            break;
-			
-        default:
-            break;
-		}
-                
-        // Set up coordinate display
-        this.mouseCoordinates = {x: 0, y: 0, z: 0};
-        this.coordinatesUnit = loadedModel.params.unit;
-	};
-    
-    this.showObjectInfo = function (name) {        
-        var modalInstance = $uibModal.open({
-            templateUrl: 'dialog.html',
-            controller: 'ModalInfoController as modalCtrl',
-            backdrop: false,
-            resolve: {
-                objectName: function () {
-                    return name;
-                },
-                objectInfo: function () {
-                    if (ods.isValidID(name)) {
-                        return ods.getObjectData(name);
-                    }
-                }
-            }
-        });
-        
-        modalInstance.result.then(function () {
-			console.info("Modal opened successfully!");
-		}, function (error) {
-			console.warn("Modal couldn't be opened. error.");
-		});
-        
-    };
     
     this.toggleCrossSection = function (newMode, oldMode) {
         if (newMode) {
@@ -179,25 +118,10 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     // Data access
     //
     
-	this.getAll = repo.getAll();
-    
     this.getModelName = function () {
-        if (loadedModel) {
-            return loadedModel.name;
+        if (ctrl.model) {
+            return ctrl.model.name;
         }
-    };
-
-    
-    //
-    // Config change
-    //
-    
-    this.toggleMovementControls = function () {
-        gfx.enableMovement(ctrl.movementEnabled);
-    };
-    
-    this.toggleCoordinatesDisplay = function () {
-        gfx.enableCoordinatesDisplay(ctrl.coordinatesEnabled);
     };
     
     //
@@ -213,7 +137,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
         
         var coords = gfx.getMouseWorldCoordinates($event);
         if (coords) {
-            this.mouseCoordinates = transformCoordinates(coords, loadedModel.params.coordinatesTransform);
+            this.mouseCoordinates = transformCoordinates(coords, ctrl.model.params.coordinatesTransform);
         }
         
     };
@@ -224,22 +148,77 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope, $uib
     *************************/
     
     function init() {
-        gfx.onModelLoaded = modelLoadedHandler;
         $scope.$watchCollection('ctrl.csMode', ctrl.toggleCrossSection);     // TODO Replace with ngChange in view
+        
+        // Event handling
+        $scope.$on('MODEL_LOADED', function (event, model) {
+            replaceIDsWithNames();
+            if (model.params.unit) {
+                ctrl.coordinatesUnit = model.params.unit;
+            }
+			if (model.params.transform) {
+				gfx.translateObject(model.name, model.params.transform.offset);
+				gfx.scaleObject(model.name, model.params.transform.scale);
+			}
+			gfx.zoomToObject(model.name);
+            $scope.$broadcast('UPDATE');  // Forward event to child directives
+        });
     }
     
     init();
 }
 
-
 /*****************************
 * Modal Dialog Controller
 ******************************/
-function ModalInfoController($modalInstance, objectName, objectInfo) {
-    this.name = objectName;
-    this.info = objectInfo;
+function ModalInfoController($uibModalInstance, objectName, objectData, ObjectDataService, GraphicsService) {
+    var modal = this;
     
+    this.loading = false;
+    this.error = null;
+    
+    this.name = objectName;
+    this.isolated = ('isolated' in objectData);
+    this.info = null;
+    
+    if ('id' in objectData) {
+        var objectID = objectData.id;
+        modal.loading = true;
+        ObjectDataService.getObjectData(objectID).then(
+            function success(response) {
+                var data = response.data;
+                if (data.error) {
+                    modal.error = data.error;
+                } else {
+                    modal.info = data;
+                }
+                modal.loading = false;
+            },
+            function error(response) {
+                modal.error = 'Data could not be retrieved (HTTP ' + response.status + ')';
+                modal.loading = false;
+            }
+        );
+    }
+    
+    this.isolateObject = function () {
+        GraphicsService.isolateObject(objectName);
+        modal.isolated = true;
+    }
+    
+    this.deisolateObject = function () {
+        GraphicsService.deisolateObject(objectName);
+        modal.isolated = false;
+    }
+    
+    this.keyHandler = function ($event) {
+        // ENTER or ESCAPE pressed?
+        if ($event.keyCode == 13 || $event.keyCode == 27) {
+            $uibModalInstance.close();
+        }
+    };
+
     this.ok = function () {
-        $modalInstance.close();
+        $uibModalInstance.close();
     };
 }

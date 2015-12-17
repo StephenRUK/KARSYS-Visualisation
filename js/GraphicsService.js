@@ -3,7 +3,10 @@
 function GraphicsService(canvasID, $timeout) {
     var svc = this;
     
-	var scene, camera, renderer, controls, objects = [];
+	var scene, camera, renderer, controls;
+    
+    var objects = new THREE.Object3D();     // Contains user-loaded objects. Used to separate camera, lights etc from user objects.
+    var boundingBox = new THREE.Box3();
     
     var crossSectionPlaneObj;
     
@@ -20,11 +23,12 @@ function GraphicsService(canvasID, $timeout) {
     // Camera
     //
     
-    this.resetScene = function() {
-        for (var i=0; i < objects.length; i++) {
-            scene.remove(objects[i]);
+    this.resetScene = function () {
+        for (var i=0; i < objects.children.length; i++) {
+            objects.remove(objects.children[i]);
         }
-        objects.splice(0, objects.length);
+        
+        svc.disableCrossSection();
         
         controls.reset();
         camera.near = CAM_NEAR_PLANE;
@@ -41,6 +45,30 @@ function GraphicsService(canvasID, $timeout) {
         camera.lookAt(new THREE.Vector3(x, y, z));
     };
 
+    /**
+    * Zooms into an object so it fills most of the screen.
+    * Assumes camera is looking towards negative z.
+    **/
+    this.zoomToObject = function (name) {
+        var obj = scene.getObjectByName(name);
+        if (!obj) return;
+        
+        var targetRatio = 0.9; // Percentage of screen to fill when zoomed
+
+        var bbox = new THREE.Box3();
+        bbox.setFromObject(obj);
+        if (!bbox) return;
+        
+        // calculate object width to plane width ratio
+        var newDistance = bbox.size().x / (2*Math.tan(camera.fov/2)*targetRatio);
+
+        camera.position.x = bbox.center().x;
+        camera.position.y = bbox.center().y * 1.15;    // Note: Elevation factor
+        camera.position.z = bbox.max.z - newDistance;
+        
+        controls.update();
+    };
+    
     //
     // Cross section
     //
@@ -73,13 +101,25 @@ function GraphicsService(canvasID, $timeout) {
         svc.crossSection.normal = vecFacingOrigin;
 
         setCrossSection(this.crossSection.normal, this.crossSection.distance);
-        crossSectionPlaneObj.visible = true;
+        
+        // Set plane to size of the model's bounding box
+        var scale = boundingBox.size().multiplyScalar(1.1);
+        crossSectionPlaneObj.scale.set(scale.x, scale.y, 1);
+        // Move to bbox centre
+        var center = boundingBox.center();
+        crossSectionPlaneObj.position.set(center.x, center.y, center.z);
+        scene.add(crossSectionPlaneObj);
     };
     
     this.disableCrossSection = function () {
+        if (!svc.crossSection.enabled) return;
+        
         camera.updateProjectionMatrix();
         svc.crossSection.enabled = false;
-        crossSectionPlaneObj.visible = false;
+        
+        scene.remove(crossSectionPlaneObj);
+        // Reset plane to original size 1x1x1
+        crossSectionPlaneObj.scale.divideScalar(crossSectionPlaneObj.scale.x, crossSectionPlaneObj.scale.y, 1);
     };
     
     this.moveCrossSection = function (distance) {
@@ -138,8 +178,12 @@ function GraphicsService(canvasID, $timeout) {
     // Controls
     //
     
-    this.enableMovement = function (isEnabled) {
-        controls.enabled = isEnabled;
+    this.toggleMovementControls = function (state) {
+        if (state!=undefined) {
+            controls.enabled = state;
+        } else {
+            controls.enabled = !controls.enabled;
+        }
     };
     
     // Transforms
@@ -150,6 +194,9 @@ function GraphicsService(canvasID, $timeout) {
         if (obj) {
             obj.scale.set(scale.x, scale.y, scale.z);
         }
+        
+        calculateSceneBoundingBox();
+        centerScene();
     };
     
     this.translateObject = function (name, offset) {
@@ -160,14 +207,36 @@ function GraphicsService(canvasID, $timeout) {
             obj.translateY(offset.y);
             obj.translateZ(offset.z);
         }
+        
+        calculateSceneBoundingBox();
     };
     
-    //
-    // Hooks, listeners
-    //
+    this.highlightObject = function(name, colorHex) {
+        var obj = scene.getObjectByName(name);
+        if (!obj) return;
+        
+        obj.traverse(function(node){
+            if ('material' in node) {
+                //console.log(node.id + " | " + node.name + " >> Orig: " + node.material.color.);
+                node.material.colorOrig = node.material.color.clone();
+                node.material.color.setHex(colorHex);
+            }
+        });
+    };
     
-    this.onModelLoaded = function (name){};     // Assigned function is called when model loading is completed
-    
+    this.unhighlightObject = function(name) {
+        var obj = scene.getObjectByName(name);
+        if (!obj) return;
+        
+        obj.traverse(function (node) {
+            if ('material' in node) {
+                node.material.color.set(node.material.colorOrig);
+                delete node.material.colorOrig;
+            }
+        });
+        
+    };
+        
     //
     // Read-only data functions
     //
@@ -187,21 +256,85 @@ function GraphicsService(canvasID, $timeout) {
     }
     
     this.getObjectHierarchy = function() {
-        return objects.slice(0);    // Clone
+        return objects.children;
     };
     
     this.getObjectByName = function(name) {
       return scene.getObjectByName(name).clone();
     };
     
+    this.hideChildren = function(name) {
+        var o = scene.getObjectByName(name);
+        o.traverse(function (node) {
+            if (node != o) {
+                node.userData.visible = node.visible;   // Store current state for restoring later
+                node.visible = false;
+            }
+        });
+    };
+    
+    this.showChildren = function(name) {
+        
+        for (var i = 0; i < objects.length; i++) {
+            objects.traverse(function(node){
+                // Showing objects cancels isolation mode.
+                // More efficient if we store a reference to isolated object (future idea ;) )
+                delete node.userData.isolated;
+            });
+        }
+        
+        var o = scene.getObjectByName(name);
+        o.traverse(function (node) {
+            if (node != o) {
+                if ('visible' in node.userData) {
+                    node.visible = node.userData.visible;   // Restore previous visibility state
+                    delete node.userData.visible;
+                } else {
+                    node.visible = true;
+                }
+            }
+        });
+    };
+    
+    this.isolateObject = function(name) {
+        var isoObject = scene.getObjectByName(name);
+        isoObject.userData.isolated = true;
+
+        objects.traverse(function(node) {
+            svc.hideChildren(node.name);
+        });
+        
+        // Revert child visibility
+        isoObject.traverse(function(node) {
+            node.visible = node.userData.visible;
+        });
+        
+        isoObject.userData.visible = true;
+
+        // Show parents, otherwise child object isn't visible
+        isoObject.traverseAncestors(function(parent) {
+            parent.visible = true;
+        });
+    };
+    
+    this.deisolateObject = function(name) {
+        var isoObject = scene.getObjectByName(name);
+        delete isoObject.userData.isolated;
+        
+        // Restore all objects visibility
+        objects.traverse(function(node) {
+            svc.showChildren(node.name);
+        });
+    };
+    
 	//
 	// Model Loaders
 	//
 	
-	this.loadObjMtl = function(name, objPath, mtlPath) { // TODO: Add asyncCallback to show progress
+	this.loadObjMtl = function(name, objPath, mtlPath, successHandler) { // TODO: Add asyncCallback to show progress
 		new THREE.OBJMTLLoader().load(objPath, mtlPath,
             function(obj) { // Load complete
-                displayModel(name, obj);
+                displayModel(name, obj, successHandler);
             },
 
             function ( xhr ) {  // In progress
@@ -216,10 +349,10 @@ function GraphicsService(canvasID, $timeout) {
         );
 	};
 	
-	this.loadDae = function(name, daePath) { // TODO: Add asyncCallback to show progress
+	this.loadDae = function(name, daePath, successHandler) { // TODO: Add asyncCallback to show progress
 		new THREE.ColladaLoader().load(daePath,
             function(collada) { // Load complete
-                displayModel(name, collada.scene);
+                displayModel(name, collada.scene, successHandler);
             },
 
             function ( xhr ) {  // In progress
@@ -246,9 +379,10 @@ function GraphicsService(canvasID, $timeout) {
         requestAnimationFrame(animate);
         render();
     }
-        
+
     function init(canvasID) {
 		scene = new THREE.Scene();
+        scene.add(objects);
         
         var canvas = document.getElementById(canvasID);
 		renderer = new THREE.WebGLRenderer({canvas: canvas});
@@ -282,11 +416,9 @@ function GraphicsService(canvasID, $timeout) {
 		scene.add(light);
         
         // Cross-sections
-        var geometry = new THREE.PlaneBufferGeometry(100, 60);
-        var material = new THREE.MeshBasicMaterial( {color: 0xf00000, side: THREE.DoubleSide, transparent: true, opacity: 0.2 } );
+        var geometry = new THREE.PlaneBufferGeometry(1, 1);
+        var material = new THREE.MeshBasicMaterial( {color: 0xf00000, side: THREE.DoubleSide, transparent: true, opacity: 0.1 } );
         crossSectionPlaneObj = new THREE.Mesh( geometry, material );
-        crossSectionPlaneObj.visible = false;
-        scene.add( crossSectionPlaneObj );
 
 		// Listeners
 		window.addEventListener('resize', onWindowResize, true);
@@ -324,7 +456,10 @@ function GraphicsService(canvasID, $timeout) {
         camera.updateProjectionMatrix();    // Reload original matrix
         var normal = normalVector.clone();
         
-        var crossSectionPlane = new THREE.Plane(normal, -distance);
+        // Position of cross-section plane is relative to bounding box size (+/- n% of half-depth)
+        var relativeDistance = distance/100 * boundingBox.size().z/2;
+        
+        var crossSectionPlane = new THREE.Plane(normal, -relativeDistance);
         crossSectionPlane.applyMatrix4(camera.matrixWorldInverse);
         
         var clipPlaneV = new THREE.Vector4(crossSectionPlane.normal.x, crossSectionPlane.normal.y, crossSectionPlane.normal.z, crossSectionPlane.constant);
@@ -348,9 +483,10 @@ function GraphicsService(canvasID, $timeout) {
         projectionMatrix.elements[ 14 ] = c.w;
         
         // DEBUG Update plane object
-        crossSectionPlaneObj.position.set(0, 0, 0);
+        var center = boundingBox.center();
+        crossSectionPlaneObj.position.set(center.x, center.y, center.z);
         crossSectionPlaneObj.rotation.set(0, 0, 0);
-        crossSectionPlaneObj.translateOnAxis(normalVector, distance + 1);
+        crossSectionPlaneObj.translateOnAxis(normalVector, relativeDistance);
         crossSectionPlaneObj.rotateOnAxis(new THREE.Vector3(1, 0, 0), svc.crossSection.angleX/180*Math.PI);    // TODO Make independent from the crossSection variable
         crossSectionPlaneObj.rotateOnAxis(new THREE.Vector3(0, 1, 0), svc.crossSection.angleY/180*Math.PI);    // TODO Make independent from the crossSection variable
     }
@@ -359,21 +495,45 @@ function GraphicsService(canvasID, $timeout) {
     // Private Utility functions
     //
     
-    function displayModel(name, object3d) {        
+    function displayModel(name, object3d, callback) {        
         object3d.name = name;
-        scene.add(object3d);
-        objects.push(object3d);
+        objects.add(object3d);
         
-        $timeout(function(){    // Async callback/Event
-            svc.onModelLoaded(name);
-        }, 0);
+        $timeout(function() {
+            callback();
+            
+            calculateSceneBoundingBox();
+            centerScene();
+        }, 200);
         
-        // DEBUG
-        object3d.traverse( function( node ) {
+        object3d.traverse(function( node ) {
+            node.name = node.name.replace('_', ' ').trim();
+            
             if( node.material ) {
                 node.material.side = THREE.DoubleSide;
             }
         });
+    }
+    
+    function centerScene () {
+        if (!boundingBox) return;
+        
+        var center = boundingBox.center();
+        var origin = new THREE.Vector3(0, 0, 0);
+        var offset = origin.sub(center);
+        
+        objects.position.add(offset);
+        calculateSceneBoundingBox();
+    }
+    
+    function calculateSceneBoundingBox() {
+        
+        var box = new THREE.Box3();
+        box.setFromObject(objects);
+        
+        if (!isNaN(box.size().x) && !isNaN(box.size().y) && !isNaN(box.size().z)) {
+            boundingBox = box;
+        }
     }
     
     // Calculate world coordinates based on mouse position

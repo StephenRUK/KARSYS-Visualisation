@@ -1,0 +1,25 @@
+<div ng-keyup="modalCtrl.keyHandler($event)">
+    <div class="modal-header">
+        <h3>Details: <span ng-bind="modalCtrl.info.title ? modalCtrl.info.title : modalCtrl.name"></span></h3>
+    </div>
+
+    <div class="modal-body">
+        <div ng-show="modalCtrl.loading" class="alert alert-info">Loading data...</div>
+        <div ng-show="!modalCtrl.loading && !modalCtrl.error">
+            <div class="alert alert-info" ng-if="!modalCtrl.info || !modalCtrl.info.fields">No data is available for this object.</div>
+            <div class="row" ng-repeat="field in modalCtrl.info.fields">
+                <div class="col-md-4"><label ng-bind="(field.name|capitalize)"></label></div>
+                <div class="col-md-8">
+                    <span ng-if="field.digits" ng-bind="field.value | fixDecimals: field.digits"></span>
+                    <span ng-if="!field.digits" ng-bind="field.value"></span>
+                    <span ng-bind="' ' + field.unit"></span>
+                </div>
+            </div>
+        </div>
+        <div ng-show="modalCtrl.error" ng-bind="modalCtrl.error" class="alert alert-warning"></div>
+
+    <div class="modal-footer">
+        <button class="btn btn-normal" type="button" ng-click="modalCtrl.isolated ? modalCtrl.deisolateObject() : modalCtrl.isolateObject()" ng-bind="modalCtrl.isolated ? 'De-Isolate' : 'Isolate'" ng-attr-title="modalCtrl.isolated ? 'Return to regular view state.' : 'Show only this object, hide all others.'">Isolate</button>
+        <button class="btn btn-primary" type="button" ng-click="modalCtrl.ok()" tabindex="1">OK</button>
+    </div>
+</div>
