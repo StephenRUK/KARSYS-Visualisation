@@ -10,7 +10,7 @@
             <div class="row" ng-repeat="field in modalCtrl.info.fields">
                 <div class="col-md-4"><label ng-bind="(field.name|capitalize)"></label></div>
                 <div class="col-md-8">
-                    <span ng-if="field.digits" ng-bind="field.value | number: field.digits"></span>
+                    <span ng-if="field.digits" ng-bind="field.value | fixDecimals: field.digits"></span>
                     <span ng-if="!field.digits" ng-bind="field.value"></span>
                     <span ng-bind="' ' + field.unit"></span>
                 </div>

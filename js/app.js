@@ -36,3 +36,8 @@ app.filter('capitalize', function() {
       return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1) : '';
     }
 });
+app.filter('fixDecimals', function() {
+    return function(number, decimalDigits) {
+        return parseFloat(number).toFixed(decimalDigits);
+    }
+});
