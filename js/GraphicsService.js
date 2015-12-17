@@ -4,7 +4,9 @@ function GraphicsService(canvasID, $timeout) {
     var svc = this;
     
 	var scene, camera, renderer, controls;
+    
     var objects = new THREE.Object3D();     // Contains user-loaded objects. Used to separate camera, lights etc from user objects.
+    var boundingBox = new THREE.Box3();
     
     var crossSectionPlaneObj;
     
@@ -180,6 +182,8 @@ function GraphicsService(canvasID, $timeout) {
         if (obj) {
             obj.scale.set(scale.x, scale.y, scale.z);
         }
+        calculateSceneBoundingBox();
+        centerScene();
     };
     
     this.translateObject = function (name, offset) {
@@ -190,6 +194,8 @@ function GraphicsService(canvasID, $timeout) {
             obj.translateY(offset.y);
             obj.translateZ(offset.z);
         }
+        
+        calculateSceneBoundingBox();
     };
     
     this.highlightObject = function(name, colorHex) {
@@ -476,7 +482,12 @@ function GraphicsService(canvasID, $timeout) {
         object3d.name = name;
         objects.add(object3d);
         
-        $timeout(callback, 200);
+        $timeout(function() {
+            callback();
+            
+            calculateSceneBoundingBox();
+            centerScene();
+        }, 200);
         
         object3d.traverse(function( node ) {
             node.name = node.name.replace('_', ' ').trim();
@@ -485,6 +496,27 @@ function GraphicsService(canvasID, $timeout) {
                 node.material.side = THREE.DoubleSide;
             }
         });
+    }
+    
+    function centerScene () {
+        if (!boundingBox) return;
+        
+        var center = boundingBox.center();
+        var origin = new THREE.Vector3(0, 0, 0);
+        var offset = origin.sub(center);
+        
+        objects.position.add(offset);
+        calculateSceneBoundingBox();
+    }
+    
+    function calculateSceneBoundingBox() {
+        
+        var box = new THREE.Box3();
+        box.setFromObject(objects);
+        
+        if (!isNaN(box.size().x) && !isNaN(box.size().y) && !isNaN(box.size().z)) {
+            boundingBox = box;
+        }
     }
     
     // Calculate world coordinates based on mouse position
