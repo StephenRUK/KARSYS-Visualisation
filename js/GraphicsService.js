@@ -101,13 +101,25 @@ function GraphicsService(canvasID, $timeout) {
         svc.crossSection.normal = vecFacingOrigin;
 
         setCrossSection(this.crossSection.normal, this.crossSection.distance);
+        
+        // Set plane to size of the model's bounding box
+        var scale = boundingBox.size().multiplyScalar(1.1);
+        crossSectionPlaneObj.scale.set(scale.x, scale.y, 1);
+        // Move to bbox centre
+        var center = boundingBox.center();
+        crossSectionPlaneObj.position.set(center.x, center.y, center.z);
         scene.add(crossSectionPlaneObj);
     };
     
     this.disableCrossSection = function () {
+        if (!svc.crossSection.enabled) return;
+        
         camera.updateProjectionMatrix();
         svc.crossSection.enabled = false;
+        
         scene.remove(crossSectionPlaneObj);
+        // Reset plane to original size 1x1x1
+        crossSectionPlaneObj.scale.divideScalar(crossSectionPlaneObj.scale.x, crossSectionPlaneObj.scale.y, 1);
     };
     
     this.moveCrossSection = function (distance) {
@@ -182,6 +194,7 @@ function GraphicsService(canvasID, $timeout) {
         if (obj) {
             obj.scale.set(scale.x, scale.y, scale.z);
         }
+        
         calculateSceneBoundingBox();
         centerScene();
     };
@@ -403,7 +416,7 @@ function GraphicsService(canvasID, $timeout) {
 		scene.add(light);
         
         // Cross-sections
-        var geometry = new THREE.PlaneBufferGeometry(100, 60);
+        var geometry = new THREE.PlaneBufferGeometry(1, 1);
         var material = new THREE.MeshBasicMaterial( {color: 0xf00000, side: THREE.DoubleSide, transparent: true, opacity: 0.1 } );
         crossSectionPlaneObj = new THREE.Mesh( geometry, material );
 
@@ -443,7 +456,10 @@ function GraphicsService(canvasID, $timeout) {
         camera.updateProjectionMatrix();    // Reload original matrix
         var normal = normalVector.clone();
         
-        var crossSectionPlane = new THREE.Plane(normal, -distance);
+        // Position of cross-section plane is relative to bounding box size (+/- n% of half-depth)
+        var relativeDistance = distance/100 * boundingBox.size().z/2;
+        
+        var crossSectionPlane = new THREE.Plane(normal, -relativeDistance);
         crossSectionPlane.applyMatrix4(camera.matrixWorldInverse);
         
         var clipPlaneV = new THREE.Vector4(crossSectionPlane.normal.x, crossSectionPlane.normal.y, crossSectionPlane.normal.z, crossSectionPlane.constant);
@@ -467,9 +483,10 @@ function GraphicsService(canvasID, $timeout) {
         projectionMatrix.elements[ 14 ] = c.w;
         
         // DEBUG Update plane object
-        crossSectionPlaneObj.position.set(0, 0, 0);
+        var center = boundingBox.center();
+        crossSectionPlaneObj.position.set(center.x, center.y, center.z);
         crossSectionPlaneObj.rotation.set(0, 0, 0);
-        crossSectionPlaneObj.translateOnAxis(normalVector, distance + 1);
+        crossSectionPlaneObj.translateOnAxis(normalVector, relativeDistance);
         crossSectionPlaneObj.rotateOnAxis(new THREE.Vector3(1, 0, 0), svc.crossSection.angleX/180*Math.PI);    // TODO Make independent from the crossSection variable
         crossSectionPlaneObj.rotateOnAxis(new THREE.Vector3(0, 1, 0), svc.crossSection.angleY/180*Math.PI);    // TODO Make independent from the crossSection variable
     }
