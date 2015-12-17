@@ -3,7 +3,8 @@
 function GraphicsService(canvasID, $timeout) {
     var svc = this;
     
-	var scene, camera, renderer, controls, objects = [];
+	var scene, camera, renderer, controls;
+    var objects = new THREE.Object3D();     // Contains user-loaded objects. Used to separate camera, lights etc from user objects.
     
     var crossSectionPlaneObj;
     
@@ -21,10 +22,9 @@ function GraphicsService(canvasID, $timeout) {
     //
     
     this.resetScene = function () {
-        for (var i=0; i < objects.length; i++) {
-            scene.remove(objects[i]);
+        for (var i=0; i < objects.children.length; i++) {
+            objects.remove(objects.children[i]);
         }
-        objects.splice(0, objects.length);
         
         svc.disableCrossSection();
         
@@ -237,7 +237,7 @@ function GraphicsService(canvasID, $timeout) {
     }
     
     this.getObjectHierarchy = function() {
-        return objects;
+        return objects.children;
     };
     
     this.getObjectByName = function(name) {
@@ -257,7 +257,7 @@ function GraphicsService(canvasID, $timeout) {
     this.showChildren = function(name) {
         
         for (var i = 0; i < objects.length; i++) {
-            objects[i].traverse(function(node){
+            objects.traverse(function(node){
                 // Showing objects cancels isolation mode.
                 // More efficient if we store a reference to isolated object (future idea ;) )
                 delete node.userData.isolated;
@@ -281,9 +281,9 @@ function GraphicsService(canvasID, $timeout) {
         var isoObject = scene.getObjectByName(name);
         isoObject.userData.isolated = true;
 
-        for (var i = 0; i < objects.length; i++) {
-            svc.hideChildren(objects[i].name);
-        }
+        objects.traverse(function(node) {
+            svc.hideChildren(node.name);
+        });
         
         // Revert child visibility
         isoObject.traverse(function(node) {
@@ -303,9 +303,9 @@ function GraphicsService(canvasID, $timeout) {
         delete isoObject.userData.isolated;
         
         // Restore all objects visibility
-        for (var i = 0; i < objects.length; i++) {
-            svc.showChildren(objects[i].name);
-        }
+        objects.traverse(function(node) {
+            svc.showChildren(node.name);
+        });
     };
     
 	//
@@ -363,6 +363,7 @@ function GraphicsService(canvasID, $timeout) {
 
     function init(canvasID) {
 		scene = new THREE.Scene();
+        scene.add(objects);
         
         var canvas = document.getElementById(canvasID);
 		renderer = new THREE.WebGLRenderer({canvas: canvas});
@@ -473,12 +474,11 @@ function GraphicsService(canvasID, $timeout) {
     
     function displayModel(name, object3d, callback) {        
         object3d.name = name;
-        scene.add(object3d);
-        objects.push(object3d);
+        objects.add(object3d);
         
         $timeout(callback, 200);
         
-        object3d.traverse( function( node ) {
+        object3d.traverse(function( node ) {
             node.name = node.name.replace('_', ' ').trim();
             
             if( node.material ) {
