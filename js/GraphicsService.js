@@ -554,7 +554,7 @@ function GraphicsService(canvasID, $timeout) {
         var raycaster = new THREE.Raycaster();
         raycaster.setFromCamera( mouse, camera );
 
-        return raycaster.intersectObjects( scene.children, true );	// 2nd param: Recursive
+        return raycaster.intersectObjects( objects.children, true );	// 2nd param: Recursive
     }
     
     // Maths util (to be moved?)
