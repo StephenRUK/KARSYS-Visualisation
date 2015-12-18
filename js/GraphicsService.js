@@ -198,6 +198,8 @@ function GraphicsService(canvasID, $timeout) {
         obj.traverse(function(node){
             if ('material' in node) {
                 //console.log(node.id + " | " + node.name + " >> Orig: " + node.material.color.);
+                if (!node.material.color) node.material.color.setHex(0xFFFFFF); // Default to white if missing. Attempted bugfix.
+                
                 node.material.colorOrig = node.material.color.clone();
                 node.material.color.setHex(colorHex);
             }
