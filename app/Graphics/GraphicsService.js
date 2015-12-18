@@ -30,7 +30,11 @@ function GraphicsService(canvasID, $timeout) {
         
         svc.disableCrossSection();
         
-        controls.reset();
+        camera.position.copy(CAM_DEFAULT_POS);
+        controls.target.set(0, 0, 0);
+        controls.update();
+        
+        // Obsolete after resetting cross-section?
         camera.near = CAM_NEAR_PLANE;
         camera.far = CAM_FAR_PLANE;
     };
@@ -43,30 +47,6 @@ function GraphicsService(canvasID, $timeout) {
     
     this.cameraLookAt = function (x, y, z) {
         camera.lookAt(new THREE.Vector3(x, y, z));
-    };
-
-    /**
-    * Zooms into an object so it fills most of the screen.
-    * Assumes camera is looking towards negative z.
-    **/
-    this.zoomToObject = function (name) {
-        var obj = scene.getObjectByName(name);
-        if (!obj) return;
-        
-        var targetRatio = 0.9; // Percentage of screen to fill when zoomed
-
-        var bbox = new THREE.Box3();
-        bbox.setFromObject(obj);
-        if (!bbox) return;
-        
-        // calculate object width to plane width ratio
-        var newDistance = bbox.size().x / (2*Math.tan(camera.fov/2)*targetRatio);
-
-        camera.position.x = bbox.center().x;
-        camera.position.y = bbox.center().y * 1.15;    // Note: Elevation factor
-        camera.position.z = bbox.max.z - newDistance;
-        
-        controls.update();
     };
     
     //
@@ -218,6 +198,8 @@ function GraphicsService(canvasID, $timeout) {
         obj.traverse(function(node){
             if ('material' in node) {
                 //console.log(node.id + " | " + node.name + " >> Orig: " + node.material.color.);
+                if (!node.material.color) node.material.color.setHex(0xFFFFFF); // Default to white if missing. Attempted bugfix.
+                
                 node.material.colorOrig = node.material.color.clone();
                 node.material.color.setHex(colorHex);
             }
@@ -501,9 +483,8 @@ function GraphicsService(canvasID, $timeout) {
         
         $timeout(function() {
             callback();
-            
-            calculateSceneBoundingBox();
             centerScene();
+            zoomToScene();
         }, 200);
         
         object3d.traverse(function( node ) {
@@ -515,7 +496,41 @@ function GraphicsService(canvasID, $timeout) {
         });
     }
     
+    /**
+    * Zooms into scene so it fills most of the screen.
+    * Assumes camera is looking towards negative z.
+    **/
+    function zoomToScene() {
+        var bbox = boundingBox;
+        
+        var fillFactor = 0.70;  // Percentage of screen to fill when zoomed in
+
+        var center = bbox.center();
+        var width  = bbox.size().x / fillFactor;
+        var height = bbox.size().y / fillFactor;
+        var maxZ   = bbox.max.z;
+
+        var fovY = camera.fov * (Math.PI/180);
+        var fovX = 2 * Math.atan(Math.tan(fovY/2) * camera.aspect);
+
+        var vDist = height / (2 * Math.tan(fovY/2));    // Distance at which height fills the frustum
+        var hDist = width / (2 * Math.tan(fovX/2));     // Distance at which width fills the frustum
+        var zDist = Math.max(vDist, hDist);
+
+        // Calculate elevation
+        var elevationAngle = 30/180*Math.PI;
+        var elevation = Math.sin(elevationAngle) * zDist;
+
+        camera.position.x = center.x;
+        camera.position.y = center.y + elevation;
+        camera.position.z = zDist + maxZ;
+
+        controls.target.copy(center);
+        controls.update();
+    }
+    
     function centerScene () {
+        calculateSceneBoundingBox();
         if (!boundingBox) return;
         
         var center = boundingBox.center();
@@ -554,7 +569,19 @@ function GraphicsService(canvasID, $timeout) {
         var raycaster = new THREE.Raycaster();
         raycaster.setFromCamera( mouse, camera );
 
-        return raycaster.intersectObjects( scene.children, true );	// 2nd param: Recursive
+        return raycaster.intersectObjects( objects.children, true );	// 2nd param: Recursive
+    }
+    
+    /*
+    * Calculates the visible size of an object in specified perspective camera.
+    * Returns the width and height as a THREE.Vector2
+    */
+    function calcVisibleSize(camera, objectDistance) {
+        var fovy = camera.fov * Math.PI / 180;
+        var height = 2 * Math.tan(fovy/2) * objectDistance;   // visible height
+        var width = height * camera.aspect;                   // visible width
+        
+        return new THREE.Vector2(width, height);
     }
     
     // Maths util (to be moved?)

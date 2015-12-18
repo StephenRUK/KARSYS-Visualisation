@@ -6,27 +6,28 @@
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/visualisation.css">
         
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
-        <script src="js/ui-bootstrap-tpls-0.14.3.min.js" type="text/javascript" defer></script>
+        <script src="lib/angularjs/angular.min.js"></script>
+        <script src="lib/angularjs/ui-bootstrap-tpls-0.14.3.min.js" type="text/javascript" defer></script>
         
-        <script src="threejs/three.min.js" type="text/javascript" defer></script>
-        <script src="threejs/OrbitControls.js" type="text/javascript" defer></script>
-        <script src="threejs/MTLLoader.js" type="text/javascript" defer></script> <!-- To probably be removed in future -->
-        <script src="threejs/OBJMTLLoader.js" type="text/javascript" defer></script> <!-- To probably be removed in future -->
-        <script src="threejs/ColladaLoader.js" type="text/javascript" defer></script> <!-- To probably be removed in future -->
+        <script src="lib/threejs/three.min.js" type="text/javascript" defer></script>
+        <script src="lib/threejs/OrbitControls.js" type="text/javascript" defer></script>
+        <script src="lib/threejs/MTLLoader.js" type="text/javascript" defer></script>
+        <script src="lib/threejs/OBJMTLLoader.js" type="text/javascript" defer></script>
+        <script src="lib/threejs/ColladaLoader.js" type="text/javascript" defer></script>
+		
+		<script src="lib/other/CollapsibleLists.min.js" type="text/javascript" defer></script>
 
-        <script src="js/ModelListDirective.js" type="text/javascript" defer></script>
-        <script src="js/ControlsDirective.js" type="text/javascript" defer></script>
-        <script src="js/HierarchyDirective.js" type="text/javascript" defer></script>
+        <script src="app/ModelListPanel/ModelListDirective.js" type="text/javascript" defer></script>
+        <script src="app/ControlsPanel/ControlsDirective.js" type="text/javascript" defer></script>
+        <script src="app/HierarchyPanel/HierarchyDirective.js" type="text/javascript" defer></script>
+        <script src="app/Graphics/GraphicsService.js" type="text/javascript" defer></script>
+        <script src="app/ObjectInfo/ArcGisService.js" type="text/javascript" defer></script>
+		<script src="app/ObjectInfo/ObjectInfoController.js" type="text/javascript" defer></script>
+        <script src="app/Models/Model.js" type="text/javascript" defer></script>
+        <script src="app/Models/ModelService.js" type="text/javascript" defer></script>
+        <script src="app/ModelCtrl.js" type="text/javascript" defer></script>
+        <script src="app/app.js" type="text/javascript" defer></script>
         
-        <script src="js/GraphicsService.js" type="text/javascript" defer></script>
-        <script src="js/ArcGisService.js" type="text/javascript" defer></script>
-        <script src="js/Model.js" type="text/javascript" defer></script>
-        <script src="js/ModelService.js" type="text/javascript" defer></script>
-        <script src="js/ModelCtrl.js" type="text/javascript" defer></script>
-        <script src="js/app.js" type="text/javascript" defer></script>
-        
-        <script src="js/CollapsibleLists.min.js" type="text/javascript" defer></script>
     </head>
     
     <body class="container-fluid" ng-app="karsys">

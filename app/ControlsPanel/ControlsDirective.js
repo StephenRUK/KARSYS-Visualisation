@@ -11,6 +11,6 @@ function ControlsDirective(Graphics) {
             $scope.toggleMovementControls = Graphics.toggleMovementControls;
         },
         
-        templateUrl: 'partials/controls.html'
+        templateUrl: 'app/ControlsPanel/ControlsView.html'
     };
 }

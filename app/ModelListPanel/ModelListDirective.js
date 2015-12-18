@@ -39,6 +39,6 @@ function ModelListDirective(ModelRepo, Graphics) {
   
         },
         
-        templateUrl: 'partials/modelList.html'
+        templateUrl: 'app/ModelListPanel/ModelListView.html'
     };
 }

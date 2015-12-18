@@ -42,8 +42,8 @@ function HierarchyDirective(GraphicsService, $uibModal, $timeout) {
             $scope.showObjectInfo = function (object) {
                 
                 var modalInstance = $uibModal.open({
-                    templateUrl: 'partials/objectDetailDialog.html',
-                    controller: 'ModalInfoController as modalCtrl',
+                    templateUrl: 'app/ObjectInfo/ObjectInfoView.html',
+                    controller: 'ObjectInfoController as modalCtrl',
                     backdrop: false,
                     resolve: {
                         objectName: function () {
@@ -62,6 +62,6 @@ function HierarchyDirective(GraphicsService, $uibModal, $timeout) {
             };
         },
         
-        templateUrl: 'partials/modelHierarchy.html'
+        templateUrl: 'app/HierarchyPanel/HierarchyView.html'
     };
 }
