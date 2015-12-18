@@ -160,7 +160,7 @@ function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope) {
 				gfx.translateObject(model.name, model.params.transform.offset);
 				gfx.scaleObject(model.name, model.params.transform.scale);
 			}
-			gfx.zoomToObject(model.name);
+
             $scope.$broadcast('UPDATE');  // Forward event to child directives
         });
     }

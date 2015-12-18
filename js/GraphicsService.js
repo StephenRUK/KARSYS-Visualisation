@@ -44,35 +44,6 @@ function GraphicsService(canvasID, $timeout) {
     this.cameraLookAt = function (x, y, z) {
         camera.lookAt(new THREE.Vector3(x, y, z));
     };
-
-    /**
-    * Zooms into an object so it fills most of the screen.
-    * Assumes camera is looking towards negative z.
-    **/
-    this.zoomToObject = function (name) {
-        var obj = scene.getObjectByName(name);
-        if (!obj) return;
-        
-        var bbox = new THREE.Box3();
-        bbox.setFromObject(obj);
-        if (!bbox) return;
-        
-        var center = bbox.center();
-        var screenPercentage = 0.4; // Percentage of screen to fill when zoomed
-        var targetWidth = bbox.size().x / screenPercentage;
-
-        //http://stackoverflow.com/questions/14614252/how-to-fit-camera-to-object
-        var fovy = camera.fov / 180 * Math.PI;
-        var newDistance = targetWidth/(camera.aspect * 2 * Math.tan(fovy));
-
-        camera.position.x = center.x;
-        camera.position.y = center.y;
-        camera.position.z = bbox.max.z + newDistance;
-        
-        controls.target.set(center.x, center.y, center.z);
-        
-        controls.update();
-    };
     
     //
     // Cross section
@@ -506,9 +477,8 @@ function GraphicsService(canvasID, $timeout) {
         
         $timeout(function() {
             callback();
-            
-            calculateSceneBoundingBox();
             centerScene();
+            zoomToScene();
         }, 200);
         
         object3d.traverse(function( node ) {
@@ -520,7 +490,41 @@ function GraphicsService(canvasID, $timeout) {
         });
     }
     
+    /**
+    * Zooms into scene so it fills most of the screen.
+    * Assumes camera is looking towards negative z.
+    **/
+    function zoomToScene() {
+        var bbox = boundingBox;
+        
+        var fillFactor = 0.70;  // Percentage of screen to fill when zoomed in
+
+        var center = bbox.center();
+        var width  = bbox.size().x / fillFactor;
+        var height = bbox.size().y / fillFactor;
+        var maxZ   = bbox.max.z;
+
+        var fovY = camera.fov * (Math.PI/180);
+        var fovX = 2 * Math.atan(Math.tan(fovY/2) * camera.aspect);
+
+        var vDist = height / (2 * Math.tan(fovY/2));    // Distance at which height fills the frustum
+        var hDist = width / (2 * Math.tan(fovX/2));     // Distance at which width fills the frustum
+        var zDist = Math.max(vDist, hDist);
+
+        // Calculate elevation
+        var elevationAngle = 30/180*Math.PI;
+        var elevation = Math.sin(elevationAngle) * zDist;
+
+        camera.position.x = center.x;
+        camera.position.y = center.y + elevation;
+        camera.position.z = zDist + maxZ;
+
+        controls.target.copy(center);
+        controls.update();
+    }
+    
     function centerScene () {
+        calculateSceneBoundingBox();
         if (!boundingBox) return;
         
         var center = boundingBox.center();
