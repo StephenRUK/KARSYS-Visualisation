@@ -53,17 +53,24 @@ function GraphicsService(canvasID, $timeout) {
         var obj = scene.getObjectByName(name);
         if (!obj) return;
         
-        var targetRatio = 0.9; // Percentage of screen to fill when zoomed
-
         var bbox = new THREE.Box3();
         bbox.setFromObject(obj);
         if (!bbox) return;
         
-        // calculate object width to plane width ratio
-        var newDistance = bbox.size().x / (2*Math.tan(camera.fov/2)*targetRatio);
-
+        var screenPercentage = 0.9; // Percentage of screen to fill when zoomed
+        
+        var nearPlaneSize = calcVisibleSize(camera, camera.near);
+        var targetVisibleSize = nearPlaneSize.multiplyScalar(screenPercentage);
+        
+        // Width only for now
+        var currDistance = bbox.max.z - camera.position.z;
+        var currWidth    = calcVisibleSize(camera, currDistance).x;
+        var targetWidth  = targetVisibleSize.x;
+        
+        var newDistance  = currDistance * currWidth/targetWidth;
+        
         camera.position.x = bbox.center().x;
-        camera.position.y = bbox.center().y * 1.15;    // Note: Elevation factor
+        camera.position.y = bbox.center().y;
         camera.position.z = bbox.max.z - newDistance;
         
         controls.update();
@@ -555,6 +562,18 @@ function GraphicsService(canvasID, $timeout) {
         raycaster.setFromCamera( mouse, camera );
 
         return raycaster.intersectObjects( objects.children, true );	// 2nd param: Recursive
+    }
+    
+    /*
+    * Calculates the visible size of an object in specified perspective camera.
+    * Returns the width and height as a THREE.Vector2
+    */
+    function calcVisibleSize(camera, objectDistance) {
+        var fovy = camera.fov * Math.PI / 180;
+        var height = 2 * Math.tan(fovy/2) * objectDistance;   // visible height
+        var width = height * camera.aspect;                   // visible width
+        
+        return new THREE.Vector2(width, height);
     }
     
     // Maths util (to be moved?)
