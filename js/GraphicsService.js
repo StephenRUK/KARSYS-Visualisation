@@ -57,21 +57,19 @@ function GraphicsService(canvasID, $timeout) {
         bbox.setFromObject(obj);
         if (!bbox) return;
         
-        var screenPercentage = 0.9; // Percentage of screen to fill when zoomed
+        var center = bbox.center();
+        var screenPercentage = 0.4; // Percentage of screen to fill when zoomed
+        var targetWidth = bbox.size().x / screenPercentage;
+
+        //http://stackoverflow.com/questions/14614252/how-to-fit-camera-to-object
+        var fovy = camera.fov / 180 * Math.PI;
+        var newDistance = targetWidth/(camera.aspect * 2 * Math.tan(fovy));
+
+        camera.position.x = center.x;
+        camera.position.y = center.y;
+        camera.position.z = bbox.max.z + newDistance;
         
-        var nearPlaneSize = calcVisibleSize(camera, camera.near);
-        var targetVisibleSize = nearPlaneSize.multiplyScalar(screenPercentage);
-        
-        // Width only for now
-        var currDistance = bbox.max.z - camera.position.z;
-        var currWidth    = calcVisibleSize(camera, currDistance).x;
-        var targetWidth  = targetVisibleSize.x;
-        
-        var newDistance  = currDistance * currWidth/targetWidth;
-        
-        camera.position.x = bbox.center().x;
-        camera.position.y = bbox.center().y;
-        camera.position.z = bbox.max.z - newDistance;
+        controls.target.set(center.x, center.y, center.z);
         
         controls.update();
     };
