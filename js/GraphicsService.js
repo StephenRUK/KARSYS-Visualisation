@@ -30,7 +30,11 @@ function GraphicsService(canvasID, $timeout) {
         
         svc.disableCrossSection();
         
-        controls.reset();
+        camera.position.copy(CAM_DEFAULT_POS);
+        controls.target.set(0, 0, 0);
+        controls.update();
+        
+        // Obsolete after resetting cross-section?
         camera.near = CAM_NEAR_PLANE;
         camera.far = CAM_FAR_PLANE;
     };
