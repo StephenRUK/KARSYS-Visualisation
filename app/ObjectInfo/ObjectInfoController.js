@@ -3,15 +3,15 @@ function ObjectInfoController($uibModalInstance, ObjectDataService, GraphicsServ
     
     this.loading = false;
     this.error = null;
-    
-    this.name = object.name;
+
+    this.object = object;
     this.isolated = ('isolated' in object.userData);
     this.info = null;
 
+    // Retrieve object info
     if ('id' in object.userData) {
-        var objectID = object.userData.id;
         modal.loading = true;
-        ObjectDataService.getObjectData(objectID).then(
+        ObjectDataService.getObjectData(object.userData.id).then(
             function success(response) {
                 var data = response.data;
                 if (data.error) {
@@ -29,7 +29,7 @@ function ObjectInfoController($uibModalInstance, ObjectDataService, GraphicsServ
     }
     
     this.isolateObject = function () {
-        GraphicsService.isolateObject(object.name);
+        GraphicsService.isolateObject(modal.object);
         modal.isolated = true;
     }
     

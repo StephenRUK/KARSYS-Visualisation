@@ -272,17 +272,16 @@ function GraphicsService(canvasID, $timeout) {
         });
     };
     
-    this.isolateObject = function(name) {
+    this.isolateObject = function(object) {
         svc.stopIsolation();
 
-        var isoObject = objects.getObjectByName(name);
-        isoObject.userData.isolated = true;
+        object.userData.isolated = true;
         
         svc.hideChildren(objects);      // 1 - Hide all objects
-        svc.showChildren(isoObject);    // 2 - Show isolated object and its children
+        svc.showChildren(object);    // 2 - Show isolated object and its children
 
         // 3 - Show parents, otherwise child object isn't visible
-        isoObject.traverseAncestors(function(parent) {
+        object.traverseAncestors(function(parent) {
             parent.visible = true;
         });
     };
