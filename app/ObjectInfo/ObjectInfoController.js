@@ -22,7 +22,7 @@ function ObjectInfoController($uibModalInstance, objectName, objectData, ObjectD
                 modal.loading = false;
             },
             function error(response) {
-                modal.error = 'Data could not be retrieved (HTTP ' + response.status + ')';
+                modal.error = 'Data could not be retrieved';
                 modal.loading = false;
             }
         );
@@ -34,7 +34,7 @@ function ObjectInfoController($uibModalInstance, objectName, objectData, ObjectD
     }
     
     this.deisolateObject = function () {
-        GraphicsService.deisolateObject(objectName);
+        GraphicsService.stopIsolation();
         modal.isolated = false;
     }
     

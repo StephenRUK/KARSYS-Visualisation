@@ -19,7 +19,7 @@
         <div ng-show="modalCtrl.error" ng-bind="modalCtrl.error" class="alert alert-warning"></div>
 
     <div class="modal-footer">
-        <button class="btn btn-normal" type="button" ng-click="modalCtrl.isolated ? modalCtrl.deisolateObject() : modalCtrl.isolateObject()" ng-bind="modalCtrl.isolated ? 'De-Isolate' : 'Isolate'" ng-attr-title="modalCtrl.isolated ? 'Return to regular view state.' : 'Show only this object, hide all others.'">Isolate</button>
+        <button class="btn btn-normal" type="button" ng-click="modalCtrl.isolated ? modalCtrl.stopIsolation() : modalCtrl.isolateObject()" ng-bind="modalCtrl.isolated ? 'De-Isolate' : 'Isolate'" ng-attr-title="modalCtrl.isolated ? 'Return to regular view state.' : 'Show only this object, hide all others.'">Isolate</button>
         <button class="btn btn-primary" type="button" ng-click="modalCtrl.ok()" tabindex="1">OK</button>
     </div>
 </div>

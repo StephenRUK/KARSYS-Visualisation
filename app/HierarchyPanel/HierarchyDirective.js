@@ -29,12 +29,12 @@ function HierarchyDirective(GraphicsService, $uibModal, $timeout) {
                 GraphicsService.unhighlightObject(object.name);
             };
             
-            $scope.toggleVisibility = function (object, show) {
+            $scope.toggleVisibility = function(object, show) {
                 // Visibility after model change
                 if (show) {
-                    GraphicsService.showChildren(object.name);
+                    GraphicsService.restoreChildVisibility(object, true);
                 } else {
-                    GraphicsService.hideChildren(object.name);
+                    GraphicsService.hideChildren(object, true);
                 }
             };
             

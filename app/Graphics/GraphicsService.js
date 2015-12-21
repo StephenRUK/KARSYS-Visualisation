@@ -245,68 +245,54 @@ function GraphicsService(canvasID, $timeout) {
       return scene.getObjectByName(name).clone();
     };
     
-    this.hideChildren = function(name) {
-        var o = scene.getObjectByName(name);
-        o.traverse(function (node) {
-            if (node != o) {
+    this.hideChildren = function(object, skipParent) {
+        object.traverse(function (node) {
+            if (skipParent && node == object) return;
+            if (!('visible' in node.userData)) {
                 node.userData.visible = node.visible;   // Store current state for restoring later
                 node.visible = false;
             }
         });
     };
     
-    this.showChildren = function(name) {
-        
-        for (var i = 0; i < objects.length; i++) {
-            objects.traverse(function(node){
-                // Showing objects cancels isolation mode.
-                // More efficient if we store a reference to isolated object (future idea ;) )
-                delete node.userData.isolated;
-            });
-        }
-        
-        var o = scene.getObjectByName(name);
-        o.traverse(function (node) {
-            if (node != o) {
-                if ('visible' in node.userData) {
-                    node.visible = node.userData.visible;   // Restore previous visibility state
-                    delete node.userData.visible;
-                } else {
-                    node.visible = true;
-                }
+    this.showChildren = function(object) {
+        object.traverse(function (node) {
+            node.visible = true;
+            delete node.userData.visible;
+        });
+    };
+    
+    this.restoreChildVisibility = function(object, skipParent) {
+        object.traverse(function (node) {
+            if (skipParent && node == object) return;
+            if ('visible' in node.userData) {
+                node.visible = node.userData.visible;   // Restore previous visibility state
+                delete node.userData.visible;
             }
         });
     };
     
     this.isolateObject = function(name) {
-        var isoObject = scene.getObjectByName(name);
+        svc.stopIsolation();
+
+        var isoObject = objects.getObjectByName(name);
         isoObject.userData.isolated = true;
-
-        objects.traverse(function(node) {
-            svc.hideChildren(node.name);
-        });
         
-        // Revert child visibility
-        isoObject.traverse(function(node) {
-            node.visible = node.userData.visible;
-        });
-        
-        isoObject.userData.visible = true;
+        svc.hideChildren(objects);      // 1 - Hide all objects
+        svc.showChildren(isoObject);    // 2 - Show isolated object and its children
 
-        // Show parents, otherwise child object isn't visible
+        // 3 - Show parents, otherwise child object isn't visible
         isoObject.traverseAncestors(function(parent) {
             parent.visible = true;
         });
     };
     
-    this.deisolateObject = function(name) {
-        var isoObject = scene.getObjectByName(name);
-        delete isoObject.userData.isolated;
-        
-        // Restore all objects visibility
+    this.stopIsolation = function() {
         objects.traverse(function(node) {
-            svc.showChildren(node.name);
+            delete node.userData.isolated;
         });
+        
+        svc.restoreChildVisibility(objects);
     };
     
 	//
