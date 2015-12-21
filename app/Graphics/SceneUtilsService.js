@@ -326,6 +326,16 @@ function SceneUtilsService(GraphicsService) {
         crossSectionPlaneObj.scale.divideScalar(crossSectionPlaneObj.scale.x, crossSectionPlaneObj.scale.y, 1);
     };
     
+    this.enableCrossSectionAtObject = function (object) {
+        var center = boundingBox.center().clone();
+        var distanceFromCenter = center.sub(object.position).z;
+        var relativeDistance = (2*distanceFromCenter / boundingBox.size().z) * 100;
+        relativeDistance = relativeDistance.toFixed(0);
+
+        svc.crossSection.distance = relativeDistance;
+        svc.enableCrossSection('V', relativeDistance);
+    };
+    
     this.moveCrossSection = function (distance) {
         if (!svc.crossSection.enabled) return;
         

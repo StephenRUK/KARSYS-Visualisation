@@ -31,12 +31,16 @@ function ObjectInfoController($uibModalInstance, ObjectDataService, SceneUtilsSe
     this.isolateObject = function () {
         SceneUtilsService.isolateObject(modal.object);
         modal.isolated = true;
-    }
+    };
     
     this.deisolateObject = function () {
         SceneUtilsService.stopIsolation();
         modal.isolated = false;
-    }
+    };
+    
+    this.createCrossSection = function () {
+        SceneUtilsService.enableCrossSectionAtObject(modal.object);
+    };
     
     this.keyHandler = function ($event) {
         // ENTER or ESCAPE pressed?
