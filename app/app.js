@@ -6,15 +6,16 @@ app.value('canvasID', 'canvas');
 app.value('arcGisAPI', 'http://localhost/backend/gisapi.php');
 
 app.service('ModelRepo', ModelServiceStatic);
-app.service('GraphicsSvc', ['canvasID', '$timeout', GraphicsService]);
+app.service('GraphicsService', ['canvasID', '$timeout', GraphicsService]);
 app.service('ObjectDataService', ['arcGisAPI', '$http', ArcGisService]);
+app.service('ObjectInfoModalService', ['$uibModal', ObjectInfoModalService]);
 
-app.controller('ModelController', ['ModelRepo', 'GraphicsSvc', 'ObjectDataService', '$scope', ModelController]);
-app.controller('ObjectInfoController', ['$uibModalInstance', 'objectName', 'objectData', 'ObjectDataService', 'GraphicsSvc', ObjectInfoController]);
+app.controller('ModelController', ['ModelRepo', 'GraphicsService', 'ObjectDataService', '$scope', ModelController]);
+app.controller('ObjectInfoController', ['$uibModalInstance', 'ObjectDataService', 'GraphicsService', 'object', ObjectInfoController]);
 
-app.directive('vkModelList', ['ModelRepo', 'GraphicsSvc', ModelListDirective]);
-app.directive('vkControls', ['GraphicsSvc', ControlsDirective]);
-app.directive('vkModelHierarchy', ['GraphicsSvc', '$uibModal', '$timeout', HierarchyDirective]);
+app.directive('vkModelList', ['ModelRepo', 'GraphicsService', ModelListDirective]);
+app.directive('vkControls', ['GraphicsService', ControlsDirective]);
+app.directive('vkModelHierarchy', ['GraphicsService', 'ObjectInfoModalService', '$timeout', HierarchyDirective]);
 
 app.filter('listObjectInTree', function () {
   return function (sceneObjects) {

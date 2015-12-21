@@ -1,15 +1,15 @@
-function ObjectInfoController($uibModalInstance, objectName, objectData, ObjectDataService, GraphicsService) {
+function ObjectInfoController($uibModalInstance, ObjectDataService, GraphicsService, object) {
     var modal = this;
     
     this.loading = false;
     this.error = null;
     
-    this.name = objectName;
-    this.isolated = ('isolated' in objectData);
+    this.name = object.name;
+    this.isolated = ('isolated' in object.userData);
     this.info = null;
-    
-    if ('id' in objectData) {
-        var objectID = objectData.id;
+
+    if ('id' in object.userData) {
+        var objectID = object.userData.id;
         modal.loading = true;
         ObjectDataService.getObjectData(objectID).then(
             function success(response) {
@@ -29,7 +29,7 @@ function ObjectInfoController($uibModalInstance, objectName, objectData, ObjectD
     }
     
     this.isolateObject = function () {
-        GraphicsService.isolateObject(objectName);
+        GraphicsService.isolateObject(object.name);
         modal.isolated = true;
     }
     

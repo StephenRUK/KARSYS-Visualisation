@@ -1,6 +1,6 @@
 'use strict';
 
-function HierarchyDirective(GraphicsService, $uibModal, $timeout) {
+function HierarchyDirective(GraphicsService, ObjectInfoModalService, $timeout) {
     return {
         scope: {},
         
@@ -40,25 +40,7 @@ function HierarchyDirective(GraphicsService, $uibModal, $timeout) {
             
             // TODO Move logic to ModelController or separate info modal service
             $scope.showObjectInfo = function (object) {
-                
-                var modalInstance = $uibModal.open({
-                    templateUrl: 'app/ObjectInfo/ObjectInfoView.html',
-                    controller: 'ObjectInfoController as modalCtrl',
-                    backdrop: false,
-                    resolve: {
-                        objectName: function () {
-                            return object.name;
-                        },
-                        objectData: function () {
-                            return object.userData;
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function () {}, function (error) {
-                    console.warn("Object info modal couldn't be opened. error.");
-                });
-
+                ObjectInfoModalService.openModal(object);
             };
         },
         
