@@ -169,7 +169,7 @@ function GraphicsService(canvasID, $timeout) {
     // Transforms
     
     this.scaleObject = function (name, scale) {
-        var obj = scene.getObjectByName(name);
+        var obj = objects.getObjectByName(name);
         
         if (obj) {
             obj.scale.set(scale.x, scale.y, scale.z);
@@ -180,7 +180,7 @@ function GraphicsService(canvasID, $timeout) {
     };
     
     this.translateObject = function (name, offset) {
-        var obj = scene.getObjectByName(name);
+        var obj = objects.getObjectByName(name);
         
         if (obj) {
             obj.translateX(offset.x);
@@ -192,7 +192,7 @@ function GraphicsService(canvasID, $timeout) {
     };
     
     this.highlightObject = function(name, colorHex) {
-        var obj = scene.getObjectByName(name);
+        var obj = objects.getObjectByName(name);
         if (!obj) return;
         
         obj.traverse(function(node){
@@ -207,7 +207,7 @@ function GraphicsService(canvasID, $timeout) {
     };
     
     this.unhighlightObject = function(name) {
-        var obj = scene.getObjectByName(name);
+        var obj = objects.getObjectByName(name);
         if (!obj) return;
         
         obj.traverse(function (node) {
@@ -242,7 +242,7 @@ function GraphicsService(canvasID, $timeout) {
     };
     
     this.getObjectByName = function(name) {
-      return scene.getObjectByName(name).clone();
+      return objects.getObjectByName(name);
     };
     
     this.hideChildren = function(object, skipParent) {
@@ -350,6 +350,8 @@ function GraphicsService(canvasID, $timeout) {
 
     function init(canvasID) {
 		scene = new THREE.Scene();
+        
+        objects.name = 'LoadedObjects';
         scene.add(objects);
         
         var canvas = document.getElementById(canvasID);
