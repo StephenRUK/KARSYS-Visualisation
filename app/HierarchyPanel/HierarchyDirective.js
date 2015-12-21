@@ -1,6 +1,6 @@
 'use strict';
 
-function HierarchyDirective(GraphicsService, ObjectInfoModalService, $timeout) {
+function HierarchyDirective(GraphicsService, SceneUtilsService, ObjectInfoModalService, $timeout) {
     return {
         scope: {},
         
@@ -22,19 +22,19 @@ function HierarchyDirective(GraphicsService, ObjectInfoModalService, $timeout) {
             });
             
             $scope.objectMouseOver = function(object) {
-                GraphicsService.highlightObject(object.name, highlightColor);
+                SceneUtilsService.highlightObject(object.name, highlightColor);
             };
             
             $scope.objectMouseOut = function(object) {
-                GraphicsService.unhighlightObject(object.name);
+                SceneUtilsService.unhighlightObject(object.name);
             };
             
             $scope.toggleVisibility = function(object, show) {
                 // Visibility after model change
                 if (show) {
-                    GraphicsService.restoreChildVisibility(object, true);
+                    SceneUtilsService.restoreChildVisibility(object, true);
                 } else {
-                    GraphicsService.hideChildren(object, true);
+                    SceneUtilsService.hideChildren(object, true);
                 }
             };
             

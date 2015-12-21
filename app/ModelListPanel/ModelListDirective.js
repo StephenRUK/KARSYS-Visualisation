@@ -1,6 +1,6 @@
 'use strict';
 
-function ModelListDirective(ModelRepo, Graphics) {
+function ModelListDirective(ModelRepo, GraphicsService, SceneUtilsService) {
     return {
         scope: {
             model: '='
@@ -21,15 +21,15 @@ function ModelListDirective(ModelRepo, Graphics) {
             
             $scope.loadModel = function (modelID) {
                 model = ModelRepo.getByID(modelID);
-                Graphics.resetScene();
+                SceneUtilsService.resetScene();
                 
                 switch (model.fileFormat) {
                 case ModelFormat.OBJMTL:
-                    Graphics.loadObjMtl(model.name, model.filePath, model.params.mtlPath, loadCompleted);
+                    GraphicsService.loadObjMtl(model.name, model.filePath, model.params.mtlPath, loadCompleted);
                     break;
 
                 case ModelFormat.DAE:
-                    Graphics.loadDae(model.name, model.filePath, loadCompleted);
+                    GraphicsService.loadDae(model.name, model.filePath, loadCompleted);
                     break;
 
                 default:

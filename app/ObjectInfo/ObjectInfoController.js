@@ -1,6 +1,6 @@
-function ObjectInfoController($uibModalInstance, ObjectDataService, GraphicsService, object) {
+function ObjectInfoController($uibModalInstance, ObjectDataService, SceneUtilsService, object) {
     var modal = this;
-    
+
     this.loading = false;
     this.error = null;
 
@@ -29,12 +29,12 @@ function ObjectInfoController($uibModalInstance, ObjectDataService, GraphicsServ
     }
     
     this.isolateObject = function () {
-        GraphicsService.isolateObject(modal.object);
+        SceneUtilsService.isolateObject(modal.object);
         modal.isolated = true;
     }
     
     this.deisolateObject = function () {
-        GraphicsService.stopIsolation();
+        SceneUtilsService.stopIsolation();
         modal.isolated = false;
     }
     

@@ -1,12 +1,13 @@
 'use strict';
 
-function ModelController(GraphicsSvc, ObjectDataService, $scope) {
+function ModelController(GraphicsService, SceneUtilsService, ObjectDataService, $scope) {
     /***********************************************
     * Private
     ***********************************************/
 
     var ctrl = this,        // Sometimes needed to 'escape' the current 'this' scope
-        gfx = GraphicsSvc,
+        gfx = GraphicsService,
+        utils = SceneUtilsService,
         ods = ObjectDataService;
     
     //
@@ -76,53 +77,42 @@ function ModelController(GraphicsSvc, ObjectDataService, $scope) {
     // Display variables
     this.mouseCoordinates = {x: 0, y: 0, z: 0};
     this.coordinatesUnit = "";
-    this.objectHierarchy;
-    
-    // Refactor: To cross-section
+
+    // Refactor: Move to a new cross-section directive
     this.csMode;    // Cross-section Horizontal/Vertical/undefined
     this.csFlipped; // "Flip" or undefined
     this.csShowPlane = 'Show';   // Show or hide the red plane
-    this.crossSection = gfx.crossSection;   // Binds to distance
-	
+    this.crossSection = utils.crossSection;   // Binds to distance
+
     //
     // Functions
     //
-    
+
     this.toggleCrossSection = function (newMode, oldMode) {
         if (newMode) {
-            gfx.enableCrossSection(newMode, ctrl.crossSection.distance);
+            utils.enableCrossSection(newMode, ctrl.crossSection.distance);
         } else {
-            gfx.disableCrossSection();
+            utils.disableCrossSection();
         }
     };
-    
+
     this.toggleCrossSectionPlane = function () {
-        gfx.showCrossSectionPlane(ctrl.csShowPlane === 'Show');
+        utils.showCrossSectionPlane(ctrl.csShowPlane === 'Show');
     };
-    
+
     this.moveCrossSection = function () {
-        gfx.moveCrossSection(ctrl.crossSection.distance);
+        utils.moveCrossSection(ctrl.crossSection.distance);
     };
-    
+
     this.rotateCrossSection = function (axis, newAngle, oldAngle) {
         var deltaAngle = newAngle - oldAngle;
-        gfx.rotateCrossSection(axis, deltaAngle);
+        utils.rotateCrossSection(axis, deltaAngle);
     };
-    
+
     this.flipCrossSection = function () {
-        gfx.flipCrossSection();
+        utils.flipCrossSection();
     };
-	
-    //
-    // Data access
-    //
-    
-    this.getModelName = function () {
-        if (ctrl.model) {
-            return ctrl.model.name;
-        }
-    };
-    
+
     //
     // Event Handlers
     //
@@ -138,7 +128,6 @@ function ModelController(GraphicsSvc, ObjectDataService, $scope) {
         if (coords) {
             this.mouseCoordinates = transformCoordinates(coords, ctrl.model.params.coordinatesTransform);
         }
-        
     };
     
     
@@ -156,9 +145,12 @@ function ModelController(GraphicsSvc, ObjectDataService, $scope) {
                 ctrl.coordinatesUnit = model.params.unit;
             }
 			if (model.params.transform) {
-				gfx.translateObject(model.name, model.params.transform.offset);
-				gfx.scaleObject(model.name, model.params.transform.scale);
+				utils.translateObject(model.name, model.params.transform.offset);
+				utils.scaleObject(model.name, model.params.transform.scale);
 			}
+            
+            utils.centerScene();
+            utils.zoomToScene();
 
             $scope.$broadcast('UPDATE');  // Forward event to child directives
         });
