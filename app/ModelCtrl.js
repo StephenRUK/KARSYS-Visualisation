@@ -1,12 +1,11 @@
 'use strict';
 
-function ModelController(ModelRepo, GraphicsSvc, ObjectDataService, $scope) {
+function ModelController(GraphicsSvc, ObjectDataService, $scope) {
     /***********************************************
     * Private
     ***********************************************/
 
     var ctrl = this,        // Sometimes needed to 'escape' the current 'this' scope
-        repo = ModelRepo,
         gfx = GraphicsSvc,
         ods = ObjectDataService;
     

@@ -10,7 +10,7 @@ app.service('GraphicsService', ['canvasID', '$timeout', GraphicsService]);
 app.service('ObjectDataService', ['arcGisAPI', '$http', ArcGisService]);
 app.service('ObjectInfoModalService', ['$uibModal', ObjectInfoModalService]);
 
-app.controller('ModelController', ['ModelRepo', 'GraphicsService', 'ObjectDataService', '$scope', ModelController]);
+app.controller('ModelController', ['GraphicsService', 'ObjectDataService', '$scope', ModelController]);
 app.controller('ObjectInfoController', ['$uibModalInstance', 'ObjectDataService', 'GraphicsService', 'object', ObjectInfoController]);
 
 app.directive('vkModelList', ['ModelRepo', 'GraphicsService', ModelListDirective]);
