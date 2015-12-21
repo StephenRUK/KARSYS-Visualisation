@@ -143,6 +143,8 @@ function ModelController(GraphicsService, SceneUtilsService, ObjectDataService, 
             replaceIDsWithNames();
             if (model.params.unit) {
                 ctrl.coordinatesUnit = model.params.unit;
+            } else {
+                ctrl.coordinatesUnit = '';
             }
 			if (model.params.transform) {
 				utils.translateObject(model.name, model.params.transform.offset);
