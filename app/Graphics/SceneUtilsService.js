@@ -288,34 +288,16 @@ function SceneUtilsService(GraphicsService) {
         angleY: 0,                              // Angle (in rad) the normal is rotated by (Used for storage only)
     };
     
-    this.enableCrossSection = function (direction, distance) {
+    /*
+    * Creates a vertical cross-section at given distance from the origin.
+    * Distance: Relative distance as percentage of model depth.
+    */
+    this.enableCrossSection = function (distance) {
         svc.crossSection.enabled = true;
         svc.crossSection.distance = distance;
-        svc.crossSection.direction = direction;
-        
-        var vecFacingOrigin, camDirection;
-        
-        if (direction == 'V') {
-            vecFacingOrigin = new THREE.Vector3(0, 0, 1);
-            camDirection = Math.sign(camera.getWorldDirection().z);
-            
-        } else { // assume horizontal
-            vecFacingOrigin = new THREE.Vector3(0, 1, 0);
-            camDirection = Math.sign(camera.getWorldDirection().y);
-        }
-        
-        vecFacingOrigin.multiplyScalar(camDirection);
-        svc.crossSection.normal = vecFacingOrigin;
 
         setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
-        
-        // Set plane to size of the model's bounding box
-        var scale = boundingBox.size().multiplyScalar(1.1);
-        crossSectionPlaneObj.scale.set(scale.x, scale.y, 1);
 
-        // Move to bbox centre
-        var center = boundingBox.center();
-        crossSectionPlaneObj.position.set(center.x, center.y, center.z);
         crossSectionPlaneObj.userData.visibility = crossSectionPlaneObj.visible;
         crossSectionPlaneObj.visible = false;
     };
@@ -380,7 +362,7 @@ function SceneUtilsService(GraphicsService) {
         svc.crossSection.distance *= -1;    // Flip distance to origin
         
         svc.disableCrossSection();
-        svc.enableCrossSection(svc.crossSection.direction, svc.crossSection.distance);
+        svc.enableCrossSection(svc.crossSection.distance);
     };
     
     this.resetCrossSection = function () {

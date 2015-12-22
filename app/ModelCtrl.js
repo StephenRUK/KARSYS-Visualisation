@@ -88,9 +88,9 @@ function ModelController(GraphicsService, SceneUtilsService, ObjectDataService, 
     // Functions
     //
 
-    this.toggleCrossSection = function (newMode, oldMode) {
-        if (newMode) {
-            utils.enableCrossSection(newMode, ctrl.crossSection.distance);
+    this.toggleCrossSection = function (enabled) {
+        if (enabled) {
+            utils.enableCrossSection(ctrl.crossSection.distance);
         } else {
             utils.disableCrossSection();
         }
