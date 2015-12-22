@@ -53,7 +53,7 @@ function SceneUtilsService(GraphicsService) {
         var c = new THREE.Vector4();
         c = clipPlaneV.multiplyScalar(2.0 / clipPlaneV.dot(q));
 
-        // Replacing the third row of the projection matrix
+        // Replace the third row of the projection matrix
         projectionMatrix.elements[2] = c.x;
         projectionMatrix.elements[6] = c.y;
         projectionMatrix.elements[10] = c.z + 1.0;
@@ -132,10 +132,8 @@ function SceneUtilsService(GraphicsService) {
         calculateSceneBoundingBox();
         if (!boundingBox) { return; }
         
-        var center = boundingBox.center(),
-            origin = new THREE.Vector3(0, 0, 0),
-            offset = origin.sub(center);
-        
+        var offset = boundingBox.center().multiplyScalar(-1);
+
         objects.position.add(offset);
         calculateSceneBoundingBox();
     }
