@@ -62,7 +62,6 @@ function SceneUtilsService(GraphicsService) {
         
         // Update the plane object displayed to the user
         var center = boundingBox.center();
-        crossSectionPlaneObj.position.set(center.x, center.y, center.z);
     
     /*
     * Controls changed event handler.
@@ -73,7 +72,13 @@ function SceneUtilsService(GraphicsService) {
             setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
         }
     }
+    
+    function updateCrossSectionPlane(normal, distance) {
+        var relativeDistance = (distance / 100) * (boundingBox.size().z / 2);
+
+        crossSectionPlaneObj.position.set(0, 0, 0);
         crossSectionPlaneObj.rotation.set(0, 0, 0);
+        
         crossSectionPlaneObj.translateOnAxis(normal, relativeDistance);
         crossSectionPlaneObj.rotateOnAxis(new THREE.Vector3(1, 0, 0), svc.crossSection.angleX / 180 * Math.PI);
         crossSectionPlaneObj.rotateOnAxis(new THREE.Vector3(0, 1, 0), svc.crossSection.angleY / 180 * Math.PI);
@@ -307,9 +312,6 @@ function SceneUtilsService(GraphicsService) {
         
         camera.updateProjectionMatrix();
         svc.crossSection.enabled = false;
-        
-        // Reset plane to original size 1x1x1
-        crossSectionPlaneObj.scale.divideScalar(crossSectionPlaneObj.scale.x, crossSectionPlaneObj.scale.y, 1);
 
         crossSectionPlaneObj.visible = crossSectionPlaneObj.userData.visibility;
         delete crossSectionPlaneObj.userData.visibility;
@@ -326,10 +328,12 @@ function SceneUtilsService(GraphicsService) {
     };
     
     this.moveCrossSection = function (distance) {
-        if (!svc.crossSection.enabled) return;
-        
         svc.crossSection.distance = distance;
-        setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
+        updateCrossSectionPlane(svc.crossSection.normal, svc.crossSection.distance);
+        
+        if (svc.crossSection.enabled) {
+            setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
+        }
     };
     
     /*
@@ -347,9 +351,13 @@ function SceneUtilsService(GraphicsService) {
         }
         
         var radAngle = deltaAngle / 180 * Math.PI;
-        
         svc.crossSection.normal.applyAxisAngle(rotAxis, radAngle);
-        setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
+        
+        updateCrossSectionPlane(svc.crossSection.normal, svc.crossSection.distance);
+        
+        if (svc.crossSection.enabled) {
+            setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
+        }
     }
     
     this.flipCrossSection = function () {
@@ -374,6 +382,15 @@ function SceneUtilsService(GraphicsService) {
     };
     
     this.showCrossSectionPlane = function (isVisible) {
+        if (isVisible) {
+            updateCrossSectionPlane(svc.crossSection.normal, svc.crossSection.distance);
+            crossSectionPlaneObj.scale.set(1, 1, 1);
+
+            // Set plane to size of the model's bounding box
+            var scale = boundingBox.size().multiplyScalar(1.3);
+            crossSectionPlaneObj.scale.set(scale.x, scale.y, 1);
+        }
+        
         crossSectionPlaneObj.visible = isVisible;
     };
 
