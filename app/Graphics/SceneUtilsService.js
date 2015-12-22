@@ -317,12 +317,12 @@ function SceneUtilsService(GraphicsService) {
         
         var objectBbox = new THREE.Box3();
         objectBbox.setFromObject(object);
-        
-        //object.localToWorld(object.position.clone()).z
+
         var distanceFromCenter = sceneCenter.z - objectBbox.center().z,
             relativeDistance = Math.round((2*distanceFromCenter / boundingBox.size().z) * 100);
 
         svc.crossSection.distance = relativeDistance;
+        updateCrossSectionPlane(svc.crossSection.normal, svc.crossSection.distance);
     };
     
     this.moveCrossSection = function (distance) {
