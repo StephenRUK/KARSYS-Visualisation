@@ -33,18 +33,17 @@ function SceneUtilsService(GraphicsService) {
         // ThreeJS snippets:    https://github.com/mrdoob/three.js/blob/af21991fc7c4e1d35d6a93031707273d937af0f9/examples/js/WaterShader.js
         
         camera.updateProjectionMatrix();    // Reload original matrix
+        var projectionMatrix = camera.projectionMatrix;
         
         // Position of cross-section plane is relative to bounding box size (+/- n% of half-depth)
         var relativeDistance = (distance / 100) * (boundingBox.size().z / 2);
         
+        // Determine clipping plane
         var crossSectionPlane = new THREE.Plane(normal.clone(), -relativeDistance); // Normal vector MUST be cloned!
         crossSectionPlane.applyMatrix4(camera.matrixWorldInverse);
-        
         var clipPlaneV = new THREE.Vector4(crossSectionPlane.normal.x, crossSectionPlane.normal.y, crossSectionPlane.normal.z, crossSectionPlane.constant);
         
         var q = new THREE.Vector4();
-        var projectionMatrix = camera.projectionMatrix;
-
         q.x = (Math.sign(clipPlaneV.x) + projectionMatrix.elements[8]) / projectionMatrix.elements[0];
         q.y = (Math.sign(clipPlaneV.y) + projectionMatrix.elements[9]) / projectionMatrix.elements[5];
         q.z = -1.0;
@@ -58,10 +57,8 @@ function SceneUtilsService(GraphicsService) {
         projectionMatrix.elements[2] = c.x;
         projectionMatrix.elements[6] = c.y;
         projectionMatrix.elements[10] = c.z + 1.0;
-        projectionMatrix.elements[14] = c.w;
-        
-        // Update the plane object displayed to the user
-        var center = boundingBox.center();
+        projectionMatrix.elements[14] = c.w;        
+    }
     
     /*
     * Controls changed event handler.
@@ -122,7 +119,7 @@ function SceneUtilsService(GraphicsService) {
             objects.remove(objects.children[i]);
         }
 
-        svc.disableCrossSection();
+        calculateSceneBoundingBox();
         svc.resetCrossSection();
         updateCrossSectionPlane(svc.crossSection.normal, svc.crossSection.distance);
         gfx.resetCamera();
@@ -340,9 +337,7 @@ function SceneUtilsService(GraphicsService) {
     * axis: 'X' or 'Y'
     * deltaAngle: In degrees
     */
-    this.rotateCrossSection = function (axis, deltaAngle) {
-        if (!svc.crossSection.enabled) return;
-        
+    this.rotateCrossSection = function (axis, deltaAngle) {        
         var rotAxis;
         if (axis === 'X') {
             rotAxis = new THREE.Vector3(1, 0, 0);
@@ -365,7 +360,6 @@ function SceneUtilsService(GraphicsService) {
         
         controls.rotateLeft(Math.PI);
         controls.update();
-        //render();   // May be superfluous
         
         svc.crossSection.distance *= -1;    // Flip distance to origin
         
@@ -379,6 +373,8 @@ function SceneUtilsService(GraphicsService) {
         svc.crossSection.distance = 0;
         svc.crossSection.angleX = 0;
         svc.crossSection.angleY = 0;
+        
+        camera.updateProjectionMatrix();
     };
     
     this.showCrossSectionPlane = function (isVisible) {
