@@ -322,7 +322,7 @@ function SceneUtilsService(GraphicsService) {
         relativeDistance = relativeDistance.toFixed(0);
 
         svc.crossSection.distance = relativeDistance;
-        svc.enableCrossSection('V', relativeDistance);
+        svc.enableCrossSection(relativeDistance);
     };
     
     this.moveCrossSection = function (distance) {
