@@ -315,10 +315,14 @@ function SceneUtilsService(GraphicsService) {
     };
     
     this.enableCrossSectionAtObject = function (object) {
-        var center = boundingBox.center().clone();
-        var distanceFromCenter = center.sub(object.position).z;
-        var relativeDistance = (2*distanceFromCenter / boundingBox.size().z) * 100;
-        relativeDistance = relativeDistance.toFixed(0);
+        var sceneCenter = boundingBox.center().clone();
+        
+        var objectBbox = new THREE.Box3();
+        objectBbox.setFromObject(object);
+        
+        //object.localToWorld(object.position.clone()).z
+        var distanceFromCenter = sceneCenter.z - objectBbox.center().z,
+            relativeDistance = Math.round((2*distanceFromCenter / boundingBox.size().z) * 100);
 
         svc.crossSection.distance = relativeDistance;
         svc.enableCrossSection(relativeDistance);
