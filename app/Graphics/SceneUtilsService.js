@@ -25,16 +25,6 @@ function SceneUtilsService(GraphicsService) {
     }
     
     /*
-    * Controls changed event handler.
-    * Maintains cross-section settings when the camera is moved.
-    */
-    function updateCrossSection() {
-        if (svc.crossSection.enabled) {
-            setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
-        }
-    }
-    
-    /*
     * Performs the actual calculations on the camera projection matrix to form a cross-section.
     */
     function setCrossSection(normal, distance) {
@@ -73,6 +63,16 @@ function SceneUtilsService(GraphicsService) {
         // Update the plane object displayed to the user
         var center = boundingBox.center();
         crossSectionPlaneObj.position.set(center.x, center.y, center.z);
+    
+    /*
+    * Controls changed event handler.
+    * Maintains cross-section settings when the camera is moved.
+    */
+    function updateCrossSection() {
+        if (svc.crossSection.enabled) {
+            setCrossSection(svc.crossSection.normal, svc.crossSection.distance);
+        }
+    }
         crossSectionPlaneObj.rotation.set(0, 0, 0);
         crossSectionPlaneObj.translateOnAxis(normal, relativeDistance);
         crossSectionPlaneObj.rotateOnAxis(new THREE.Vector3(1, 0, 0), svc.crossSection.angleX / 180 * Math.PI);
