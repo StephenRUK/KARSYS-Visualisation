@@ -38,8 +38,8 @@ function ObjectInfoController($uibModalInstance, ObjectDataService, SceneUtilsSe
         modal.isolated = false;
     };
     
-    this.createCrossSection = function () {
-        SceneUtilsService.enableCrossSectionAtObject(modal.object);
+    this.setCrossSection = function () {
+        SceneUtilsService.setCrossSectionToObjectPosition(modal.object);
     };
     
     this.keyHandler = function ($event) {

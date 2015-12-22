@@ -314,7 +314,7 @@ function SceneUtilsService(GraphicsService) {
         delete crossSectionPlaneObj.userData.visibility;
     };
     
-    this.enableCrossSectionAtObject = function (object) {
+    this.setCrossSectionToObjectPosition = function (object) {
         var sceneCenter = boundingBox.center().clone();
         
         var objectBbox = new THREE.Box3();
@@ -325,7 +325,6 @@ function SceneUtilsService(GraphicsService) {
             relativeDistance = Math.round((2*distanceFromCenter / boundingBox.size().z) * 100);
 
         svc.crossSection.distance = relativeDistance;
-        svc.enableCrossSection(relativeDistance);
     };
     
     this.moveCrossSection = function (distance) {
