@@ -81,7 +81,7 @@ function ModelController(GraphicsService, SceneUtilsService, ObjectDataService, 
     // Refactor: Move to a new cross-section directive
     this.csMode;    // Cross-section Horizontal/Vertical/undefined
     this.csFlipped; // "Flip" or undefined
-    this.csShowPlane = 'Show';   // Show or hide the red plane
+    this.csShowPlane = false;   // Show or hide the red plane
     this.crossSection = utils.crossSection;   // Binds to distance
 
     //
@@ -96,8 +96,9 @@ function ModelController(GraphicsService, SceneUtilsService, ObjectDataService, 
         }
     };
 
-    this.toggleCrossSectionPlane = function () {
-        utils.showCrossSectionPlane(ctrl.csShowPlane === 'Show');
+    this.toggleCrossSectionPlane = function (enabled) {
+        enabled = enabled === true;    // enabled is always 'true' or null
+        utils.showCrossSectionPlane(enabled);
     };
 
     this.moveCrossSection = function () {
@@ -136,8 +137,6 @@ function ModelController(GraphicsService, SceneUtilsService, ObjectDataService, 
     *************************/
     
     function init() {
-        $scope.$watchCollection('ctrl.csMode', ctrl.toggleCrossSection);     // TODO Replace with ngChange in view
-        
         // Event handling
         $scope.$on('MODEL_LOADED', function (event, model) {
             replaceIDsWithNames();
@@ -150,7 +149,10 @@ function ModelController(GraphicsService, SceneUtilsService, ObjectDataService, 
 				utils.translateObject(model.name, model.params.transform.offset);
 				utils.scaleObject(model.name, model.params.transform.scale);
 			}
-            
+
+            ctrl.csMode      = false;
+            ctrl.csShowPlane = false;
+
             utils.centerScene();
             utils.zoomToScene();
 
