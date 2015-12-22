@@ -93,6 +93,8 @@ function SceneUtilsService(GraphicsService) {
         var geometry = new THREE.PlaneBufferGeometry(1, 1);
         var material = new THREE.MeshBasicMaterial({color: 0xf00000, side: THREE.DoubleSide, transparent: true, opacity: 0.1 });
         crossSectionPlaneObj = new THREE.Mesh(geometry, material);
+        crossSectionPlaneObj.visible = false;
+        gfx.addNonuserObject(crossSectionPlaneObj); // Add to scene directly
         
         controls.addEventListener('change', updateCrossSection);
     }
@@ -116,6 +118,8 @@ function SceneUtilsService(GraphicsService) {
         }
 
         svc.disableCrossSection();
+        svc.resetCrossSection();
+        updateCrossSectionPlane(svc.crossSection.normal, svc.crossSection.distance);
         gfx.resetCamera();
     };
     
@@ -312,7 +316,8 @@ function SceneUtilsService(GraphicsService) {
         // Move to bbox centre
         var center = boundingBox.center();
         crossSectionPlaneObj.position.set(center.x, center.y, center.z);
-        objects.add(crossSectionPlaneObj);
+        crossSectionPlaneObj.userData.visibility = crossSectionPlaneObj.visible;
+        crossSectionPlaneObj.visible = false;
     };
     
     this.disableCrossSection = function () {
@@ -321,9 +326,11 @@ function SceneUtilsService(GraphicsService) {
         camera.updateProjectionMatrix();
         svc.crossSection.enabled = false;
         
-        objects.remove(crossSectionPlaneObj);
         // Reset plane to original size 1x1x1
         crossSectionPlaneObj.scale.divideScalar(crossSectionPlaneObj.scale.x, crossSectionPlaneObj.scale.y, 1);
+
+        crossSectionPlaneObj.visible = crossSectionPlaneObj.userData.visibility;
+        delete crossSectionPlaneObj.userData.visibility;
     };
     
     this.enableCrossSectionAtObject = function (object) {

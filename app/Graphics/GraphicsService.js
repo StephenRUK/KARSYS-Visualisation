@@ -143,6 +143,14 @@ function GraphicsService(canvasID, $timeout) {
     * Public
     ******************************************************/
     
+    /*
+    * Add an object to the scene directly, outside of the user objects.
+    * Examples: Lights, HUD elements
+    */
+    this.addNonuserObject = function(object) {
+        scene.add(object);
+    };
+    
     this.getSceneContainer = function() {
         return objects;
     };
