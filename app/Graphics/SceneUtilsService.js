@@ -202,10 +202,7 @@ function SceneUtilsService(GraphicsService) {
         
         obj.traverse(function (node) {
             if ('material' in node) {
-                //console.log(node.id + " | " + node.name + " >> Orig: " + node.material.color.);
-                if (!node.material.color) node.material.color.setHex(0xFFFFFF); // Default to white if missing. Attempted bugfix.
-                
-                node.material.colorOrig = node.material.color.clone();
+                node.materialOrig = node.material.clone();
                 node.material.color.setHex(colorHex);
             }
         });
@@ -216,9 +213,9 @@ function SceneUtilsService(GraphicsService) {
         if (!obj) return;
         
         obj.traverse(function (node) {
-            if ('material' in node) {
-                node.material.color.set(node.material.colorOrig);
-                delete node.material.colorOrig;
+            if ('materialOrig' in node) {
+                node.material = node.materialOrig.clone();
+                delete node.materialOrig;
             }
         });
     };
