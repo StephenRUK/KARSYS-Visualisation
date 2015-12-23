@@ -22,11 +22,12 @@ function HierarchyDirective(GraphicsService, SceneUtilsService, ObjectInfoModalS
             });
             
             $scope.objectMouseOver = function(object) {
-                SceneUtilsService.highlightObject(object.name, highlightColor);
+                //SceneUtilsService.highlightObject(object.name, highlightColor);
             };
             
             $scope.objectMouseOut = function(object) {
-                SceneUtilsService.unhighlightObject(object.name);
+                // BUG Material colour sometimes stays red. Functionality disabled for now.
+                //SceneUtilsService.unhighlightObject(object.name);
             };
             
             $scope.toggleVisibility = function(object, show) {
