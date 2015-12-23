@@ -5,8 +5,10 @@ function ObjectInfoController($uibModalInstance, ObjectDataService, SceneUtilsSe
     this.error = null;
 
     this.object = object;
-    this.isolated = ('isolated' in object.userData);
     this.info = null;
+    
+    this.isolated = ('isolated' in object.userData);
+    this.crossSectionSet = false;
 
     // Retrieve object info
     if ('id' in object.userData) {
@@ -40,6 +42,7 @@ function ObjectInfoController($uibModalInstance, ObjectDataService, SceneUtilsSe
     
     this.setCrossSection = function () {
         SceneUtilsService.setCrossSectionToObjectPosition(modal.object);
+        modal.crossSectionSet = true;
     };
     
     this.keyHandler = function ($event) {

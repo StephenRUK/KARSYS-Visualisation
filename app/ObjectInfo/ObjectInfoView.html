@@ -4,6 +4,7 @@
     </div>
 
     <div class="modal-body">
+        <div ng-show="modalCtrl.crossSectionSet" class="alert alert-success">Cross-section was set to position of object {{modalCtrl.object.name}}. Please enable/show cross-section.</div>
         <div ng-show="modalCtrl.loading" class="alert alert-info">Loading data...</div>
         <div ng-show="!modalCtrl.loading && !modalCtrl.error">
             <div class="alert alert-info" ng-if="!modalCtrl.info || !modalCtrl.info.fields">No data is available for this object.</div>
