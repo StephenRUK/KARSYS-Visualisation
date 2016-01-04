@@ -32,7 +32,9 @@ function ModelServiceStatic() {
 	};
     
     this.getByID = function (id) {
-        return models[id];
+		for(var i=0; i<models.length; i++) {
+			if (models[i].id === id) return models[i];
+		}
     };
 
 }

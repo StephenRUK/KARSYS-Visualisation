@@ -20,7 +20,8 @@ function ModelListDirective(ModelRepo, GraphicsService, SceneUtilsService) {
             $scope.models = ModelRepo.getAll();
             
             $scope.loadModel = function (modelID) {
-                model = ModelRepo.getByID(modelID);
+                var id = parseInt(modelID);
+                model = ModelRepo.getByID(id);
                 SceneUtilsService.resetScene();
                 
                 switch (model.fileFormat) {
