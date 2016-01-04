@@ -6,7 +6,7 @@ function ModelListDirective(ModelRepo, GraphicsService, SceneUtilsService) {
             model: '='
         },
         
-        controller: function ($scope) {
+        controller: ['$scope', function ($scope) {
             var model;
             
             // TODO Move this logic to ModelController & pass a reference
@@ -40,7 +40,7 @@ function ModelListDirective(ModelRepo, GraphicsService, SceneUtilsService) {
                 }
             };
   
-        },
+        }],
         
         templateUrl: 'app/ModelListPanel/ModelListView.html'
     };

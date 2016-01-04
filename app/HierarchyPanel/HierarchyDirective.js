@@ -4,7 +4,7 @@ function HierarchyDirective(GraphicsService, SceneUtilsService, ObjectInfoModalS
     return {
         scope: {},
         
-        controller: function ($scope, $timeout) {
+        controller: ['$scope', '$timeout', function ($scope, $timeout) {
             $scope.objects = GraphicsService.getObjectHierarchy();
             var highlightColor = 0xffb3b3;
             
@@ -43,7 +43,7 @@ function HierarchyDirective(GraphicsService, SceneUtilsService, ObjectInfoModalS
             $scope.showObjectInfo = function (object) {
                 ObjectInfoModalService.openModal(object);
             };
-        },
+        }],
         
         templateUrl: 'app/HierarchyPanel/HierarchyView.html'
     };

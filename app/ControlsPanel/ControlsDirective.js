@@ -7,9 +7,9 @@ function ControlsDirective(Graphics) {
             movementEnabled: '='
         },
         
-        controller: function ($scope) {
+        controller: ['$scope', function ($scope) {
             $scope.toggleMovementControls = Graphics.toggleMovementControls;
-        },
+        }],
         
         templateUrl: 'app/ControlsPanel/ControlsView.html'
     };
