@@ -21,6 +21,8 @@ function ModelListDirective(ModelRepo, GraphicsService, SceneUtilsService) {
             
             $scope.loadModel = function (modelID) {
                 var id = parseInt(modelID);
+                if(isNaN(id)) return;
+                
                 model = ModelRepo.getByID(id);
                 SceneUtilsService.resetScene();
                 
